@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div>this is film list from thymeleaf</div>
+
+	<table border="1">
+		<tr th:each="film : ${films}">
+			<td th:text="${film.filmId}"></td>
+			<td th:text="${film.title}"></td>
+		</tr>
+	</table>
+</body>
+</html>
