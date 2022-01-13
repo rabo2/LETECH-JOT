@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import kr.letech.study.repository.AccountRepository;
 import kr.letech.study.vo.Account;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 public class AccountService implements UserDetailsService {
@@ -29,66 +30,27 @@ public class AccountService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		Account account=accountRepository.readAccount(username);
-		account.setAuthorities(getAuthorities(username));
+		Account account = accountRepository.readAccount(username);
+		if(account == null) {
+			throw new UsernameNotFoundException(username + "is Not Found!!");
+		}
 		
-		UserDetails userDetails=new UserDetails() {
-			
-			@Override
-			public boolean isEnabled() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-			
-			@Override
-			public boolean isCredentialsNonExpired() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-			
-			@Override
-			public boolean isAccountNonLocked() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-			
-			@Override
-			public boolean isAccountNonExpired() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-			
-			@Override
-			public String getUsername() {
-				// TODO Auto-generated method stub
-				return account.getId();
-			}
-			
-			@Override
-			public String getPassword() {
-				// TODO Auto-generated method stub
-				return account.getPassword();
-			}
-			
-			@Override
-			public Collection <? extends GrantedAuthority> getAuthorities() {
-			// TODO Auto-generated method stub
-				
-				return account.getAuthorities();
-			}
-		};
+		Collection<GrantedAuthority> authorities = getAuthorities(username);
+		if(authorities != null) {
+			account.setAuthorities(authorities);
+		}
+
 		return account;
 	}
 
-	public Collection<GrantedAuthority> getAuthorities(String username) 
-	{ 
-		List<String> string_authorities = accountRepository.readAutorities(username);
-		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(); 
-		for (String authority : string_authorities) 
-		{ 
-			authorities.add(new SimpleGrantedAuthority(authority)); 
-		} 
-		return authorities; 
+	public Collection<GrantedAuthority> getAuthorities(String username) {
+		List<String> authorities = accountRepository.readAutorities(username);
+		List<GrantedAuthority> gratendAuth = new ArrayList<GrantedAuthority>();
+		
+		if(authorities != null) for (String authority : authorities) {
+			gratendAuth.add(new SimpleGrantedAuthority(authority));
+		}
+		return gratendAuth;
 	}
 
 }

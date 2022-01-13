@@ -3,11 +3,21 @@
 
 <mapper namespace="kr.letech.study.repository.AccountRepository">
 	<select id="readAccount" resultType="Account">
-		SELECT * FROM USERS WHERE ID = #{id}
+		SELECT USER_NO
+			  ,ID
+			  ,PASSWORD
+			  ,USER_NM
+			  ,ATVT_YN 
+		  FROM USERS 
+		 WHERE ID = #{id}
 	</select>
 	
 	<select id="readAutorities" resultType="String">
-		SELECT AUTHORITY_NAME FROM AUTHORITY WHERE USERNAME = #{id}
+		SELECT A.AUTH_CD
+		  FROM USER_AUTH A
+		  	   JOIN USERS B
+		  	   ON A.USER_NO = B.USER_NO
+		 WHERE B.ID = #{id}
 	</select>
 	
 </mapper>

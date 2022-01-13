@@ -6,20 +6,29 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
+@Setter
+@Getter
 public class Account implements UserDetails {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private String userNo;
 	private String id;
-	private String pwd;
+	private String password;
+	private String userNm;
+	private String atvtYn;
+	
 	private boolean isAccountNonExpired;
 	private boolean isAccountNonLocked;
 	private boolean isCredentialsNonExpired;
 	private boolean isEnabled;
+	
 	private Collection<? extends GrantedAuthority> authorities;
 
 
@@ -31,7 +40,7 @@ public class Account implements UserDetails {
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		return this.pwd;
+		return this.password;
 	}
 
 	@Override
