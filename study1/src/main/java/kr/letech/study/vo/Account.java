@@ -5,13 +5,16 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Data
 @Setter
 @Getter
+@ToString
 public class Account implements UserDetails {
 	/**
 	 * 
@@ -24,14 +27,21 @@ public class Account implements UserDetails {
 	private String userNm;
 	private String atvtYn;
 	
-	private boolean isAccountNonExpired;
-	private boolean isAccountNonLocked;
-	private boolean isCredentialsNonExpired;
-	private boolean isEnabled;
+	private boolean isAccountNonExpired = true;
+	private boolean isAccountNonLocked = true;
+	private boolean isCredentialsNonExpired = true;
+	private boolean isEnabled = true;
 	
 	private Collection<? extends GrantedAuthority> authorities;
 
-
+	@Builder
+	public Account(String id, String password, String userNm) {
+		this.id = id;
+		this.password = password;
+		this.userNm = userNm;
+	}
+	
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return authorities;
@@ -72,5 +82,5 @@ public class Account implements UserDetails {
 		// TODO Auto-generated method stub
 		return this.isEnabled;
 	}
-
+	
 }

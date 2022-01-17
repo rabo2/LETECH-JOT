@@ -1,19 +1,71 @@
 package kr.letech.study.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import kr.letech.study.service.AccountService;
+import kr.letech.study.vo.UserInfoVo;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
-public class CommonController {
+@Slf4j
+public class CommonController<V> {
 	
-	@RequestMapping("/")
+	@Autowired
+	private AccountService accountService;
+	
+	
+	@RequestMapping("/index")
 	public String indexPage() {
-		return "index";
+		return "common/index";
 	}
 	
-	@GetMapping("login")
+	@GetMapping("/login")
 	public String loginPage() {
 		return "common/login";
+	}
+	
+	@GetMapping("/signupPage")
+	public String signupPage() {
+		return "common/signup";
+	}
+	
+	@PostMapping("/signup")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> signUp(@RequestBody UserInfoVo userInfo){
+		log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+userInfo.toString());
+		
+		ResponseEntity<Map<String,String>> entity = null;
+		Map<String,String> dataMap = new HashMap<String,String>();
+		
+		try {
+			accountService.save(userInfo);
+			dataMap.put("Message", "OK");
+			entity = new ResponseEntity<Map<String,String>> (dataMap,HttpStatus.OK);
+			
+		} catch (Exception e) {
+			dataMap.put("Message", "FAIL");
+			entity = new ResponseEntity<Map<String,String>> (dataMap,HttpStatus.BAD_REQUEST);
+			
+		}
+
+		return entity;
+	}
+	
+	@RequestMapping("/accessDeniedPage")
+	public String accessDeniedPage() {
+		return "common/accessDeniedPage";
 	}
 }
