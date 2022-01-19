@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kr.letech.study.repository.CommonCodeRepository;
 import kr.letech.study.vo.CommonCode;
+import kr.letech.study.vo.Navbar;
 
 @Service
 public class CommonCodeService {
@@ -36,5 +37,9 @@ public class CommonCodeService {
 	public CommonCode getCommonCode(String comnCd) throws Exception{
 		CommonCode code = cmnCdRepository.selectCommonCode(comnCd);
 		return code;
+	}
+
+	public List<CommonCode> getNavbarList(Navbar nav) throws Exception{
+		return cmnCdRepository.selectCommonCodeByLevel(nav);
 	}
 }

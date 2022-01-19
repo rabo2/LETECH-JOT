@@ -1,11 +1,8 @@
-window.onload = function() {
-	commonCodeList();
-}
-
 var form = "";
 var codVal = "";
 var codList = "";
 var flag = true;
+var data = "";
 function commonCodeList() {
 	$.ajax({
 		url : 'commonCode/list',
@@ -70,14 +67,19 @@ function removeCode() {
 }
 
 
-function printNavbar(level){
+function printNavbar(level,target,upcode){
+	data = {'lvl' : level,
+			'target' : target,
+			'upCd' : upcode};
+			
 	$.ajax({
-		url : 'navbar',
-		contentType : 'application/json; charset=utf-8',
-		data : {'lvl' : level},
-		method : 'POST'
+		url : 'commonCode/navbar',
+		contentType: "application/json; UTF-8;",
+		data : JSON.stringify(data),
+		type : 'POST'
 	}).done(function(fragement){
-		$('#navbar').replaceWith(fragment);
+		console.log($(target));
+		$(target).replaceWith(fragement);
 	});
 }
 

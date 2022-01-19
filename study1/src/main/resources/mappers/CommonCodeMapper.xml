@@ -26,6 +26,22 @@
 		   AND COMN_CD = #{comnCd}
 	</select>
 	
+	<select id="selectCommonCodeByLevel" resultType="CommonCode">
+		SELECT COMN_CD
+			  ,UP_CD
+			  ,LVL
+			  ,VAL
+			  ,CD_NM
+			  ,ORD
+			  ,DESCRIPTION
+		  FROM COMN_CD
+		 WHERE 1=1
+		   AND LVL = #{lvl}
+		   <if test="upCd != null and upCd != ''">
+		   AND UP_CD = #{upCd}
+		   </if>
+	</select>
+	
 	<insert id="insertCommonCode">
 		INSERT INTO COMN_CD
 		VALUES (

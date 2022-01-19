@@ -9,13 +9,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.letech.study.service.CommonCodeService;
 import kr.letech.study.vo.CommonCode;
+import kr.letech.study.vo.Navbar;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("/commonCode")
+@Slf4j
 public class CommonCodeController {
 	
 	@Autowired
@@ -44,7 +49,7 @@ public class CommonCodeController {
 	}
 	
 	@PostMapping("/regist")
-	public String registCommonCode(Model model, CommonCode cmd) throws Exception {
+	public String registCommonCode(Model model,@RequestBody  CommonCode cmd) throws Exception {
 		cmnCdService.registCommonCode(cmd);
 		List<CommonCode> cmdList = cmnCdService.getCommonCodeList();
 
@@ -54,7 +59,7 @@ public class CommonCodeController {
 	}
 
 	@PostMapping("/modify")
-	public String modifyCommonCode(Model model, CommonCode cmd) throws Exception {
+	public String modifyCommonCode(Model model,@RequestBody  CommonCode cmd) throws Exception {
 		cmnCdService.modifyCommandCode(cmd);
 		List<CommonCode> cmdList = cmnCdService.getCommonCodeList();
 
@@ -71,5 +76,14 @@ public class CommonCodeController {
 		model.addAttribute("cmdList",cmdList);
 
 		return "commonCode/main :: #codeList";
+	}
+	
+	@PostMapping("/navbar")
+	public String printNavbar(Model model, @RequestBody Navbar nav) throws Exception {		
+		log.info(">>{}",nav.toString());
+		List<CommonCode> navbarList = cmnCdService.getNavbarList(nav);
+		model.addAttribute("navbarList",navbarList);
+		
+		return "commonCode/main :: "+nav.getTarget();
 	}
 }

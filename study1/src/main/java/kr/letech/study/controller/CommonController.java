@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.letech.study.service.AccountService;
+import kr.letech.study.vo.CommonCode;
 import kr.letech.study.vo.UserInfoVo;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +26,6 @@ public class CommonController {
 	
 	@Autowired
 	private AccountService accountService;
-	
 	
 	@RequestMapping("/index")
 	public String indexPage() {
@@ -67,4 +67,5 @@ public class CommonController {
 	public String accessDeniedPage() {
 		return "common/accessDeniedPage";
 	}
+
 }
