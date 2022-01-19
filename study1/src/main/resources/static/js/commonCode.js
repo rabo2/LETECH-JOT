@@ -1,0 +1,106 @@
+window.onload = function() {
+	commonCodeList();
+}
+
+var form = "";
+var codVal = "";
+var codList = "";
+var flag = true;
+function commonCodeList() {
+	$.ajax({
+		url : 'commonCode/list',
+		method : 'post',
+		contentType : 'application/json; charset=utf-8',
+	}).done(function(fragment) {
+		$("#codeList").replaceWith(fragment);
+	});
+}
+
+function detailCommonCode(comnCd){
+	$.ajax({
+		url : 'commonCode/'+comnCd
+	}).done(function(fragment){
+		$("#detailCode").replaceWith(fragment);
+	});
+	
+}
+
+function registCode() {
+// 	if(!formCheck()){
+// 		return false;
+// 	};
+	
+	form = $('#registForm').serialize();
+	
+	$.ajax({
+		url : 'commonCode/regist',
+		method : 'POST',
+		data : form
+	}).done(function(fragment) {
+		$("#codeList").replaceWith(fragment);
+		$('#registForm input').reset();
+	});
+}
+
+function modifyCode() {
+// 	if(!formCheck()){
+// 		return false;
+// 	};
+	form = $('#registForm').serialize();
+	$.ajax({
+		url : 'commonCode/modify',
+		method : 'POST',
+		data : form
+	}).done(function(fragment) {
+		$("#codeList").replaceWith(fragment);
+	});
+}
+
+function removeCode() {
+	codeVal = document.querySelector('#detailCode input[name="comnCd"]').value;
+	
+	if(confirm('정말 삭제하시겠습니까?')){
+		$.ajax({
+			url : 'commonCode/remove/'+codeVal,
+			method : 'GET'
+		}).done(function(fragment) {
+			$("#codeList").replaceWith(fragment);
+		});
+	}
+}
+
+
+function printNavbar(level){
+	$.ajax({
+		url : 'navbar',
+		contentType : 'application/json; charset=utf-8',
+		data : {'lvl' : level},
+		method : 'POST'
+	}).done(function(fragement){
+		$('#navbar').replaceWith(fragment);
+	});
+}
+
+// function formCheck(){
+// 	codeVal = document.querySelector('#comnCd').value;
+// 	codList = document.getElementsByClassName('comnCd');
+	
+// 	for(let i = 0; i < codList.length; i++){
+// 		if(codList[i].innerHTML == codeVal){
+// 			alert('이미 존재하는 코드 입니다');
+// 			flag = false;
+// 		}
+// 	}
+	
+// 	form = document.getElementsByClassName('form-control');
+	
+// 	for(let i = 0; i < form.length; i++){
+// 		if(!form[i].value && (i != 3 || i != 6)){
+// 			alert(i+'번째 값을 전부 입력하세요');
+// 			flag =  false;
+// 			return flag;
+// 		}
+// 	}
+	
+// 	return flag;
+// }

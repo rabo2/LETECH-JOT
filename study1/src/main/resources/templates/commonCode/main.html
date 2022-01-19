@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-ti-fit=no">
+<title>Common Code Page</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+<style type="text/css">
+.navbar {
+	background: #e3f2fd;;
+}
+
+.navbar .navbar-nav .nav-item .nav-link {
+	font-size: 1.5em;
+	cursor: pointer;
+}
+
+.btn-div {
+	text-align: right;
+}
+
+.btn-div .btn {
+	display: inline-block;
+	margin-right: 5px;
+}
+
+.container .row .form-group label {
+	font-weight: bold;
+}
+
+.table-div {
+	padding: 10px 0px;
+}
+
+.table-div table {
+	width: 100%;
+}
+
+.table-div #codeList tr:hover {
+	background: yellow;
+	cursor: pointer;
+}
+
+.table-div #codeList tr td:nth-child(3), .table-div #codeList tr td:nth-child(6)
+	{
+	text-align: right;
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<nav class="navbar navbar-expand-lg navbar-light" id="navbar">
+			<ul class="navbar-nav">
+				<li th:each="menu : ${menuList}" class="nav-item dropdown">
+					<a th:text="${cdNm}" class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item" href="#">Action</a>
+						<a class="dropdown-item" href="#">Another action</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="#">Something else here</a>
+					</div>
+				</li>
+			</ul>
+		</nav>
+		<form id="registForm" onsubmit="return false">
+			<div class="row row-no-gutters" id="detailCode">
+				<div class="form-group col">
+					<label for="inputsm">CD</label>
+					<input class="form-control input-sm" type="text" id="comnCd" name="comnCd" th:value="${code?.comnCd}">
+				</div>
+				<div class="form-group col">
+					<label for="inputsm">UP_CD</label>
+					<input class="form-control input-sm" type="text" name="upCd" th:value="${code?.upCd}">
+				</div>
+				<div class="form-group col">
+					<label for="inputsm">LVL</label>
+					<input class="form-control input-sm" type="text" name="lvl" th:value="${code?.lvl}">
+				</div>
+				<div class="form-group col">
+					<label for="inputsm">VAL</label>
+					<input class="form-control input-sm" type="text" name="val" th:value="${code?.val}">
+				</div>
+				<div class="form-group col">
+					<label for="inputsm">NAME</label>
+					<input class="form-control input-sm" type="text" name="cdNm" th:value="${code?.cdNm}">
+				</div>
+				<div class="form-group col">
+					<label for="inputsm">ORD</label>
+					<input class="form-control input-sm" type="text" name="ord" th:value="${code?.ord}">
+				</div>
+				<div class="form-group col">
+					<label for="inputsm">DESC</label>
+					<input class="form-control input-sm" type="text" name="description" th:value="${code?.description}">
+				</div>
+			</div>
+		</form>
+		<div class="btn-div">
+			<input type="button" onclick="registCode()" class="btn btn-secondary" value="등록" />
+			<input type="button" onclick="modifyCode()" class="btn btn-secondary" value="수정" />
+			<input type="button" onclick="removeCode()" class="btn btn-secondary" value="삭제" />
+		</div>
+		<div class="table-div">
+			<table border="1">
+				<thead>
+					<tr>
+						<th>CD</th>
+						<th>UP_CD</th>
+						<th>LVL</th>
+						<th>VAL</th>
+						<th>NAME</th>
+						<th>ORD</th>
+						<th>DESC</th>
+					</tr>
+				</thead>
+				<tbody id="codeList">
+					<tr th:each="commonCd : ${cmdList}" th:onclick="detailCommonCode( [[${commonCd.comnCd}]] )">
+						<td th:text="${commonCd.comnCd}" class="comnCd"></td>
+						<td th:text="${commonCd.upCd}"></td>
+						<td th:text="${commonCd.lvl}"></td>
+						<td th:text="${commonCd.val}"></td>
+						<td th:text="${commonCd.cdNm}"></td>
+						<td th:text="${commonCd.ord}"></td>
+						<td th:text="${commonCd.description}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<!-- jQuery library -->
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+	<!-- Popper JS -->
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<!-- Latest compiled JavaScript -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+	<script th:src="@{/js/commonCode.js}"></script>
+</body>
+</html>

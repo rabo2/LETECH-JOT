@@ -39,15 +39,14 @@ public class AccountService implements UserDetailsService {
 			throw new UsernameNotFoundException(username + "Not Found!");
 		}
 
-		log.info("Success find user {}>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", user);
 
 		List<UserAuth> authList = accountRepository.selectAutorities(username);
 		List<GrantedAuthority> gratnedList = new ArrayList<>();
+
 		try {
 			
 		if (authList != null) {
 			for (UserAuth auth : authList) {
-				log.info("auth_cd??????????????? {}",auth.getAuthCd());
 				gratnedList.add(new SimpleGrantedAuthority(auth.getAuthCd()));
 			}
 			user.setAuthorities(gratnedList);

@@ -20,8 +20,8 @@ import kr.letech.study.vo.UserInfoVo;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@Slf4j
-public class CommonController<V> {
+@RequestMapping("/")
+public class CommonController {
 	
 	@Autowired
 	private AccountService accountService;
@@ -45,7 +45,6 @@ public class CommonController<V> {
 	@PostMapping("/signup")
 	@ResponseBody
 	public ResponseEntity<Map<String, String>> signUp(@RequestBody UserInfoVo userInfo){
-		log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+userInfo.toString());
 		
 		ResponseEntity<Map<String,String>> entity = null;
 		Map<String,String> dataMap = new HashMap<String,String>();

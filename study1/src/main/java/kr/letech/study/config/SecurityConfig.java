@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.deleteCookies("JSESSIONID")
 			.logoutSuccessUrl("/login").permitAll()
 		.and()
-			.exceptionHandling().accessDeniedPage("/login");
+			.exceptionHandling().accessDeniedPage("/accessDeniedPage");
 	}
 
 	@Bean 

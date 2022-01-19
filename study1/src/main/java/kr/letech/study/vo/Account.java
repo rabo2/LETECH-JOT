@@ -41,6 +41,10 @@ public class Account implements UserDetails {
 		this.userNm = userNm;
 	}
 	
+	public Account() {
+		// TODO Auto-generated constructor stub
+		
+	}
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
