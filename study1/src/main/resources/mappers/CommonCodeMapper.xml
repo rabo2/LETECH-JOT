@@ -11,6 +11,7 @@
 			  ,ORD
 			  ,DESCRIPTION
 		  FROM COMN_CD
+		  ORDER BY COMN_CD, ORD
 	</select>
 	
 	<select id="selectCommonCode" resultType="CommonCode">
@@ -24,6 +25,7 @@
 		  FROM COMN_CD
 		 WHERE 1=1
 		   AND COMN_CD = #{comnCd}
+		 ORDER BY COMN_CD, ORD
 	</select>
 	
 	<select id="selectCommonCodeByLevel" resultType="CommonCode">
@@ -40,6 +42,7 @@
 		   <if test="upCd != null and upCd != ''">
 		   AND UP_CD = #{upCd}
 		   </if>
+		  ORDER BY COMN_CD, ORD
 	</select>
 	
 	<insert id="insertCommonCode">

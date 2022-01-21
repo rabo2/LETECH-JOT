@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import kr.letech.study.repository.CommonCodeRepository;
 import kr.letech.study.vo.CommonCode;
 import kr.letech.study.vo.Navbar;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class CommonCodeService {
 
 	@Autowired
@@ -40,6 +42,7 @@ public class CommonCodeService {
 	}
 
 	public List<CommonCode> getNavbarList(Navbar nav) throws Exception{
-		return cmnCdRepository.selectCommonCodeByLevel(nav);
+		List<CommonCode> navList = cmnCdRepository.selectCommonCodeByLevel(nav);
+		return navList;
 	}
 }

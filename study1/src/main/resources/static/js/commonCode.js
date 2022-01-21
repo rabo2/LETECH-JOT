@@ -3,34 +3,22 @@ var codVal = "";
 var codList = "";
 var flag = true;
 var data = "";
-function commonCodeList() {
+var html = "";
+function commonCodeList(target, comnCd) {
 	$.ajax({
-		url : 'commonCode/list',
-		method : 'post',
-		contentType : 'application/json; charset=utf-8',
+		url : 'commonCode/list/'+comnCd,
+		method : 'GET'
 	}).done(function(fragment) {
-		$("#codeList").replaceWith(fragment);
+		$(target).replaceWith(fragment);
 	});
-}
-
-function detailCommonCode(comnCd){
-	$.ajax({
-		url : 'commonCode/'+comnCd
-	}).done(function(fragment){
-		$("#detailCode").replaceWith(fragment);
-	});
-	
 }
 
 function registCode() {
-// 	if(!formCheck()){
-// 		return false;
-// 	};
-	
 	form = $('#registForm').serialize();
 	
 	$.ajax({
 		url : 'commonCode/regist',
+//		contentType: "application/json; UTF-8;",
 		method : 'POST',
 		data : form
 	}).done(function(fragment) {
@@ -46,7 +34,8 @@ function modifyCode() {
 	form = $('#registForm').serialize();
 	$.ajax({
 		url : 'commonCode/modify',
-		method : 'POST',
+//		contentType: "application/json; UTF-8;",
+		method : 'PUT',
 		data : form
 	}).done(function(fragment) {
 		$("#codeList").replaceWith(fragment);
@@ -59,7 +48,7 @@ function removeCode() {
 	if(confirm('정말 삭제하시겠습니까?')){
 		$.ajax({
 			url : 'commonCode/remove/'+codeVal,
-			method : 'GET'
+			method : 'DELETE'
 		}).done(function(fragment) {
 			$("#codeList").replaceWith(fragment);
 		});
@@ -68,19 +57,36 @@ function removeCode() {
 
 
 function printNavbar(level,target,upcode){
-	data = {'lvl' : level,
-			'target' : target,
-			'upCd' : upcode};
-			
+	console.log(level, target, upcode);
 	$.ajax({
-		url : 'commonCode/navbar',
+		url : 'commonCode/navbar/'+level+'/'+upcode,
 		contentType: "application/json; UTF-8;",
 		data : JSON.stringify(data),
-		type : 'POST'
-	}).done(function(fragement){
-		console.log($(target));
-		$(target).replaceWith(fragement);
-	});
+		type : 'GET',
+		success : function(data){
+			html = "";
+			if(level == 1){
+				html += '<ul class="navbar-nav mr-auto" id="oneDepth">';
+				for(let i = 0; i < data.length; i++){
+					html += '		<!-- Level one dropdown -->';
+					html += '		<li class="nav-item dropdown">';
+					html += '<a onclick="printNavbar(2, \'#'+data[i].comnCd+'\',\''+data[i].comnCd+'\')" id="dropdownMenu1 '+data[i].comnCd+'" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link">'+data[i].cdNm+'</a>';
+					html += '		</li>';
+				}
+				html += '</ul>';
+			}else if (level == 2){
+				html += '<ul aria-labelledby="dropdownMenu1" class="dropdown-menu border-0 shadow">                                                                          ';
+				for(let i = 0; i < data.length; i++){
+					html += '		<li class="dropdown-submenu">                                                                                                                ';
+					html += '			<a onclick="printNavbar(2,\'#'+data[i].comnCd+'\',\''+data[i].comnCd+'\')" id="dropdownMenu2" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item">'+data[i].cdNm+'</a>';
+					html += '		</li>';
+				}
+				html += '</ul>';
+			}
+			console.log(html);
+			$(target).append(html);
+		}
+	})
 }
 
 // function formCheck(){
