@@ -3,12 +3,10 @@ package kr.letech.study.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.letech.study.service.AccountService;
-import kr.letech.study.vo.CommonCode;
 import kr.letech.study.vo.UserInfoVo;
-import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("/")

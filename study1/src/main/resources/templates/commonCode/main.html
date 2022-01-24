@@ -1,30 +1,26 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-ti-fit=no">
-<title>Common Code Page</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
-<link rel="stylesheet" th:href="@{/css/commonCode.css}">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-ti-fit=no">
+	<title>Common Code Page</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" th:href="@{/css/commonCode.css}">
 </head>
+
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm">
 		<div class="container">
 			<a href="#" class="navbar-brand font-weight-bold">OJT</a>
-			<button type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler">
+			<button type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbars"
+				aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div id="navbarContent" class="collapse navbar-collapse">
-						<ul aria-labelledby="dropdownMenu1" class="dropdown-menu border-0 shadow">
-							<li class="dropdown-submenu">
-								<a id="dropdownMenu2" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item"></a>
-<!-- 								<ul aria-labelledby="dropdownMenu2" class="dropdown-menu border-0 shadow"> -->
-<!-- 									<li> -->
-<!-- 										<a tabindex="-1" href="#" class="dropdown-item"></a> -->
-<!-- 									</li> -->
-<!-- 								</ul> -->
-							</li>
-						</ul>
+				<ul class="navbar-nav mr-auto" id="oneDepth">
+				</ul>
 			</div>
 		</div>
 	</nav>
@@ -34,7 +30,8 @@
 				<div class="row row-no-gutters" id="detailCode">
 					<div class="form-group col">
 						<label for="inputsm">CD</label>
-						<input class="form-control input-sm" type="text" id="comnCd" name="comnCd" th:value="${code?.comnCd}">
+						<input class="form-control input-sm" type="text" id="comnCd" name="comnCd"
+							th:value="${code?.comnCd}">
 					</div>
 					<div class="form-group col">
 						<label for="inputsm">UP_CD</label>
@@ -58,7 +55,8 @@
 					</div>
 					<div class="form-group col">
 						<label for="inputsm">DESC</label>
-						<input class="form-control input-sm" type="text" name="description" th:value="${code?.description}">
+						<input class="form-control input-sm" type="text" name="description"
+							th:value="${code?.description}">
 					</div>
 				</div>
 			</form>
@@ -82,7 +80,8 @@
 					</tr>
 				</thead>
 				<tbody id="codeList">
-					<tr th:each="commonCd : ${cmdList}" th:onclick="commonCodeList('#detailCode',[[${commonCd.comnCd}]])">
+					<tr th:each="commonCd : ${cmdList}"
+						th:onclick="commonCodeList('#detailCode',[[${commonCd.comnCd}]])">
 						<td th:text="${commonCd.comnCd}" class="comnCd"></td>
 						<td th:text="${commonCd.upCd}"></td>
 						<td th:text="${commonCd.lvl}"></td>
@@ -95,33 +94,13 @@
 			</table>
 		</div>
 	</div>
-<!-- jQuery library -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-<!-- Popper JS -->
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-<!-- Latest compiled JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-<script th:src="@{/js/commonCode.js}"></script>
-<script type="text/javascript">
-window.onload = function() {
-	commonCodeList('#codeList');
-	printNavbar(1, '#navbarContent');
-
-// // 	$("ul.dropdown-menu [data-toggle='dropdown']").on("click",function(event) {
-// // 		event.preventDefault();
-// // 		event.stopPropagation();
-
-// // 		$(this).siblings().toggleClass("show");
-
-// // 		if (!$(this).next().hasClass('show')) {
-// // 			$(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
-// // 		}
-		
-// // 		$(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown',function(e) {
-// // 			$('.dropdown-submenu .show').removeClass("show");
-// // 		});
-// 	});
-}
-</script>
+	<!-- jQuery library -->
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+	<!-- Popper JS -->
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<!-- Latest compiled JavaScript -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+	<script th:src="@{/js/commonCode.js}"></script>
 </body>
+
 </html>

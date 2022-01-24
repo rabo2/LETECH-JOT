@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 public class HelloWorldCTL {
 	
-	@RequestMapping("/")
+	@RequestMapping("/hello")
 	public String helloWorld() {
 		log.info("hello world 주소 : {}","입력성공");
 		String str = "hello world";
