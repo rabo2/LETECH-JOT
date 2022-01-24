@@ -4,43 +4,9 @@ var codList = "";
 var flag = true;
 var data = "";
 var html = "";
-
-window.onload = function() {
-	commonCodeList('#codeList');
-	printNavbar(1, '#oneDepth');
-
-	let navbar = $('#navbarContent');
-
-	navbar.on('click', '.lvl1', function(event) {
-		let id = $(this).attr("id");
-		printNavbar(2, '#' + id + '+ ul.dropdown-menu', id);
-		//$(this).siblings("ul.dropdown-menu").toggleClass("show");
-	});
-
-	navbar.on('mouseenter', '.lvl2', function(event) {
-		let id = $(this).attr("id");
-		printNavbar(3, '#' + id + '+ ul.dropdown-menu', id);
-		$(this).siblings("ul.dropdown-menu").toggleClass("show");
-	});
-
-
-
-	$('#navbarContent').on("mouseenter","ul.dropdown-menu [data-toggle='dropdown']", function (event) {
-		event.preventDefault();
-		event.stopPropagation();
-	
-		$(this).parents().siblings('.dropdown-submenu').find('a.dropdown-item').siblings('ul.dropdown-menu').removeClass("show");
-		
-		if (!$(this).next().hasClass('show')) {
-			$(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
-		}
-		$(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
-			$('.dropdown-submenu .show').removeClass("show");
-		});
-		
-	});
-}
-
+window.addEventListener('load', function() {
+		commonCodeList('#codeList');
+});
 
 function commonCodeList(target, comnCd) {
 	$.ajax({
@@ -92,44 +58,6 @@ function removeCode() {
 		});
 	}
 }
-
-
-function printNavbar(level, target, upcode) {
-	$.ajax({
-		url: 'commonCode/navbar/' + level + '/' + upcode,
-		contentType: "application/json; UTF-8;",
-		data: JSON.stringify(data),
-		type: 'GET',
-		success: function(data) {
-			if(data.length < 1){
-				$(target).toggleClass('show');
-			}
-			html = "";
-			for (let i = 0; i < data.length; i++) {
-				if (level == 1) {
-					html += '<!-- Level one dropdown -->';
-					html += '<li class="nav-item dropdown">';
-					html += '	<a id="' + data[i].comnCd + '" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link lvl1" data-bs-auto-close="true">' + data[i].cdNm + '</a>';
-					html += '	<ul aria-labelledby="dropdownMenu1" class="dropdown-menu border-0 shadow">';
-					html += '	</ul>';
-					html += '</li>';
-				} else if (level == 2) {
-					html += '<li class="dropdown-submenu">';
-					html += '	<a id="' + data[i].comnCd + '" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="lvl2 dropdown-item" data-bs-auto-close="true">' + data[i].cdNm + '</a>';
-					html += '	<ul aria-labelledby="dropdownMenu2" class="dropdown-menu border-0 shadow">';
-					html += '	</ul>';
-					html += '</li>';
-				} else if (level == 3) {
-					html += '<li>';
-					html += '	<a tabindex="-1" href="#" class="dropdown-item show">' + data[i].cdNm + '</a>';
-					html += '</li>';
-				}
-			}
-				$(target).html(html);
-			}
-	})
-}
-
 // function formCheck(){
 // 	codeVal = document.querySelector('#comnCd').value;
 // 	codList = document.getElementsByClassName('comnCd');

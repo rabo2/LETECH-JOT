@@ -79,19 +79,4 @@ public class CommonCodeController {
 
 		return "commonCode/main :: #codeList";
 	}
-
-	@GetMapping("/navbar/{level}/{upcode}")
-	@ResponseBody
-	public List<CommonCode> printNavbar(@PathVariable(value = "level", required = false) int level,
-										@PathVariable(value = "upcode", required = false) String upCd) throws Exception {
-		
-		if(upCd.equals("undefined")) {
-			upCd = null;
-		}
-		
-		Navbar navbar = new Navbar();
-		navbar.setLvl(level);
-		navbar.setUpCd(upCd);
-		return cmnCdService.getNavbarList(navbar);
-	}
 }

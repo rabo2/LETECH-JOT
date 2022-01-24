@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default}">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" th:href="@{/css/commonCode.css}">
+</head>
+<body layout:fragment="content">
+	<div class="container">
+		<div>
+			<h2>메뉴관리</h2>
+		</div>
+		<div>
+			<form id="registForm" onsubmit="return false">
+				<div class="row row-no-gutters" id="detailCode">
+					<div class="form-group col">
+						<label for="inputsm">CD</label>
+						<input class="form-control input-sm" type="text" id="menuCd" name="menuCd" th:value="${menu?.menuCd}">
+					</div>
+					<div class="form-group col">
+						<label for="inputsm">UP_CD</label>
+						<input class="form-control input-sm" type="text" name="upCd" th:value="${menu?.upCd}">
+					</div>
+					<div class="form-group col">
+						<label for="inputsm">LVL</label>
+						<input class="form-control input-sm" type="text" name="lvl" th:value="${menu?.lvl}">
+					</div>
+					<div class="form-group col">
+						<label for="inputsm">NAME</label>
+						<input class="form-control input-sm" type="text" name="menuNm" th:value="${menu?.menuNm}">
+					</div>
+					<div class="form-group col">
+						<label for="inputsm">ORD</label>
+						<input class="form-control input-sm" type="text" name="ord" th:value="${menu?.ord}">
+					</div>
+					<div class="form-group col">
+						<label for="inputsm">URI</label>
+						<input class="form-control input-sm" type="text" name="uri" th:value="${menu?.uri}">
+					</div>
+					<div class="form-group col">
+						<label for="inputsm">USE</label>
+						<select class="form-control input-sm" name="useYn" th:value="${menu?.uri}">
+							<option value="1">Y</option>
+							<option value="0">N</option>
+						</select>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="btn-div">
+			<input type="button" onclick="registMenu()" class="btn btn-secondary" value="등록" />
+			<input type="button" onclick="modifyMenu()" class="btn btn-secondary" value="수정" />
+			<input type="button" onclick="removeCode()" class="btn btn-secondary" value="삭제" />
+		</div>
+		<div class="table-div">
+			<table class="table table-sm">
+				<thead>
+					<tr>
+						<th>CD</th>
+						<th>UP_CD</th>
+						<th>LVL</th>
+						<th>NAME</th>
+						<th>ORD</th>
+						<th>URI</th>
+						<th>USE</th>
+					</tr>
+				</thead>
+				<tbody id="menuList">
+					<tr th:if="${menuList != null}" th:each="menu : ${menuList}"  th:onclick="detailMenu('#detailCode',[[${menu.menuCd}]])">
+						<td th:text="${menu.menuCd}"></td>
+						<td th:text="${menu.upCd}"></td>
+						<td th:text="${menu.lvl}"></td>
+						<td th:text="${menu.menuNm}"></td>
+						<td th:text="${menu.ord}"></td>
+						<td th:text="${menu.uri}"></td>
+						<td th:text="${menu.useYn}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+<script th:src="@{/js/menu.js}"></script>
+</body>
+</html>
