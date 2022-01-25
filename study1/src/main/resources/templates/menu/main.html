@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <link rel="stylesheet" th:href="@{/css/commonCode.css}">
+<link rel="stylesheet" th:href="@{/css/menu.css}">
 </head>
 <body layout:fragment="content">
 	<div class="container">
@@ -72,7 +73,7 @@
 						<td th:text="${menu.menuNm}"></td>
 						<td th:text="${menu.ord}"></td>
 						<td th:text="${menu.uri}"></td>
-						<td th:text="${menu.useYn}"></td>
+						<td th:text="${menu.useYn} ? 'Y' : 'N'"></td>
 					</tr>
 				</tbody>
 			</table>

@@ -16,7 +16,14 @@
 	       	AND UP_CD = #{upCd}
 	       </if>
 	       <if test="lvl != null and lvl != ''">
-	        AND LVL = #{lvl}
+		       	<if test="lvl == 1">
+		<![CDATA[
+		       	AND LVL <= 1
+		]]>
+		       	</if>
+		       	<if test="lvl != 1">
+		        AND LVL = #{lvl}
+		       	</if>
 	       </if>
 	     ORDER BY LVL,MENU_CD, ORD
 	</select>

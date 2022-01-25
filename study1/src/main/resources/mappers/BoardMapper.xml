@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.letech.study.repository.BoardRepository">
+	<select id="selectBoardList" resultType="java.util.LinkedHashMap">
+		SELECT BOARD_NO    AS boardNo
+			  ,TITLE       AS title
+			  ,CONTENT     AS content
+ 			  ,WRITER	   AS writer
+ 			  ,REGIST_DATE AS registDate
+			  ,UPDATE_DATE AS updateDate
+			  ,VIEW_CNT	   AS viewCnt
+			  ,COUNT(*) OVER() AS cnt
+		 FROM BOARD
+		ORDER BY boardNo DESC
+		LIMIT #{pageStart}, #{perPageNum}
+	</select>
+	
+	
+	
+	<select id="selectBoardByBoardId" resultType="Map">
+	
+	</select>
+
+	<insert id="insertBoard">
+	
+	</insert>
+	
+	<update id="updateBoard">
+	
+	</update>
+
+	<delete id="deleteBoard">
+	
+	</delete>
+</mapper>
