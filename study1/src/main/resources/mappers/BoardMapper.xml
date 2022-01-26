@@ -3,27 +3,41 @@
 
 <mapper namespace="kr.letech.study.repository.BoardRepository">
 	<select id="selectBoardList" resultType="java.util.LinkedHashMap">
-		SELECT BOARD_NO    AS boardNo
-			  ,TITLE       AS title
-			  ,CONTENT     AS content
- 			  ,WRITER	   AS writer
- 			  ,REGIST_DATE AS registDate
-			  ,UPDATE_DATE AS updateDate
-			  ,VIEW_CNT	   AS viewCnt
+		SELECT A.BOARD_NO    AS boardNo
+			  ,A.TITLE       AS title
+			  ,A.CONTENT     AS content
+ 			  ,B.ID	   		 AS writer
+ 			  ,DATE_FORMAT(A.REGIST_DATE, '%Y-%m-%d') AS registDate
+			  ,DATE_FORMAT(A.UPDATE_DATE, '%Y-%m-%d') AS updateDate
+			  ,A.VIEW_CNT	   AS viewCnt
 			  ,COUNT(*) OVER() AS cnt
-		 FROM BOARD
+		 FROM BOARD A
+		      JOIN USERS B
+		      ON A.WRITER = B.USER_NO
 		ORDER BY boardNo DESC
 		LIMIT #{pageStart}, #{perPageNum}
 	</select>
 	
-	
-	
-	<select id="selectBoardByBoardId" resultType="Map">
-	
+	<select id="selectBoardByBoardNo" resultType="Map">
+		SELECT A.BOARD_NO    AS boardNo
+			  ,A.TITLE       AS title
+			  ,A.CONTENT     AS content
+ 			  ,B.ID	   		 AS writer
+ 			  ,DATE_FORMAT(A.REGIST_DATE, '%Y-%m-%d') AS registDate
+			  ,DATE_FORMAT(A.UPDATE_DATE, '%Y-%m-%d') AS updateDate
+			  ,A.VIEW_CNT	   AS viewCnt
+			  ,COUNT(*) OVER() AS cnt
+		 FROM BOARD A
+		      JOIN USERS B
+		      ON A.WRITER = B.USER_NO
+		WHERE 1=1
+		  AND A.BOARD_NO = #{boardNo}		
+		ORDER BY boardNo DESC
 	</select>
 
 	<insert id="insertBoard">
-	
+		INSERT INTO BOARD (TITLE, CONTENT, WRITER)
+		VALUES(#{title}, #{content}, #{userNo})	
 	</insert>
 	
 	<update id="updateBoard">

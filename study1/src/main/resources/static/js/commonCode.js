@@ -5,7 +5,7 @@ var flag = true;
 var data = "";
 var html = "";
 window.addEventListener('load', function() {
-		commonCodeList('#codeList');
+	commonCodeList('#codeList');
 });
 
 function commonCodeList(target, comnCd) {

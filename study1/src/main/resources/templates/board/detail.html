@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default}">
+<head>
+<meta charset="utf-8">
+<style type="text/css">
+.container .content-div {
+	min-height: 30vh;
+}
+
+.subTitle .col-6 {
+	vertical-align: middle;
+	margin: 0;
+}
+
+.subTitle .col-6:first-child {
+	text-align: left;
+}
+
+.subTitle .col-6:last-child {
+	text-align: right;
+}
+
+.btn-div {
+	text-align: right;
+}
+
+div.reply-div #reply #reply-regist .row .col-1 {
+	text-align: right;
+}
+</style>
+</head>
+<div layout:fragment="content">
+	<div class="container content-container">
+		<div class="head-div row">
+			<div class="col-10">
+				<h2 th:utext="${board.title}"></h2>
+			</div>
+			<div th:if="${board.hasRole ne null}" class="btn-div col-2">
+				<button id="registBtn" class="btn btn-secondary">수정</button>
+				<button id="registBtn" class="btn btn-secondary">삭제</button>
+			</div>
+		</div>
+		<div class="form-div" id="board">
+			<hr>
+			<div class="subTitle row">
+				<div class="form-group col-6" id="writer">작성자&nbsp;[[${board.writer}]]</div>
+				<div class="form-group col-6" id="viewCnt">조회수&nbsp;[[${board.viewCnt}]]</div>
+			</div>
+			<hr>
+			<div class="form-group content-div" th:utext="${board.content}"></div>
+			<hr>
+			<div class="reply-div">
+				<label for="reply">댓글</label>
+				<div id="reply">
+					<div id="reply-regist">
+						<textarea style="resize: none;" rows="3" cols="145" class="form-control"></textarea>
+						<div class="row">
+							<div class="col-11"></div>
+							<div class="col-1">
+								<button class="btn btn-sm btn-secondary">등록</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</html>

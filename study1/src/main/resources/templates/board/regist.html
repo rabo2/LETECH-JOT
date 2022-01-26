@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default}">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" th:href="@{/css/summernote/summernote-lite.css}">
+<style type="text/css">
+.content-container>.head-div {
+	margin: 20px 0;
+}
+
+.btn-div {
+	text-align: right;
+}
+</style>
+</head>
+<div layout:fragment="content">
+	<div class="container content-container">
+		<div class="head-div">
+			<h2>글쓰기</h2>
+		</div>
+		<hr>
+		<div class="form-div">
+			<form id="registForm" action="regist" method="post">
+				<div class="form-group">
+					<label for="title">제목</label>
+					<input name="title" type="text" class="form-control rounded-0" id="title" placeholder="제목을 입력하세요" autofocus="autofocus">
+				</div>
+				<div class="form-group">
+					<label>내용</label>
+					<textarea name="content" class="form-control" rows="15" placeholder="내용을 입력하세요" maxlength="1000" style="resize: none;" wrap="hard"></textarea>
+				</div>
+			</form>
+			<div class="file-div">
+				<input type="file">
+			</div>
+		</div>
+		<div class="btn-div">
+			<button id="registBtn" class="btn btn-secondary">등록</button>
+		</div>
+	</div>
+	<script type="text/javascript">
+		window.addEventListener('load', function() {
+			document.getElementById('registBtn').addEventListener(
+					'click',
+					function(e) {
+						if (confirm('게시글을 등록하시겠습니까?')) {
+							let data = {
+								'title' : $('input[name="title"]').val(),
+								'content' : $("textarea[name='content']").val().replace(/\n/g, "<br>")
+							};
+
+							$.ajax({
+								url : 'regist',
+								data : JSON.stringify(data),
+								contentType : 'application/json; charset=utf-8',
+								method : 'POST'
+							}).done(function() {
+								location.href = "/std/board";
+							});
+						}
+					});
+		})
+	</script>
+</div>
+</html>

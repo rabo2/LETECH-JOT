@@ -10,9 +10,12 @@ public class Page {
 	private boolean prev;
 	private boolean next;
 	private Criteria cri;
+	
+	private int[] navigation = new int[10];
+	
+	
 	private int displayPageNum = 10; // 한 게시판에서 보여질 페이지수.
 									 // 게시글수가 아닌 페이지수이다.
-	
 	
 	private void calcData() {
 		endPage = (int) (Math.ceil(cri.getPage() / (double) displayPageNum) * displayPageNum);
@@ -25,6 +28,12 @@ public class Page {
 		
 		prev = (startPage == 1 ? false : true);
 		next = (endPage * cri.getPerPageNum() >= totalCnt ? false : true);
+		
+		for(int i = 0; i < 10; i++) {
+			if((i+startPage) > endPage) break;
+			navigation[i] = i+startPage;
+		}
+		
 	}
 
 	// 변경되는 값인 totalCnt가 지정된 후 calcData를 호출하여 값을 도출한다.

@@ -12,7 +12,7 @@ public interface BoardRepository {
 	
 	List<Map<String, ?>> selectBoardList(Criteria criteria) throws Exception;
 	
-	Map<String, ?> selectBoardByBoardId(Map<String, String> paraMap) throws Exception;
+	Map<String, String> selectBoardByBoardNo(Map<String, String> paraMap) throws Exception;
 	
 	void insertBoard(Map<String, String> paraMap) throws Exception;
 	

@@ -1,0 +1,25 @@
+@charset "UTF-8";
+.container .table {
+	text-align: center;
+}
+
+.container .table tbody tr:hover {
+	background: #e3f2fd;
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.container .table thead tr td:first-child, .container .table thead tr td:last-child{
+	width: 10%;
+}
+
+.container .table thead tr td:nth-child(2) {
+	width: 40%;
+}
+
+.container .table thead tr td:nth-child(3), .container .table thead tr td:nth-child(4){
+	width: 20%;
+}
+.container .btn-div{
+	text-align: right;
+}

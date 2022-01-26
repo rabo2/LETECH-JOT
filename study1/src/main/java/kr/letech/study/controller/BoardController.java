@@ -1,14 +1,24 @@
 package kr.letech.study.controller;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.catalina.authenticator.SpnegoAuthenticator.AuthenticateAction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import kr.letech.study.service.BoardService;
 import kr.letech.study.vo.Criteria;
@@ -35,15 +45,33 @@ public class BoardController {
 		
 		Page page = new Page();
 		page.setCri(criteria);
-		
 		page.setTotalCnt(Integer.parseInt(String.valueOf(boardList.get(0).get("cnt"))));
-		
-		log.info(">>>>>>>>>>>>>>{}",page);
 		
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("pageInfo", page);
 		
 		return "board/main :: #boardList";
+	}
+	
+	@GetMapping("/regist")
+	public void registForm() {}
+
+	@PostMapping("/regist")
+	public void regist(@RequestBody Map<String, String> paraMap, Principal principal) throws Exception {
+		paraMap.put("user", principal.getName());
+		
+		boardService.regist(paraMap);
+	}
+	
+	@GetMapping("/detail")
+	public String detail(@RequestParam Map<String, String> paraMap, Model model, Principal principal) throws Exception{
+		log.info("contorller user >>>>>>>>>{}", principal.getName());
+		
+		paraMap.put("user", principal.getName());
+		
+		model.addAttribute("board",boardService.selectBoardByBoardNo(paraMap));
+		
+		return "board/detail";
 	}
 	
 }
