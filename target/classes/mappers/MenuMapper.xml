@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.letech.study.repository.MenuRepository">
+	<select id="selectMenuList" resultType="java.util.LinkedHashMap">
+		SELECT MENU_CD as menuCd
+		  	  ,UP_CD as upCd
+		  	  ,MENU_NM as menuNm
+		  	  ,ORD as ord
+		  	  ,USE_YN as useYn
+		  	  ,URI as uri
+		  	  ,LVL as lvl
+		  FROM MENU
+		 WHERE 1=1
+	       <if test="upCd != null and upCd != ''">
+	       	AND UP_CD = #{upCd}
+	       </if>
+	       <if test="lvl != null and lvl != ''">
+		       	<if test="lvl == 1">
+		<![CDATA[
+		       	AND LVL <= 1
+		]]>
+		       	</if>
+		       	<if test="lvl != 1">
+		        AND LVL = #{lvl}
+		       	</if>
+	       </if>
+	     ORDER BY LVL,MENU_CD, ORD
+	</select>
+	
+	<select id="selectMenu" resultType="Map">
+		SELECT MENU_CD as menuCd
+		  	  ,UP_CD as upCd
+		  	  ,MENU_NM as menuNm
+		  	  ,ORD as ord
+		  	  ,USE_YN as useYn
+		  	  ,URI as uri
+		  	  ,LVL as lvl
+		  FROM MENU
+		 WHERE 1=1
+		   <if test="menuCd != null and menuCd != ''">
+		   	and MENU_CD = #{menuCd}
+		   </if>
+	</select>
+	
+	<insert id="insertMenu">
+		INSERT INTO MENU (MENU_CD, UP_CD, MENU_NM, ORD, LVL, USE_YN, URI)
+		VALUES (#{menuCd}, #{upCd}, #{menuNm}, #{ord}, #{lvl}, #{useYn}, #{uri})
+	</insert>
+		
+	<update id="updateMenu">
+		UPDATE MENU
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="upCd != null and upCd != ''">
+				UP_CD = #{upCd},
+			</if>	
+			<if test="lvl != null">
+				LVL = #{lvl},
+			</if>	
+			<if test="useYn != null and useYn != ''">
+				USE_YN = #{useYn},
+			</if>
+			<if test="uri != null and uri != ''">
+				URI = #{uri},
+			</if>
+			<if test="menuNm != null and menuNm != ''">
+				MENU_NM = #{menuNm},
+			</if>	
+			<if test="ord != null">
+				ORD = #{ord},
+			</if>	
+		</trim>	
+		WHERE MENU_CD = #{menuCd}
+	</update>
+	
+	<delete id="deleteMenu">
+		DELETE FROM MENU
+		 WHERE MENU_CD = #{menuCd}
+	</delete>
+</mapper>

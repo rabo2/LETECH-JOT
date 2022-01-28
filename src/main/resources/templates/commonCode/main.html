@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	 layout:decorate="~{layout/default}">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" th:href="@{/css/commonCode.css}">
+</head>
+<div layout:fragment="content">
+	<div class="container">
+		<div>
+			<h2>코드관리</h2>
+		</div>
+		<div>
+			<form id="registForm" onsubmit="return false">
+				<div class="row row-no-gutters" id="detailCode">
+					<div class="form-group col">
+						<label for="inputsm">CD</label>
+						<input class="form-control input-sm" type="text" id="comnCd" name="comnCd" th:value="${code?.comnCd}">
+					</div>
+					<div class="form-group col">
+						<label for="inputsm">UP_CD</label>
+						<input class="form-control input-sm" type="text" name="upCd" th:value="${code?.upCd}">
+					</div>
+					<div class="form-group col">
+						<label for="inputsm">LVL</label>
+						<input class="form-control input-sm" type="text" name="lvl" th:value="${code?.lvl}">
+					</div>
+					<div class="form-group col">
+						<label for="inputsm">VAL</label>
+						<input class="form-control input-sm" type="text" name="val" th:value="${code?.val}">
+					</div>
+					<div class="form-group col">
+						<label for="inputsm">NAME</label>
+						<input class="form-control input-sm" type="text" name="cdNm" th:value="${code?.cdNm}">
+					</div>
+					<div class="form-group col">
+						<label for="inputsm">ORD</label>
+						<input class="form-control input-sm" type="text" name="ord" th:value="${code?.ord}">
+					</div>
+					<div class="form-group col">
+						<label for="inputsm">DESC</label>
+						<input class="form-control input-sm" type="text" name="description" th:value="${code?.description}">
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="btn-div">
+			<input type="button" onclick="registCode()" class="btn btn-secondary" value="등록" />
+			<input type="button" onclick="modifyCode()" class="btn btn-secondary" value="수정" />
+			<input type="button" onclick="removeCode()" class="btn btn-secondary" value="삭제" />
+		</div>
+		<div class="table-div">
+			<table class="table table-sm">
+				<thead>
+					<tr>
+						<th>CD</th>
+						<th>UP_CD</th>
+						<th>LVL</th>
+						<th>VAL</th>
+						<th>NAME</th>
+						<th>ORD</th>
+						<th>DESC</th>
+					</tr>
+				</thead>
+				<tbody id="codeList">
+					<tr th:each="commonCd : ${cmdList}" th:onclick="commonCodeList('#detailCode',[[${commonCd.comnCd}]])">
+						<td th:text="${commonCd.comnCd}" class="comnCd"></td>
+						<td th:text="${commonCd.upCd}"></td>
+						<td th:text="${commonCd.lvl}"></td>
+						<td th:text="${commonCd.val}"></td>
+						<td th:text="${commonCd.cdNm}"></td>
+						<td th:text="${commonCd.ord}"></td>
+						<td th:text="${commonCd.description}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+<script th:src="@{/js/commonCode.js}"></script>
+</div>
+</html>

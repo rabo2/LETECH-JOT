@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.letech.study.repository.CommonCodeRepository"> 
+	<select id="selectCommonCodeList" resultType="CommonCode">
+		SELECT COMN_CD
+			  ,UP_CD
+			  ,LVL
+			  ,VAL
+			  ,CD_NM
+			  ,ORD
+			  ,DESCRIPTION
+		  FROM COMN_CD
+		  ORDER BY COMN_CD, ORD
+	</select>
+	
+	<select id="selectCommonCode" resultType="CommonCode">
+		SELECT COMN_CD
+			  ,UP_CD
+			  ,LVL
+			  ,VAL
+			  ,CD_NM
+			  ,ORD
+			  ,DESCRIPTION
+		  FROM COMN_CD
+		 WHERE 1=1
+		   AND COMN_CD = #{comnCd}
+		 ORDER BY COMN_CD, ORD
+	</select>
+	
+	<select id="selectCommonCodeByLevel" resultType="CommonCode">
+		SELECT COMN_CD
+			  ,UP_CD
+			  ,LVL
+			  ,VAL
+			  ,CD_NM
+			  ,ORD
+			  ,DESCRIPTION
+		  FROM COMN_CD
+		 WHERE 1=1
+		   <if test="lvl != null and lvl != ''">
+		   AND LVL = #{lvl}
+		   </if>
+		   <if test="upCd != null and upCd != ''">
+		   AND UP_CD = #{upCd}
+		   </if>
+		  ORDER BY COMN_CD, ORD
+	</select>
+	
+	
+	<select id="selectCommonCodeByUpCode" resultType="CommonCode">
+		SELECT COMN_CD
+			  ,UP_CD
+			  ,LVL
+			  ,VAL
+			  ,CD_NM
+			  ,ORD
+			  ,DESCRIPTION
+		  FROM COMN_CD
+		 WHERE 1=1
+		   AND UP_CD = #{upCd}
+		ORDER BY COMN_CD, ORD
+	</select>
+	
+	
+	<insert id="insertCommonCode">
+		INSERT INTO COMN_CD
+		VALUES (
+			#{comnCd}
+			,#{upCd}
+			,#{lvl}
+			,#{val}
+			,#{cdNm}
+			,#{ord}
+			,#{description}
+		)
+	</insert>
+	
+	<update id="updateCommonCode">
+		UPDATE COMN_CD
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="upCd != null and upCd != ''">
+				UP_CD = #{upCd},
+			</if>	
+			<if test="lvl != null">
+				LVL = #{lvl},
+			</if>	
+			<if test="val != null and val != ''">
+				VAL = #{val},
+			</if>	
+			<if test="cdNm != null and cdNm != ''">
+				CD_NM = #{cdNm},
+			</if>	
+			<if test="ord != null">
+				ORD = #{ord},
+			</if>	
+			<if test="description != null and description != ''">
+				DESCRIPTION = #{description},
+			</if>
+		</trim>	
+		WHERE COMN_CD = #{comnCd}
+	</update>
+	
+	<delete id="deleteCommonCode">
+		DELETE FROM COMN_CD
+		WHERE COMN_CD = #{comnCd}
+	</delete>
+	
+</mapper>

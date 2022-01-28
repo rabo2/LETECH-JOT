@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default}">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" th:href="@{/css/summernote/summernote-lite.css}">
+<style type="text/css">
+.content-container>.head-div {
+	margin: 20px 0;
+}
+
+.btn-div {
+	text-align: right;
+}
+</style>
+</head>
+<div layout:fragment="content">
+	<div class="container content-container">
+		<div class="head-div">
+			<h2>글쓰기</h2>
+		</div>
+		<hr>
+		<div class="form-div">
+			<form id="registForm" action="regist" method="post">
+				<div class="row">
+					<div class="form-group col-6">
+						<label for="title">제목</label>
+						<input name="title" type="text" class="form-control rounded-0" id="title" placeholder="제목을 입력하세요" autofocus="autofocus">
+					</div>
+					<div class="col-3 form-group" id="boardDev">
+						<label>구분</label>
+						<select name="boardDev" class="form-control">
+							<option th:if="${codeList != null}" th:each="code : ${codeList}" th:value="${code?.comnCd}" th:text="${code?.cdNm}"></option>
+						</select>
+					</div>
+					<div class="col-3" id="boardClass">
+						<label>분류</label>
+						<select name="boardClass" class="form-control">
+							<option th:if="${codeList != null}" th:each="code : ${codeList}" th:value="${code?.comnCd}" th:text="${code?.cdNm}"></option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label>내용</label>
+					<textarea name="content" class="form-control" rows="15" placeholder="내용을 입력하세요" maxlength="1000" style="resize: none;" wrap="hard"></textarea>
+				</div>
+			</form>
+			<div class="file-div">
+				<input type="file">
+			</div>
+		</div>
+		<div class="btn-div">
+			<button id="registBtn" class="btn btn-secondary">등록</button>
+		</div>
+	</div>
+<script th:src="@{/js/board/regist.js}"></script>
+</div>
+</html>

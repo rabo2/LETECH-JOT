@@ -1,0 +1,30 @@
+@charset "UTF-8";
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu>a:after {
+  float: right;
+  border: none;
+}
+
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: 0px;
+  margin-left: 0px;
+}
+
+
+body .container > div:first-child {
+	margin: 30px 0px;
+}
+
+.navbar {
+	background: #e3f2fd;;
+}
+
+.navbar .navbar-nav .nav-item .nav-link {
+	font-size: 1.5em;
+	cursor: pointer;
+}
