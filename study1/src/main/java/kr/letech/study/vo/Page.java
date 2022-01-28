@@ -7,6 +7,8 @@ public class Page {
 	private int totalCnt; // 전체 튜플 수
 	private int startPage;
 	private int endPage;
+	private int tempEndPage;
+	
 	private boolean prev;
 	private boolean next;
 	private Criteria cri;
@@ -20,7 +22,7 @@ public class Page {
 	private void calcData() {
 		endPage = (int) (Math.ceil(cri.getPage() / (double) displayPageNum) * displayPageNum);
 		startPage = (endPage - displayPageNum) + 1;
-		int tempEndPage = (int) (Math.ceil(totalCnt / (double) cri.getPerPageNum()));
+		tempEndPage = (int) (Math.ceil(totalCnt / (double) cri.getPerPageNum()));
 
 		if (endPage > tempEndPage) {
 			endPage = tempEndPage;

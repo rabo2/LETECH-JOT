@@ -32,7 +32,7 @@ public class CommonController {
 	@Autowired
 	private MenuService menuService;
 	
-	@RequestMapping("/index")
+	@RequestMapping(value = {"/index",""})
 	public String indexPage() {
 		return "common/index";
 	}

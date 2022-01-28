@@ -9,16 +9,17 @@
 	text-decoration: underline;
 }
 
-.container .table thead tr td:first-child, .container .table thead tr td:last-child{
+.container .table thead tr td:first-child, .container .table thead tr td:last-child
+,.container .table thead tr td:nth-child(2){
 	width: 10%;
 }
 
-.container .table thead tr td:nth-child(2) {
+.container .table thead tr td:nth-child(3) {
 	width: 40%;
 }
 
-.container .table thead tr td:nth-child(3), .container .table thead tr td:nth-child(4){
-	width: 20%;
+.container .table thead tr td:nth-child(4), .container .table thead tr td:nth-child(5){
+	width: 10%;
 }
 .container .btn-div{
 	text-align: right;

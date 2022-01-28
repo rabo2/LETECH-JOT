@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.letech.study.repository.ReplyRepository">
+	<select id="selectReplyByBoardNo" resultType="java.util.LinkedHashMap">
+		SELECT A.CONTENT AS content
+			  ,DATE_FORMAT(A.REGIST_DATE, '%Y-%m-%d') AS registDate
+			  ,B.ID AS writer
+			  ,A.ORD AS ORD
+		  FROM REPLY A
+		  	   JOIN USERS B
+		  	   ON A.WRITER = B.USER_NO
+		 WHERE 1=1
+		   AND A.BOARD_NO = #{boardNo}
+		ORDER BY A.ORD DESC
+	</select>
+	
+	<insert id="insertReply">
+		INSERT INTO REPLY (BOARD_NO, ORD, CONTENT, WRITER)
+		VALUES (
+				#{boardNo}
+				,(SELECT IFNULL(MAX(ORD) + 1), 1) 
+					FROM REPLY 
+				   WHERE 1=1 
+				     AND BOARD_NO = #{boardNo})
+				,#{content}
+				,(SELECT USER_NO
+					FROM USERS
+				   WHERE 1=1
+				     AND ID = #{id}
+				  )
+				)
+	</insert>
+	
+	<update id="updateReply">
+		UPDATE REPLY
+		  <trim prefix="SET" suffixOverrides=",">
+			<if test="content != null and content != ''">
+			   CONTENT = #{content},
+			</if>
+			<if test="delYn != null and delYn != ''">
+				DEL_YN = #{delYn}
+			</if>
+		  </trim>
+		 WHERE 1=1
+		   AND BOARD_NO = #{boardNo}
+		   AND ORD = #{ord}
+	</update>
+
+	<delete id="deleteAllReply">
+		DELETE FROM REPLY
+		 WHERE 1=1
+		   AND BOARD_NO = #{boardNo}
+	</delete>
+</mapper>

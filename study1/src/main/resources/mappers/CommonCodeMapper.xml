@@ -38,12 +38,30 @@
 			  ,DESCRIPTION
 		  FROM COMN_CD
 		 WHERE 1=1
+		   <if test="lvl != null and lvl != ''">
 		   AND LVL = #{lvl}
+		   </if>
 		   <if test="upCd != null and upCd != ''">
 		   AND UP_CD = #{upCd}
 		   </if>
 		  ORDER BY COMN_CD, ORD
 	</select>
+	
+	
+	<select id="selectCommonCodeByUpCode" resultType="CommonCode">
+		SELECT COMN_CD
+			  ,UP_CD
+			  ,LVL
+			  ,VAL
+			  ,CD_NM
+			  ,ORD
+			  ,DESCRIPTION
+		  FROM COMN_CD
+		 WHERE 1=1
+		   AND UP_CD = #{upCd}
+		ORDER BY COMN_CD, ORD
+	</select>
+	
 	
 	<insert id="insertCommonCode">
 		INSERT INTO COMN_CD

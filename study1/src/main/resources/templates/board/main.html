@@ -12,11 +12,12 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layo
 		</div>
 		<div>
 			<div id="boardList">
-				<label></label>
+				<label th:utext="|총 ${boardList?.get(0)?.cnt}건 &#09; ${pageInfo?.cri?.page}/${pageInfo?.tempEndPage} 페이지 |"></label>
 				<table class="table">
 					<thead>
 						<tr>
 							<td>글번호</td>
+							<td>분류</td>
 							<td>제목</td>
 							<td>작성자</td>
 							<td>작성일자</td>
@@ -26,6 +27,7 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layo
 					<tbody>
 						<tr th:if="${boardList ne null}" th:each="board : ${boardList}" th:onclick="|javascript:location.href='@{/board/detail?boardNo=}${board.boardNo}'|">
 							<td th:text="${board?.boardNo}"></td>
+							<td th:text="|[${board?.boardClass}]|"></td>
 							<td th:utext="${board?.title}"></td>
 							<td th:utext="${board?.writer}"></td>
 							<td th:text="${board?.registDate}"></td>

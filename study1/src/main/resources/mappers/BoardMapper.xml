@@ -4,6 +4,7 @@
 <mapper namespace="kr.letech.study.repository.BoardRepository">
 	<select id="selectBoardList" resultType="java.util.LinkedHashMap">
 		SELECT A.BOARD_NO    AS boardNo
+			  ,C.CD_NM AS boardClass
 			  ,A.TITLE       AS title
 			  ,A.CONTENT     AS content
  			  ,B.ID	   		 AS writer
@@ -14,12 +15,18 @@
 		 FROM BOARD A
 		      JOIN USERS B
 		      ON A.WRITER = B.USER_NO
+		      JOIN COMN_CD C
+			  ON A.BOARD_CLASS = C.COMN_CD
+		WHERE 1=1
+		  AND DEL_YN = 1
+		  AND BOARD_DEV = 'CD018' 
 		ORDER BY boardNo DESC
 		LIMIT #{pageStart}, #{perPageNum}
 	</select>
 	
-	<select id="selectBoardByBoardNo" resultType="Map">
+	<select id="selectBoardByBoardNo" resultType="java.util.HashMap">
 		SELECT A.BOARD_NO    AS boardNo
+			  ,C.CD_NM AS boardClass
 			  ,A.TITLE       AS title
 			  ,A.CONTENT     AS content
  			  ,B.ID	   		 AS writer
@@ -30,21 +37,47 @@
 		 FROM BOARD A
 		      JOIN USERS B
 		      ON A.WRITER = B.USER_NO
+		      JOIN COMN_CD C
+			  ON A.BOARD_CLASS = C.COMN_CD
 		WHERE 1=1
 		  AND A.BOARD_NO = #{boardNo}		
 		ORDER BY boardNo DESC
 	</select>
 
 	<insert id="insertBoard">
-		INSERT INTO BOARD (TITLE, CONTENT, WRITER)
-		VALUES(#{title}, #{content}, #{userNo})	
+		INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_DEV, BOARD_CLASS)
+		VALUES(#{title}, #{content}, #{userNo}, #{boardDev}, #{boardClass})	
 	</insert>
 	
 	<update id="updateBoard">
-	
+		UPDATE BOARD
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="title != null and title != ''">
+				TITLE = #{title},
+			</if>
+			<if test="content != null and content != ''">
+				CONTENT = #{content},
+			</if>
+			<if test="boardDev != null and boardDev != ''">
+				BOARD_DEV = #{boardDev},
+			</if>
+			<if test="boardClass != null and boardClass!= ''">
+				BOARD_CLASS = #{boardClass},
+			</if>
+				UPDATE_DATE = NOW()
+		 WHERE BOARD_NO = #{boardNo}			
+		</trim>
+	</update>
+
+	<update id="updateViewCount">
+		UPDATE BOARD
+		   SET VIEW_CNT = (VIEW_CNT + 1)
+		 WHERE BOARD_NO = #{boardNo} 
 	</update>
 
 	<delete id="deleteBoard">
-	
+		UPDATE BOARD
+		   SET DEL_YN = 0
+		 WHERE BOARD_NO = #{boardNo} 
 	</delete>
 </mapper>

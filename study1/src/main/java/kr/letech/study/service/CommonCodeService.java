@@ -1,6 +1,7 @@
 package kr.letech.study.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,8 +42,16 @@ public class CommonCodeService {
 		return code;
 	}
 
+	public List<CommonCode> getCommonCodeListByUpCode(Map<String, String> paraMap) throws Exception{
+		return cmnCdRepository.selectCommonCodeByUpCode(paraMap);
+	}
+	
+	
 	public List<CommonCode> getNavbarList(Navbar nav) throws Exception{
 		List<CommonCode> navList = cmnCdRepository.selectCommonCodeByLevel(nav);
 		return navList;
 	}
+	
+	
+	
 }

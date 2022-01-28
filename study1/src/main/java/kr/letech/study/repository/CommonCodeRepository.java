@@ -1,6 +1,7 @@
 package kr.letech.study.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -21,6 +22,7 @@ public interface CommonCodeRepository {
 
 	CommonCode selectCommonCode(String comnCd);
 
+	public List<CommonCode> selectCommonCodeByUpCode(Map<String, String> paraMap);
 	
 	//상단 메뉴 관리
 	List<CommonCode> selectCommonCodeByLevel(Navbar nav);

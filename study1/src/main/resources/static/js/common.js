@@ -92,3 +92,21 @@ function printNavbar(lvl, target, upCd) {
 		}
 	})
 }
+
+
+function printBoardSelet(target,upCd){
+	let data = {'target' : target
+				,'upCd' : upCd
+	};
+	
+	let uri = '/std/commonCode/upCode?target=' + encodeURIComponent(target) +'&upCd='+encodeURIComponent(upCd);
+	
+	$.ajax({
+		url : uri,
+		method : 'GET'
+	}).done(function(fragment){
+		target = target.substring(target.indexOf('#'));
+		$(target).replaceWith(fragment);
+	})
+	
+}

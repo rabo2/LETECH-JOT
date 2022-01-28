@@ -21,9 +21,23 @@
 		<hr>
 		<div class="form-div">
 			<form id="registForm" action="regist" method="post">
-				<div class="form-group">
-					<label for="title">제목</label>
-					<input name="title" type="text" class="form-control rounded-0" id="title" placeholder="제목을 입력하세요" autofocus="autofocus">
+				<div class="row">
+					<div class="form-group col-6">
+						<label for="title">제목</label>
+						<input name="title" type="text" class="form-control rounded-0" id="title" placeholder="제목을 입력하세요" autofocus="autofocus">
+					</div>
+					<div class="col-3 form-group" id="boardDev">
+						<label>구분</label>
+						<select name="boardDev" class="form-control">
+							<option th:if="${codeList != null}" th:each="code : ${codeList}" th:value="${code?.comnCd}" th:text="${code?.cdNm}"></option>
+						</select>
+					</div>
+					<div class="col-3" id="boardClass">
+						<label>분류</label>
+						<select name="boardClass" class="form-control">
+							<option th:if="${codeList != null}" th:each="code : ${codeList}" th:value="${code?.comnCd}" th:text="${code?.cdNm}"></option>
+						</select>
+					</div>
 				</div>
 				<div class="form-group">
 					<label>내용</label>
@@ -38,28 +52,6 @@
 			<button id="registBtn" class="btn btn-secondary">등록</button>
 		</div>
 	</div>
-	<script type="text/javascript">
-		window.addEventListener('load', function() {
-			document.getElementById('registBtn').addEventListener(
-					'click',
-					function(e) {
-						if (confirm('게시글을 등록하시겠습니까?')) {
-							let data = {
-								'title' : $('input[name="title"]').val(),
-								'content' : $("textarea[name='content']").val().replace(/\n/g, "<br>")
-							};
-
-							$.ajax({
-								url : 'regist',
-								data : JSON.stringify(data),
-								contentType : 'application/json; charset=utf-8',
-								method : 'POST'
-							}).done(function() {
-								location.href = "/std/board";
-							});
-						}
-					});
-		})
-	</script>
+<script th:src="@{/js/board/regist.js}"></script>
 </div>
 </html>

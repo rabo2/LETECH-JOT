@@ -12,11 +12,13 @@ public interface BoardRepository {
 	
 	List<Map<String, ?>> selectBoardList(Criteria criteria) throws Exception;
 	
-	Map<String, String> selectBoardByBoardNo(Map<String, String> paraMap) throws Exception;
+	Map<String, Object> selectBoardByBoardNo(Map<String, String> paraMap) throws Exception;
 	
 	void insertBoard(Map<String, String> paraMap) throws Exception;
 	
 	void updateBoard(Map<String, String> paraMap) throws Exception;
 	
 	void deleteBoard(Map<String, String> paraMap) throws Exception;
+
+	void updateViewCount(Map<String, String> paraMap);
 }

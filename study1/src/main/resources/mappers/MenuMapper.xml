@@ -63,7 +63,7 @@
 			<if test="uri != null and uri != ''">
 				URI = #{uri},
 			</if>
-			<if test="cdNm != null and cdNm != ''">
+			<if test="menuNm != null and menuNm != ''">
 				MENU_NM = #{menuNm},
 			</if>	
 			<if test="ord != null">

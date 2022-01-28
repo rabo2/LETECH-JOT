@@ -33,37 +33,84 @@ div.reply-div #reply #reply-regist .row .col-1 {
 	<div class="container content-container">
 		<div class="head-div row">
 			<div class="col-10">
-				<h2 th:utext="${board.title}"></h2>
+				<h2 th:utext="|[${board?.boardClass}]${board?.title}|"></h2>
 			</div>
-			<div th:if="${board.hasRole ne null}" class="btn-div col-2">
-				<button id="registBtn" class="btn btn-secondary">수정</button>
-				<button id="registBtn" class="btn btn-secondary">삭제</button>
+			<div th:if="${board?.hasRole ne null}" class="btn-div col-2">
+				<button id="modifyBtn" class="btn btn-secondary" th:onclick="|javascript:location.href='@{/board/modify}?boardNo=${board?.boardNo}&from=modify'|">수정</button>
+				<button id="removeBtn" class="btn btn-secondary">삭제</button>
 			</div>
 		</div>
 		<div class="form-div" id="board">
 			<hr>
-			<div class="subTitle row">
-				<div class="form-group col-6" id="writer">작성자&nbsp;[[${board.writer}]]</div>
-				<div class="form-group col-6" id="viewCnt">조회수&nbsp;[[${board.viewCnt}]]</div>
+			<div class="subTitle row" th:if="${board != null}">
+				<div class="form-group col-6" id="writer">작성자&nbsp;[[${board?.writer}]]</div>
+				<div class="form-group col-6" id="viewCnt">조회수&nbsp;[[${board?.viewCnt}]]</div>
+			</div>
+			<div class="subTitle row" th:if="${board == null}">
 			</div>
 			<hr>
-			<div class="form-group content-div" th:utext="${board.content}"></div>
+			<div class="form-group content-div" th:utext="${board?.content}"></div>
 			<hr>
 			<div class="reply-div">
 				<label for="reply">댓글</label>
 				<div id="reply">
 					<div id="reply-regist">
-						<textarea style="resize: none;" rows="3" cols="145" class="form-control"></textarea>
+						<textarea id="registReply" style="resize: none;" rows="3" cols="145" class="form-control"></textarea>
 						<div class="row">
 							<div class="col-11"></div>
 							<div class="col-1">
-								<button class="btn btn-sm btn-secondary">등록</button>
+								<button id="replyRegistBtn" class="btn btn-sm btn-secondary">등록</button>
 							</div>
 						</div>
+					</div>
+					<div id="replyList" th:if="${replyList != null}" th:each="reply : ${replyList}">
+						
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+<script th:inline="javascript" type="text/javascript">
+	window.addEventListener('load',function(){
+		let removeBtn = document.querySelector('#removeBtn');
+		
+		let data = {
+					'boardNo' : /*<![CDATA[*//*[[${board?.boardNo}]]*//*]]*/
+					};
+		
+		removeBtn.addEventListener('click', function(){
+			if(confirm('해당 게시글을 정말 삭제하시겠습니끼?')){
+				$.ajax({
+					url : 'remove',
+					data : JSON.stringify(data),
+					method : 'DELETE',
+					contentType : 'application/json; charset=utf-8'
+				}).done(function(){
+					location.href = "/std/board";
+				});
+			}
+		});
+		
+		let registReplyBtn = document.querySelector('#replyRegistBtn');
+		registReplyBtn.addEventListener('click', function(){
+			registReply(/*<![CDATA[*//*[[${board?.boardNo}]]*//*]]*/ ,$('#registReply').val() ,'board/detail :: #replyList');
+		})
+	});
+	
+	function registReply(boardNo, content, target){
+		let data = {'boardNo' : boardNo
+					,'content' : content
+					,'target' : target
+		};
+		$.ajax({
+			url : '/std/reply/regist',
+			data : JSON.stringify(data),
+			method : 'POST',
+			contentType : 'application/json; charst=utf-8'
+		}).done(function(fragment){
+			$(target).replacewith(fragment);
+		})
+	}
+</script>
 </div>
 </html>
