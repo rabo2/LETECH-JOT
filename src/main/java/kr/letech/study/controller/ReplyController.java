@@ -1,5 +1,6 @@
 package kr.letech.study.controller;
 
+import java.security.Principal;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,8 @@ public class ReplyController {
 	private ReplyService replyService;
 	
 	@PostMapping("/regist")
-	public String registReply(@RequestBody Map<String, String> paraMap, Model model) throws Exception{
+	public String registReply(@RequestBody Map<String, String> paraMap, Model model, Principal principal) throws Exception{
+		paraMap.put("id", principal.getName());
 		
 		replyService.registReply(paraMap);
 		

@@ -71,8 +71,11 @@ public class BoardController {
 		
 		paraMap.put("user", principal.getName());
 		
-		model.addAttribute("board",boardService.getBoard(paraMap));
+		Map<String, ?> board = boardService.getBoard(paraMap);
 		
+		model.addAttribute("board",board);
+		
+		log.info(">>>>>>>>>>ctl{}",board.get("replyList"));
 		return "board/detail";
 	}
 	

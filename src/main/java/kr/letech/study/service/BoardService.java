@@ -55,6 +55,9 @@ public class BoardService {
 			}
 			
 			List<Map<String, ?>> replyList = replyRepository.selectReplyByBoardNo(paraMap);
+			
+			log.info(">>>>>>>{}", replyList);
+			
 			board.put("replyList", replyList);
 		}
 

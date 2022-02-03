@@ -19,13 +19,13 @@
 		INSERT INTO REPLY (BOARD_NO, ORD, CONTENT, WRITER)
 		VALUES (
 				#{boardNo}
-				,(SELECT IFNULL(MAX(ORD) + 1), 1) 
-					FROM REPLY 
+				,(SELECT IFNULL((MAX(ORD) + 1), 1) 
+					FROM REPLY A
 				   WHERE 1=1 
 				     AND BOARD_NO = #{boardNo})
 				,#{content}
 				,(SELECT USER_NO
-					FROM USERS
+					FROM USERS B
 				   WHERE 1=1
 				     AND ID = #{id}
 				  )
