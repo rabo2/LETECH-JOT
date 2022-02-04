@@ -75,7 +75,6 @@ public class BoardController {
 		
 		model.addAttribute("board",board);
 		
-		log.info(">>>>>>>>>>ctl{}",board.get("replyList"));
 		return "board/detail";
 	}
 	

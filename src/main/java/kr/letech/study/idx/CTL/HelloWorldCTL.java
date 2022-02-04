@@ -13,7 +13,6 @@ public class HelloWorldCTL {
 	public String helloWorld() {
 		log.info("hello world 주소 : {}","입력성공 테스트");
 		String str = "hello world";
-		
 		return str;
 	}
 }

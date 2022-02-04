@@ -23,10 +23,9 @@ public class BoardService {
 
 	@Autowired
 	private AccountRepository accountRepository;
-	
+
 	@Autowired
 	private ReplyRepository replyRepository;
-	
 
 	public List<Map<String, ?>> getBoardList(Criteria criteria) throws Exception {
 
@@ -52,15 +51,10 @@ public class BoardService {
 		if (board != null) {
 			if (paraMap.get("user") != null && paraMap.get("user").equals(board.get("writer"))) {
 				board.put("hasRole", "OK");
+			}else {
+				board.put("hasRole", "NO");
 			}
-			
-			List<Map<String, ?>> replyList = replyRepository.selectReplyByBoardNo(paraMap);
-			
-			log.info(">>>>>>>{}", replyList);
-			
-			board.put("replyList", replyList);
 		}
-
 		return board;
 	}
 

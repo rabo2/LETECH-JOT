@@ -7,12 +7,14 @@
 			  ,DATE_FORMAT(A.REGIST_DATE, '%Y-%m-%d') AS registDate
 			  ,B.ID AS writer
 			  ,A.ORD AS ORD
+			  ,COUNT(*) OVER() AS cnt
 		  FROM REPLY A
 		  	   JOIN USERS B
 		  	   ON A.WRITER = B.USER_NO
 		 WHERE 1=1
 		   AND A.BOARD_NO = #{boardNo}
 		ORDER BY A.ORD DESC
+		LIMIT #{pageStart}, 10
 	</select>
 	
 	<insert id="insertReply">

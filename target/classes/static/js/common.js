@@ -94,19 +94,48 @@ function printNavbar(lvl, target, upCd) {
 }
 
 
-function printBoardSelet(target,upCd){
-	let data = {'target' : target
-				,'upCd' : upCd
+function printBoardSelet(target, upCd) {
+	let data = {
+		'target': target
+		, 'upCd': upCd
 	};
-	
-	let uri = '/std/commonCode/upCode?target=' + encodeURIComponent(target) +'&upCd='+encodeURIComponent(upCd);
-	
+
+	let uri = '/std/commonCode/upCode?target=' + encodeURIComponent(target) + '&upCd=' + encodeURIComponent(upCd);
+
 	$.ajax({
-		url : uri,
-		method : 'GET'
-	}).done(function(fragment){
+		url: uri,
+		method: 'GET'
+	}).done(function(fragment) {
 		target = target.substring(target.indexOf('#'));
 		$(target).replaceWith(fragment);
 	})
-	
+}
+
+//댓굴 등록, 출력
+
+function printReply(boardNo, pageNum, target) {
+	$.ajax({
+		url: '/std/reply/' + boardNo + '/' + pageNum + '?target=' + encodeURIComponent(target),
+		method: 'GET'
+	}).done(function(fragment) {
+		target = target.substring(target.indexOf("#"));
+		$(target).replaceWith(fragment);
+	})
+}
+
+function registReply(boardNo, content, target) {
+	let data = {
+		'boardNo': boardNo
+		, 'content': content.replace(/\n/g, "<br>")
+		, 'target': target
+	};
+	$.ajax({
+		url: '/std/reply/regist',
+		data: JSON.stringify(data),
+		method: 'POST',
+		contentType: 'application/json; charst=utf-8',
+	}).always(function() {
+		$('#registReply').val('');
+		printReply(boardNo, 1, target);
+	});
 }
