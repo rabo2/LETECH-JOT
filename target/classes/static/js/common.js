@@ -4,7 +4,6 @@ window.onload = function() {
 	let navbar = $('#navbarContent');
 
 	navbar.on('click', '.lvl1', function(event) {
-		console.log($(this).attr('href') == '#');
 		if ($(this).attr('href') == '#') {
 			let id = $(this).attr("id");
 			printNavbar(2, '#' + id + '+ ul.dropdown-menu', id);
@@ -62,7 +61,6 @@ function printNavbar(lvl, target, upCd) {
 				if (lvl == 1) {
 					html += '<!-- Level one dropdown -->';
 					html += '<li class="nav-item dropdown">';
-					console.log(data[i].uri);
 					if (data[i].uri == '#') {
 						html += '	<a id="' + data[i].menuCd + '" href="' + data[i].uri + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link lvl1" data-bs-auto-close="true">' + data[i].menuNm + '</a>';
 					} else {
@@ -94,28 +92,25 @@ function printNavbar(lvl, target, upCd) {
 }
 
 
-function printBoardSelet(target, upCd) {
-	let data = {
-		'target': target
-		, 'upCd': upCd
-	};
-
-	let uri = '/std/commonCode/upCode?target=' + encodeURIComponent(target) + '&upCd=' + encodeURIComponent(upCd);
-
-	$.ajax({
-		url: uri,
-		method: 'GET'
-	}).done(function(fragment) {
-		target = target.substring(target.indexOf('#'));
-		$(target).replaceWith(fragment);
-	})
+function removeBoard(data) {
+	if (confirm('해당 게시글을 정말 삭제하시겠습니끼?')) {
+		$.ajax({
+			url: '/std/boards',
+			data: JSON.stringify(data),
+			method: 'DELETE',
+			contentType: 'application/json; charset=utf-8'
+		}).done(function() {
+			location.href = "/std/boards";
+		});
+	}
 }
 
-//댓굴 등록, 출력
 
+
+//댓굴 등록, 출력
 function printReply(boardNo, pageNum, target) {
 	$.ajax({
-		url: '/std/reply/' + boardNo + '/' + pageNum + '?target=' + encodeURIComponent(target),
+		url: '/std/replies/' + boardNo + '/' + pageNum + '?target=' + encodeURIComponent(target),
 		method: 'GET'
 	}).done(function(fragment) {
 		target = target.substring(target.indexOf("#"));
@@ -130,7 +125,7 @@ function registReply(boardNo, content, target) {
 		, 'target': target
 	};
 	$.ajax({
-		url: '/std/reply/regist',
+		url: '/std/replies',
 		data: JSON.stringify(data),
 		method: 'POST',
 		contentType: 'application/json; charst=utf-8',
@@ -138,4 +133,66 @@ function registReply(boardNo, content, target) {
 		$('#registReply').val('');
 		printReply(boardNo, 1, target);
 	});
+}
+function changeTextAreaReply(target, ord, boardNo) {
+	target = target.parentElement.parentElement.parentElement.parentElement;
+	let comment = target.nextElementSibling.children[0].innerText;
+
+	let page = document.querySelector('li.page-item.active').children[0].innerText;
+
+	target.parentElement.innerHTML = `
+			<textarea wrap="hard" style="resize: none;" rows="3" cols="145" class="form-control">${comment}</textarea>
+			<div class="row">
+				<div class="col-10"></div>
+				<div class="col-2" style="text-align:right;">
+					<button class="replyModifyBtn btn btn-sm btn-success" onclick="javascript:modifyReply(this,${boardNo}, ${ord}, ${page}, 'board/detail :: #replyList')">등록</button>
+					<button class="btn btn-sm btn-secondary" onclick="javascript:printReply(${boardNo}, 1, 'board/detail :: #replyList')">취소</button>
+				</div>
+			</div>
+	`;
+};
+
+function modifyReply(event, boardNo, ord, page, target) {
+
+	let content = event.parentElement.parentElement.previousElementSibling.value;
+
+	let data = {
+		'boardNo': boardNo
+		, 'content': content.replace(/\n/g, "<br>")
+		, 'target': target
+		, 'ord': ord
+	};
+
+	$.ajax({
+		url: '/std/replies',
+		method: 'put',
+		data: JSON.stringify(data),
+		contentType: 'application/json; charset=utf-8'
+	}).done(function() {
+		printReply(boardNo, page, target);
+	})
+
+}
+
+function removeReply(ord, boardNo, target) {
+	let page = document.querySelector('li.page-item.active').children[0].innerText;
+	let data = {
+		'ord': ord
+		, 'boardNo': boardNo
+		, 'delYn': 0
+		,'target' : target
+	};
+
+	if (confirm('해당 댓글을 삭제하시겠습니까?')) {
+
+		$.ajax({
+			url: '/std/replies',
+			method: 'delete',
+			data: JSON.stringify(data),
+			contentType: 'application/json; charset=utf-8'
+		}).done(function() {
+			printReply(boardNo, page, target);
+		});
+	}
+
 }

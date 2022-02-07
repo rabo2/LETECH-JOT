@@ -58,32 +58,25 @@
 			<button class="btn btn-secondary" onclick="history.go(-1);">취소</button>
 		</div>
 	</div>
+<script th:src="@{/js/board/common.js}"></script>
 <script th:inline="javascript" type="text/javascript">
 window.addEventListener('load', function(){
-	printBoardSelet('board/regist :: #boardDev' , 'CD017');
-	printBoardSelet('board/regist :: #boardClass' , 'CD020');
+	printBoardSelect('board/regist :: #boardDev' , 'CD017');
+	printBoardSelect('board/regist :: #boardClass' , 'CD020');
 	
 	let btn = document.getElementById("modifyBtn");
 	
 	btn.addEventListener('click', function(){
-		if(confirm('해당 수정내용을 등록하시겠습니까?')){
-			let data = {'title' : document.querySelector('input[name="title"]').value
-						,'content' : document.querySelector('div[name="content"]').innerHTML 
-						,'boardNo' : /*<![CDATA[*//*[[${board?.boardNo}]]*//*]]*/
-						,'boardDev' : $('select[name="boardDev"] option:selected').val()
-						,'boardClass' : $('select[name="boardClass"] option:selected').val()
-			};
-			$.ajax({
-				url : 'modify',
-				data : JSON.stringify(data),
-				contentType : 'application/json; charset=utf-8',
-				method : 'put'
-			}).done(function(data){
-				location.href = "detail?from=modify&boardNo=" + /*<![CDATA[*//*[[${board?.boardNo}]]*//*]]*/;
-			});
-		}
+		let data = {
+				'title': document.querySelector('input[name="title"]').value
+				, 'content': document.querySelector('div[name="content"]').innerHTML
+				, 'boardNo': /*<![CDATA[*//*[[${board?.boardNo}]]*//*]]*/
+				, 'boardDev': $('select[name="boardDev"] option:selected').val()
+				, 'boardClass': $('select[name="boardClass"] option:selected').val()
+		};
+		modifyBoard(data);
 	});
-})
+});
 </script>
 </div>
 </html>

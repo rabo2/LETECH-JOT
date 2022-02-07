@@ -35,7 +35,7 @@
 					<div class="col-3" id="boardClass">
 						<label>분류</label>
 						<select name="boardClass" class="form-control">
-							<option th:if="${codeList != null}" th:each="code : ${codeList}" th:value="${code?.comnCd}" th:text="${code?.cdNm}"></option>
+							<option th:if="${codeList!= null}" th:each="code : ${codeList}" th:value="${code?.comnCd}" th:text="${code?.cdNm}"></option>
 						</select>
 					</div>
 				</div>
@@ -52,6 +52,16 @@
 			<button id="registBtn" class="btn btn-secondary">등록</button>
 		</div>
 	</div>
-<script th:src="@{/js/board/regist.js}"></script>
+<script th:src="@{/js/board/common.js}"></script>
+<script>
+window.addEventListener('load', function() {
+	printBoardSelect('board/regist :: #boardDev' , 'CD017');
+	printBoardSelect('board/regist :: #boardClass' , 'CD020');
+	
+	document.getElementById('registBtn').addEventListener('click', function(e) {
+		registBoard();
+	});
+});
+</script>
 </div>
 </html>

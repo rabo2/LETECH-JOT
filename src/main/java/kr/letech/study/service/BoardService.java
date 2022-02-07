@@ -12,6 +12,7 @@ import kr.letech.study.repository.BoardRepository;
 import kr.letech.study.repository.ReplyRepository;
 import kr.letech.study.vo.Account;
 import kr.letech.study.vo.Criteria;
+import kr.letech.study.vo.Page;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -27,11 +28,24 @@ public class BoardService {
 	@Autowired
 	private ReplyRepository replyRepository;
 
-	public List<Map<String, ?>> getBoardList(Criteria criteria) throws Exception {
+	public Map<String, Object> getBoardList(Map<String, Object> paraMap) throws Exception {
 
-		List<Map<String, ?>> boardList = boardRepository.selectBoardList(criteria);
+		List<Map<String, String>> boardList = boardRepository.selectBoardList(paraMap);
 
-		return boardList;
+		Page page = new Page();
+		
+		page.setCri((Criteria)paraMap.get("cri"));
+		
+		if(boardList.get(0).size() > 0) {
+			page.setTotalCnt(Integer.parseInt(String.valueOf(boardList.get(0).get("cnt"))));
+		}else {
+			page.setTotalCnt(0);
+		}
+		
+		paraMap.put("boardList", boardList);
+		paraMap.put("pageInfo", page);
+		
+		return paraMap;
 	}
 
 	public void regist(Map<String, String> paraMap) throws Exception {

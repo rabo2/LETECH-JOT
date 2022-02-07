@@ -32,14 +32,15 @@ div.reply-div #reply #reply-regist .row .col-1 {
 	background: #6c757d;
 }
 
-div.dropleft a.btn-sm{
+div.dropleft a.btn-sm {
 	writing-mode: vertical-rl;
 	font-size: large;
 	font-weight: bold;
 	color: black;
 	text-decoration: none;
 }
-div.dropleft a.btn-sm:hover{
+
+div.dropleft a.btn-sm:hover {
 	cursor: pointer;
 }
 
@@ -47,11 +48,20 @@ div.dropleft div.dropdown-menu {
 	width: 100px;
 }
 
-div.dropleft div.dropdown-menu a.dropdown-item{
-	width: 80px;
-	margin : 5px;
+div#replyList div div.p-3 div.row div.col-5 div.btn-group div.dropdown-menu
+	{
+	min-width: 30px;
+	text-align: center;
+}
+
+div.dropleft div.dropdown-menu a.dropdown-item {
 	font-size: small;
 	text-align: center;
+	font-weight: bold;
+}
+
+div.dropleft div.dropdown-menu a.dropdown-item:active{
+	background: gray;
 }
 </style>
 </head>
@@ -62,7 +72,7 @@ div.dropleft div.dropdown-menu a.dropdown-item{
 				<h2 th:utext="|[${board?.boardClass}]${board?.title}|"></h2>
 			</div>
 			<div th:if="${board?.hasRole != null}" class="btn-div col-2">
-				<button id="modifyBtn" class="btn btn-secondary btn-sm" th:onclick="|javascript:location.href='@{/board/modify}?boardNo=${board?.boardNo}&from=modify'|">수정</button>
+				<button id="modifyBtn" class="btn btn-secondary btn-sm" th:onclick="|javascript:location.href='@{/boards/modify}?boardNo=${board?.boardNo}&from=modify'|">수정</button>
 				<button id="removeBtn" class="btn btn-secondary btn-sm">삭제</button>
 			</div>
 		</div>
@@ -84,7 +94,7 @@ div.dropleft div.dropdown-menu a.dropdown-item{
 						<div class="row">
 							<div class="col-11"></div>
 							<div class="col-1">
-								<button id="replyRegistBtn" class="btn btn-sm btn-success">등록</button>
+								<button class="replyRegistBtn btn btn-sm btn-success">등록</button>
 							</div>
 						</div>
 					</div>
@@ -98,15 +108,15 @@ div.dropleft div.dropdown-menu a.dropdown-item{
 									<div class="col-5" style="text-align: right; padding: 0;" th:if="${reply?.hasRole == 'Y'}">
 										<div class="btn-group dropleft">
 											<a class="btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">...</a>
-											<div class="dropdown-menu justify-content-between" x-placement="left-start" style="position: absolute; transform: translate3d(-196px, 0px, 0px); top: 0px; left: 0px; will-change: transform;">
-												<a class="dropdown-item" href="#">수정</a>
-												<a class="dropdown-item" href="#">삭제</a>
+											<div class="dropdown-menu" x-placement="left-start" style="position: absolute; transform: translate3d(-196px, 0px, 0px); top: 0px; left: 0px; will-change: transform;">
+												<a class="dropdown-item replyModify" th:onclick="javascript:changeTextAreaReply(this,[[${reply?.ord}]],[[${reply?.boardNo}]]);">수정</a>
+												<a class="dropdown-item replyRemove" th:onclick="javscript:removeReply([[${reply?.ord}]],[[${reply?.boardNo}]],'board/detail :: #replyList')">삭제</a>
 											</div>
 										</div>
 									</div>
 								</div>
 								<div class="comment-text text-justify mt-2">
-									<p th:utext="${reply?.content}"></p>
+									<p th:utext="${reply?.content}" class="content"></p>
 								</div>
 							</div>
 						</div>
@@ -137,27 +147,36 @@ div.dropleft div.dropdown-menu a.dropdown-item{
 window.addEventListener('load',function(){
 	printReply(/*<![CDATA[*//*[[${board?.boardNo}]]*//*]]*/, 1, 'board/detail :: #replyList'); 
 	
+	/*
+	게시글 삭제
+	*/
 	let removeBtn = document.querySelector('#removeBtn');
 	let data = {
 				'boardNo' : /*<![CDATA[*//*[[${board?.boardNo}]]*//*]]*/
 				};
 	removeBtn.addEventListener('click', function(){
-		if(confirm('해당 게시글을 정말 삭제하시겠습니끼?')){
-			$.ajax({
-				url : 'remove',
-				data : JSON.stringify(data),
-				method : 'DELETE',
-				contentType : 'application/json; charset=utf-8'
-			}).done(function(){
-				location.href = "/std/board";
-			});
-		}
+		removeBoard(data);
 	});
 	
-	let registReplyBtn = document.querySelector('#replyRegistBtn');
-	registReplyBtn.addEventListener('click', function(){
-		registReply(/*<![CDATA[*//*[[${board?.boardNo}]]*//*]]*/ ,$('#registReply').val() ,'board/detail :: #replyList');
-	})
+	/*
+	댓글 등록
+	*/
+	let registReplyBtn = document.querySelector('.replyRegistBtn');
+	
+	registReplyBtn.addEventListener('click', function(e){
+		let content = e.target.parentElement.parentElement.previousElementSibling.value;
+ 		registReply(/*<![CDATA[*//*[[${board?.boardNo}]]*//*]]*/, content ,'board/detail :: #replyList');
+	});
+	
+	/*
+	댓글 삭제
+	*/
+	let replyRemove = document.getElementsByClassName('replyRemove');
+	console.log(replyRemove);
+	for(let i=0; i<replyRemove.length; i++){
+	    console.log(replyRemove[i]);
+	 }
+	
 });
 </script>
 </div>

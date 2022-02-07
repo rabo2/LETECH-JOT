@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import kr.letech.study.service.ReplyService;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/reply")
+@RequestMapping("/replies")
 @Controller
 @Slf4j
 public class ReplyController<V> {
@@ -44,7 +44,7 @@ public class ReplyController<V> {
 	}
 	
 	
-	@PostMapping("/regist")
+	@PostMapping("")
 	public String registReply(@RequestBody Map<String, String> paraMap, Principal principal, Model model) throws Exception{
 		paraMap.put("id", principal.getName());
 		
@@ -53,20 +53,19 @@ public class ReplyController<V> {
 		return paraMap.get("target");
 	}
 	
-	@PutMapping("/modify")
-	public String modifyReply(@RequestBody Map<String, String> paraMap, Model model) throws Exception{
+	@PutMapping("")
+	public String modifyReply(@RequestBody Map<String, String> paraMap, Principal principal , Model model) throws Exception{
+		paraMap.put("id", principal.getName());
 		
 		replyService.modifyReply(paraMap);
 		
-		return "board/detail :: #replyList";
+		return paraMap.get("target");
 	}
 	
-	@DeleteMapping("/remove")
+	@DeleteMapping("")
 	public String removeReply(@RequestBody Map<String, String> paraMap, Model model) throws Exception{
-		
 		replyService.removeReply(paraMap);
 		
-		return "board/detail :: #replyList";
-		
+		return paraMap.get("target");
 	}
 }

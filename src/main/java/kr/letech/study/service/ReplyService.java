@@ -37,7 +37,7 @@ public class ReplyService {
 		
 		int cnt = 0;
 		
-		if(replyList.get(0) != null) {
+		if(replyList.get(0) != null && replyList.get(0).size() > 0) {
 			cnt = Integer.parseInt(String.valueOf(replyList.get(0).get("cnt")));
 		}
 		
@@ -68,6 +68,6 @@ public class ReplyService {
 	}
 
 	public void removeReply(Map<String, String> paraMap) throws Exception {
-		replyRepository.deleteReply(paraMap);
+		replyRepository.updateReply(paraMap);
 	}
 }

@@ -10,7 +10,7 @@ import kr.letech.study.vo.Criteria;
 @Mapper
 public interface BoardRepository {
 	
-	List<Map<String, ?>> selectBoardList(Criteria criteria) throws Exception;
+	List<Map<String, String>> selectBoardList(Map<String, Object> paraMap) throws Exception;
 	
 	Map<String, Object> selectBoardByBoardNo(Map<String, String> paraMap) throws Exception;
 	
