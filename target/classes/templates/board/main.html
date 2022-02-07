@@ -26,7 +26,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:if="${boardList ne null}" th:each="board : ${boardList}" th:onclick="|location.href='@{/boards/${board.boardDev}}${board.boardNo}'|">
+						<tr th:if="${boardList ne null}" th:each="board : ${boardList}" th:onclick="|location.href='@{/boards}/CD018/${board.boardNo}'|">
 							<td th:text="${board?.boardNo}"></td>
 							<td th:text="|[${board?.boardClass}]|"></td>
 							<td th:utext="${board?.title}"></td>
