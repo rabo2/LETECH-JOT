@@ -8,7 +8,7 @@ import java.sql.Statement;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-import kr.letech.study.vo.UserInfoVo;
+import kr.letech.study.dto.UserInfoVo;
 
 public class AccountRepositoryTest {
 

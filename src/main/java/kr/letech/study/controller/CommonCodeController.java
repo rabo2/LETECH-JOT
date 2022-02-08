@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import kr.letech.study.dto.CommonCode;
 import kr.letech.study.service.CommonCodeService;
-import kr.letech.study.vo.CommonCode;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller

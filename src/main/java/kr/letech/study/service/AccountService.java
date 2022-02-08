@@ -15,10 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.letech.study.dto.Account;
+import kr.letech.study.dto.UserAuth;
+import kr.letech.study.dto.UserInfoVo;
 import kr.letech.study.repository.AccountRepository;
-import kr.letech.study.vo.Account;
-import kr.letech.study.vo.UserAuth;
-import kr.letech.study.vo.UserInfoVo;
 import lombok.extern.slf4j.Slf4j;
 
 @Service

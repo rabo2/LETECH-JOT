@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.letech.study.dto.Criteria;
+import kr.letech.study.dto.Page;
 import kr.letech.study.repository.ReplyRepository;
-import kr.letech.study.vo.Criteria;
-import kr.letech.study.vo.Page;
 
 @Service
 public class ReplyService {

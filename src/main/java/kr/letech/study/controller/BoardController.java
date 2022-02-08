@@ -25,9 +25,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import kr.letech.study.dto.Criteria;
+import kr.letech.study.dto.Page;
 import kr.letech.study.service.BoardService;
-import kr.letech.study.vo.Criteria;
-import kr.letech.study.vo.Page;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

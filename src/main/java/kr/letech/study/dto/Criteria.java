@@ -1,4 +1,4 @@
-package kr.letech.study.vo;
+package kr.letech.study.dto;
 
 public class Criteria {
 	private int page;

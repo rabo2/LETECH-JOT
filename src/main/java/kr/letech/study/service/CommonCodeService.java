@@ -6,9 +6,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.letech.study.dto.CommonCode;
+import kr.letech.study.dto.Navbar;
 import kr.letech.study.repository.CommonCodeRepository;
-import kr.letech.study.vo.CommonCode;
-import kr.letech.study.vo.Navbar;
 import lombok.extern.slf4j.Slf4j;
 
 @Service

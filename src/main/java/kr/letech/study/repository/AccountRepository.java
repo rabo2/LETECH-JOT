@@ -5,10 +5,10 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 
-import kr.letech.study.vo.Account;
-import kr.letech.study.vo.Account.AccountBuilder;
-import kr.letech.study.vo.UserAuth;
-import kr.letech.study.vo.UserInfoVo;
+import kr.letech.study.dto.Account;
+import kr.letech.study.dto.UserAuth;
+import kr.letech.study.dto.UserInfoVo;
+import kr.letech.study.dto.Account.AccountBuilder;
 
 @Mapper
 public interface AccountRepository {

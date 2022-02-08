@@ -54,7 +54,7 @@
 		ORDER BY boardNo DESC
 	</select>
 
-	<insert id="insertBoard">
+	<insert id="insertBoard" useGeneratedKeys="true" keyProperty="boardNo">
 		INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_DEV, BOARD_CLASS)
 		VALUES(#{title}, #{content}, #{userNo}, #{boardDev}, #{boardClass})	
 	</insert>
@@ -90,4 +90,9 @@
 		   SET DEL_YN = 0
 		 WHERE BOARD_NO = #{boardNo} 
 	</delete>
+	
+	<insert id="insertBoardAttach">
+		INSERT INTO BOARD_ATTACH
+		VALUES(#{boardNo}, #{uuid}, #{ord})
+	</insert>
 </mapper>

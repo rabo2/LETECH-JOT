@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import kr.letech.study.vo.Criteria;
+import kr.letech.study.dto.Criteria;
 
 @Mapper
 public interface BoardRepository {
@@ -21,4 +21,6 @@ public interface BoardRepository {
 	void deleteBoard(Map<String, String> paraMap) throws Exception;
 
 	void updateViewCount(Map<String, String> paraMap);
+	
+	void insertBoardAttach(Map<String, String> paraMap);
 }

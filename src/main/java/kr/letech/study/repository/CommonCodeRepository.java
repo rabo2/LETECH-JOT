@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import kr.letech.study.vo.CommonCode;
-import kr.letech.study.vo.Navbar;
+import kr.letech.study.dto.CommonCode;
+import kr.letech.study.dto.Navbar;
 
 @Mapper
 public interface CommonCodeRepository {

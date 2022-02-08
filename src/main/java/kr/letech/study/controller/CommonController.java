@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.letech.study.dto.CommonCode;
+import kr.letech.study.dto.Navbar;
+import kr.letech.study.dto.UserInfoVo;
 import kr.letech.study.service.AccountService;
 import kr.letech.study.service.CommonCodeService;
 import kr.letech.study.service.MenuService;
-import kr.letech.study.vo.CommonCode;
-import kr.letech.study.vo.Navbar;
-import kr.letech.study.vo.UserInfoVo;
 
 @Controller
 @RequestMapping("/")
@@ -87,5 +87,10 @@ public class CommonController {
 		
 		return menuService.getMenuList(paraMap);
 	}
-
+	
+	
+	@GetMapping("/{uuid}")
+	public void fileDownLoad(@PathVariable("uuid") String uuid) {
+		
+	}
 }
