@@ -47,11 +47,9 @@ public class CommonCodeService {
 	}
 	
 	
-	public List<CommonCode> getNavbarList(Navbar nav) throws Exception{
-		List<CommonCode> navList = cmnCdRepository.selectCommonCodeByLevel(nav);
+	public List<CommonCode> getNavbarList(CommonCode comn) throws Exception{
+		List<CommonCode> navList = cmnCdRepository.selectCommonCodeByLevel(comn);
 		return navList;
 	}
-	
-	
 	
 }

@@ -10,11 +10,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.letech.study.dto.Account;
 import kr.letech.study.dto.AttachDTO;
+import kr.letech.study.dto.CommonCode;
 import kr.letech.study.dto.Criteria;
 import kr.letech.study.dto.Page;
 import kr.letech.study.repository.AccountRepository;
 import kr.letech.study.repository.AttachRepository;
 import kr.letech.study.repository.BoardRepository;
+import kr.letech.study.repository.CommonCodeRepository;
 import kr.letech.study.repository.ReplyRepository;
 import kr.letech.study.utility.FileUtilities;
 import lombok.extern.slf4j.Slf4j;
@@ -35,15 +37,19 @@ public class BoardService {
 	@Autowired
 	private AttachRepository attachRepository;
 
+	@Autowired
+	private CommonCodeRepository codeRepository;
+
 	public Map<String, Object> getBoardList(Map<String, Object> paraMap) throws Exception {
 
 		List<Map<String, String>> boardList = boardRepository.selectBoardList(paraMap);
+		CommonCode comn = codeRepository.selectCommonCode((String) paraMap.get("boardDev"));
 
 		Page page = new Page();
 
 		page.setCri((Criteria) paraMap.get("cri"));
 
-		if (boardList.get(0) != null) {
+		if (boardList.size() > 0 && boardList.get(0) != null) {
 			page.setTotalCnt(Integer.parseInt(String.valueOf(boardList.get(0).get("cnt"))));
 		} else {
 			page.setTotalCnt(0);
@@ -51,21 +57,14 @@ public class BoardService {
 
 		paraMap.put("boardList", boardList);
 		paraMap.put("pageInfo", page);
+		paraMap.put("boardCode", comn);
 
 		return paraMap;
 	}
 
-	public void regist(Map<String, String> paraMap) throws Exception {
-		Account account = accountRepository.selectAccount(paraMap.get("user"));
-
-		paraMap.put("userNo", account.getUserNo());
-
-		boardRepository.insertBoard(paraMap);
-	}
-
 	@Transactional
-	public void registImageFile(List<MultipartFile> files, Map<String, String> paraMap) throws Exception {
-		Account account = accountRepository.selectAccount(paraMap.get("writer"));
+	public void regist(List<MultipartFile> files, Map<String, String> paraMap) throws Exception {
+		Account account = accountRepository.selectAccount(paraMap.get("user"));
 
 		paraMap.put("userNo", account.getUserNo());
 
@@ -75,11 +74,11 @@ public class BoardService {
 
 		if (!AttachmentsList.isEmpty()) {
 			for (int i = 0; i < AttachmentsList.size(); i++) {
-				AttachDTO attachDTO = AttachmentsList.get(i+1);
+				AttachDTO attachDTO = AttachmentsList.get(i);
 				attachRepository.insertAttach(attachDTO);
 
 				paraMap.put("uuid", attachDTO.getUuid());
-				paraMap.put("ord", String.valueOf(i));
+				paraMap.put("ord", String.valueOf(i) + 1);
 
 				boardRepository.insertBoardAttach(paraMap);
 			}
@@ -99,13 +98,10 @@ public class BoardService {
 				board.put("hasRole", "NO");
 			}
 		}
-		
-		if(paraMap.get("boardDev") != "CD018") {
-			List<AttachDTO> attachList = attachRepository.selectAttachList(paraMap);
-			
-			if(attachList != null && attachList.size() > 0) board.put("attachList", attachList);
-		}
-		
+
+		List<AttachDTO> attachList = attachRepository.selectAttachList(paraMap);
+		board.put("attachList", attachList);
+
 		return board;
 	}
 

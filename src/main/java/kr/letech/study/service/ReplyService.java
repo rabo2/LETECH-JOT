@@ -22,7 +22,6 @@ public class ReplyService {
 	public Map<String, Object> getReplyList(Map<String, Object> paraMap) throws Exception{
 		Map<String, Object> hashMap = new HashMap<>();
 		
-		
 		Page page = new Page();
 		
 		int pageNum = Integer.parseInt(String.valueOf(paraMap.get("pageNum")));
@@ -37,7 +36,7 @@ public class ReplyService {
 		
 		int cnt = 0;
 		
-		if(replyList.get(0) != null && replyList.get(0).size() > 0) {
+		if(replyList != null && replyList.size() > 0) {
 			cnt = Integer.parseInt(String.valueOf(replyList.get(0).get("cnt")));
 		}
 		

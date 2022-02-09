@@ -10,7 +10,7 @@
 		<div>
 			<div id="boardList">
 				<div th:if="${boardList != null}">
-					<h2 th:text="|${boardList?.get(0)?.boardNm} 게시판|"></h2>
+					<h2 th:text="|${boardCode.cdNm} 게시판|"></h2>
 				</div>
 				<label th:if="${boardList != null}" th:utext="|총 ${boardList?.get(0)?.cnt}건 &#09; ${pageInfo?.cri?.page}/${pageInfo?.tempEndPage} 페이지 |"></label>
 				<label th:if="${boardList == null}">총 0건 &#09; 0/0 페이지 </label>

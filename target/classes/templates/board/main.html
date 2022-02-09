@@ -10,9 +10,10 @@
 		<div>
 			<div id="boardList">
 				<div th:if="${boardList != null}">
-					<h2 th:text="|${boardList?.get(0)?.boardNm} 게시판|"></h2>
+					<h2 th:if="${boardCode != null}" th:text="|${boardCode.cdNm}|"></h2>
 				</div>
-				<label th:if="${boardList != null}" th:utext="|총 ${boardList?.get(0)?.cnt}건 &#09; ${pageInfo?.cri?.page}/${pageInfo?.tempEndPage} 페이지 |"></label>
+				<label th:if="${boardList != null and boardList.size() > 0}" th:utext="|총 ${boardList?.get(0)?.cnt}건 &#09; ${pageInfo?.cri?.page}/${pageInfo?.tempEndPage} 페이지 |"></label>
+				<label th:unless="${boardList != null and boardList.size() > 0}" th:utext="|총 0건 &#09; 0/0 페이지 |"></label>
 				<label th:if="${boardList == null}">총 0건 &#09; 0/0 페이지 </label>
 				<table class="table">
 					<thead>
@@ -26,7 +27,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:if="${boardList ne null}" th:each="board : ${boardList}" th:onclick="|location.href='@{/boards/CD018/}${board.boardNo}'|">
+						<tr th:if="${boardList ne null}" th:each="board : ${boardList}"  th:class="boardTr" th:data-boardDev="${board.boardDev}" th:data-boardNo="${board.boardNo}">
 							<td th:text="${board?.boardNo}"></td>
 							<td th:text="|[${board?.boardClass}]|"></td>
 							<td th:utext="${board?.title}"></td>
@@ -37,7 +38,7 @@
 					</tbody>
 				</table>
 				<div class="btn-div">
-					<button class="btn btn-secondary" onclick="location.href = 'boards/regist'">글쓰기</button>
+					<button class="btn btn-secondary" onclick="location.href = 'regist'">글쓰기</button>
 				</div>
 				<ul class="pagination justify-content-center">
 					<li class="page-item" th:if="${pageInfo ne null}" th:classappend="${pageInfo?.startPage}  == 1? 'disabled'">
@@ -62,24 +63,31 @@
 	<script>
 		var data = "";
 		var boardDev = "";
+		
 		window.addEventListener('load', function() {
-			printBoardList(1, null);
-		});
-
-		function printBoardList(page, perPage, boardDev) {
+				$('#boardList').on('click', '.boardTr',function(e){
+					let boardNo = this.getAttribute('data-boardNo');
+					let boardDev = this.getAttribute('data-boardDev');
+					location.href = boardDev+'/'+boardNo;
+				})
+		})
+		
+		
+		function printBoardList(page, perPage, boardDev, from) {
 			boardDev = document.querySelector('input[name="boardDev"]').value;
 			
-			let pageNum = page;
+			if(page){
+				from = "page";
+			}
+			
 			let pageSize = perPage;
 			if (!perPage) {
 				pageSize = 10;
 			}
 			$.ajax(
-					{
-						url : 'boards/' + boardDev + '?page=' + pageNum+ '&perPageNum=' + pageSize,
-						method : 'GET'
+					{url : boardDev + '?page=' + page + '&perPageNum=' + pageSize + '&from='+from,
+					 method : 'GET'
 					}).done(function(fragment) {
-				console.log(fragment)
 				$('#boardList').replaceWith(fragment);
 			});
 		}

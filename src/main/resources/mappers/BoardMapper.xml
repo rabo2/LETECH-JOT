@@ -4,9 +4,8 @@
 <mapper namespace="kr.letech.study.repository.BoardRepository">
 	<select id="selectBoardList" resultType="java.util.LinkedHashMap">
 		SELECT A.BOARD_NO    AS boardNo
-			  ,C.CD_NM AS boardClass
-			  ,A.BOARD_DEV AS boardDev
-			  ,D.CD_NM AS boardNm
+			 , C.CD_NM       AS boardClass
+			 , A.BOARD_DEV   AS boardDev
 			  ,A.TITLE       AS title
 			  ,A.CONTENT     AS content
  			  ,B.ID	   		 AS writer
@@ -29,7 +28,7 @@
 		ORDER BY boardNo DESC
 		LIMIT #{cri.pageStart}, #{cri.perPageNum}
 	</select>
-	
+		
 	<select id="selectBoardByBoardNo" resultType="java.util.HashMap">
 		SELECT A.BOARD_NO    AS boardNo
 			  ,C.CD_NM AS boardClass

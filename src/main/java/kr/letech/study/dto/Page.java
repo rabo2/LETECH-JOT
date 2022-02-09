@@ -19,6 +19,7 @@ public class Page {
 	private int displayPageNum = 10; // 한 게시판에서 보여질 페이지수.
 									 // 게시글수가 아닌 페이지수이다.
 	
+	
 	private void calcData() {
 		endPage = (int) (Math.ceil(cri.getPage() / (double) displayPageNum) * displayPageNum);
 		startPage = (endPage - displayPageNum) + 1;

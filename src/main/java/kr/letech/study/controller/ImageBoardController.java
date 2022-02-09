@@ -55,24 +55,4 @@ public class ImageBoardController {
 		
 		return "imageBoard/detail";
 	}
-	
-	
-	@PostMapping("")
-	public String registImageBoard(MultipartHttpServletRequest multiRequest) throws Exception {
-		List<MultipartFile> files = multiRequest.getFiles("files");
-		
-		Map<String,String> paraMap = new HashMap<>();
-		Principal principal = multiRequest.getUserPrincipal();
-
-		paraMap.put("title", multiRequest.getParameter("title"));
-		paraMap.put("content", multiRequest.getParameter("content"));
-		paraMap.put("writer", principal.getName());
-		paraMap.put("boardDev", multiRequest.getParameter("boardDev"));
-		paraMap.put("boardClass", multiRequest.getParameter("boardClass"));
-		
-		boardService.registImageFile(files, paraMap);
-		
-		return "/imageBoards";
-	}
-	
 }

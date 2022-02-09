@@ -25,7 +25,7 @@ public interface CommonCodeRepository {
 	public List<CommonCode> selectCommonCodeByUpCode(Map<String, String> paraMap);
 	
 	//상단 메뉴 관리
-	List<CommonCode> selectCommonCodeByLevel(Navbar nav);
+	List<CommonCode> selectCommonCodeByLevel(CommonCode cmn);
 
 
 }

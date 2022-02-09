@@ -60,7 +60,7 @@ div.dropleft div.dropdown-menu a.dropdown-item {
 	font-weight: bold;
 }
 
-div.dropleft div.dropdown-menu a.dropdown-item:active{
+div.dropleft div.dropdown-menu a.dropdown-item:active {
 	background: gray;
 }
 </style>
@@ -85,6 +85,11 @@ div.dropleft div.dropdown-menu a.dropdown-item:active{
 			<div class="subTitle row" th:if="${board == null}"></div>
 			<hr>
 			<div class="form-group content-div" th:utext="${board?.content}"></div>
+			<hr>
+			<label for="fileDiv">첨부파일</label>
+			<div th:each="attach : ${board?.attachList}" id="fileDiv">
+				<a th:href="|location.href='@{/common/}'|">[[${attach?.fileNm}]]</a>
+			</div>
 			<hr>
 			<div class="reply-div">
 				<label for="reply">댓글</label>

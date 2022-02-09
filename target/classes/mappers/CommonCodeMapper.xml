@@ -11,7 +11,7 @@
 			  ,ORD
 			  ,DESCRIPTION
 		  FROM COMN_CD
-		  ORDER BY COMN_CD, ORD
+		  ORDER BY UP_CD, LVL, COMN_CD, ORD
 	</select>
 	
 	<select id="selectCommonCode" resultType="CommonCode">
@@ -29,19 +29,23 @@
 	</select>
 	
 	<select id="selectCommonCodeByLevel" resultType="CommonCode">
-		SELECT COMN_CD
-			  ,UP_CD
-			  ,LVL
-			  ,VAL
-			  ,CD_NM
-			  ,ORD
-			  ,DESCRIPTION
+		SELECT COMN_CD AS comnCd
+			  ,UP_CD   AS upCd
+			  ,LVL     AS lvl
+			  ,VAL     AS val
+			  ,CD_NM   AS cdNm
+			  ,ORD     AS ord
+			  ,DESCRIPTION AS description
 		  FROM COMN_CD
 		 WHERE 1=1
 		   <if test="lvl != null and lvl != ''">
-		   AND LVL = #{lvl}
+		    AND LVL = #{lvl}
 		   </if>
-		   <if test="upCd != null and upCd != ''">
+  		   <if test="lvl != null and lvl == 1">
+		    AND VAL IS NOT NULL
+		    AND VAL != ''
+		   </if>
+		   <if test="upCd != null and upCd != '' and upCd != 'undefined'">
 		   AND UP_CD = #{upCd}
 		   </if>
 		  ORDER BY COMN_CD, ORD

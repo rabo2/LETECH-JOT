@@ -13,11 +13,12 @@ function printBoardSelect(target, upCd) {
 }
 
 function registBoard() {
+	let boardDev = $('select[name="boardDev"] option:selected').val();
 	if (confirm('게시글을 등록하시겠습니까?')) {
 		let data = {
 			'title': $('input[name="title"]').val(),
 			'content': $("textarea[name='content']").val().replace(/\n/g, "<br>"),
-			'boardDev': $('select[name="boardDev"] option:selected').val(),
+			'boardDev': boardDev,
 			'boardClass': $('select[name="boardClass"] option:selected').val()
 		};
 
@@ -27,11 +28,7 @@ function registBoard() {
 			contentType: 'application/json; charset=utf-8',
 			method: 'POST'
 		}).done(function() {
-			if($('select[name="boardDev"] option:selected').val() == 'CD018'){
-				location.href = "/std/boards";
-			}else{
-				location.href = "/std/imageBoards";
-			}
+			console.log(boardDev);
 		});
 	}
 }
@@ -46,7 +43,7 @@ function modifyBoard(data) {
 			contentType: 'application/json; charset=utf-8',
 			method: 'put'
 		}).done(function(data) {
-			location.href = boardDev+'/'+boardNo;
+			location.href = boardDev + '/' + boardNo;
 		});
 	}
 }

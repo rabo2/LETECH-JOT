@@ -1,27 +1,36 @@
 var contextPath = $('#contextPathHolder').attr('data-contextPath') ? $('#contextPathHolder').attr('data-contextPath') : '';
 window.onload = function() {
 	printNavbar(1, '#oneDepth');
+
 	let navbar = $('#navbarContent');
 
-	navbar.on('click', '.lvl1', function(event) {
-		if ($(this).attr('href') == '#') {
-			let id = $(this).attr("id");
-			printNavbar(2, '#' + id + '+ ul.dropdown-menu', id);
-		} else {
-
+	navbar.on('click', '.lvl1', function(e) {
+		$(this).siblings("ul.dropdown-menu").toggleClass("show");
+		
+		let show = $(this).parents('#oneDepth').find('.dropdown-menu');
+		for(let i = 0; i < show.length; i++){
+			if($(show[i]).hasClass){
+				$(show[i]).removeClass('show');
+			}
 		}
-		//$(this).siblings("ul.dropdown-menu").toggleClass("show");
+		
+		let id = $(this).attr("id");
+		let uri = $(this).attr('href');
+
+		printNavbar(2, '#' + id + '+ ul.dropdown-menu', id, uri);
+		
 	});
 
-	navbar.on('mouseenter', '.lvl2', function(event) {
+	navbar.on('click', '.lvl2', function(event) {
+		$(this).siblings("ul.dropdown-menu").toggleClass("show");
 		if ($(this).attr('href') == '#') {
 			let id = $(this).attr("id");
+
 			printNavbar(3, '#' + id + '+ ul.dropdown-menu', id);
-			$(this).siblings("ul.dropdown-menu").toggleClass("show");
 		}
 	});
 
-	$('#navbarContent').on("mouseenter", "ul.dropdown-menu [data-toggle='dropdown']", function(event) {
+	$('#navbarContent').on("click", "ul.dropdown-menu [data-toggle='dropdown']", function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 
@@ -34,47 +43,32 @@ window.onload = function() {
 			$('.dropdown-submenu .show').removeClass("show");
 		});
 	});
-
-	$('#summernote').summernote({
-		height: 300,                 // 에디터 높이
-		minHeight: null,             // 최소 높이
-		maxHeight: null,             // 최대 높이
-		focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
-		lang: "ko-KR",					// 한글 설정
-		placeholder: '최대 2048자까지 쓸 수 있습니다',	//placeholder 설정
-		disableResizeEditor: true
-	});
-
 }
 
-function printNavbar(lvl, target, upCd) {
+function printNavbar(lvl, target, upCd,uri) {
 	$.ajax({
-		url: contextPath + '/navbar/' + lvl + '/' + upCd,
+		url: contextPath + '/navbars/' + lvl + '/' + upCd,
 		contentType: "application/json; UTF-8;",
 		type: 'GET',
 		success: function(data) {
 			if (data.length < 1) {
 				$(target).toggleClass('show');
 			}
-			html = "";
+			let html = "";
 			for (let i = 0; i < data.length; i++) {
 				if (lvl == 1) {
 					html += '<!-- Level one dropdown -->';
 					html += '<li class="nav-item dropdown">';
-					if (data[i].uri == '#') {
-						html += '	<a id="' + data[i].menuCd + '" href="' + data[i].uri + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link lvl1" data-bs-auto-close="true">' + data[i].menuNm + '</a>';
-					} else {
-						html += '<a class="nav-link lvl1" id="' + data[i].menuCd + '" href="' + contextPath + data[i].uri + '">' + data[i].menuNm + '</a>';
-					}
-					html += '	<ul aria-labelledby="dropdownMenu1" class="dropdown-menu border-0 shadow">';
+					html += '	<a id="' + data[i].comnCd + '" href="' + data[i].val + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link lvl1" data-bs-auto-close="true">' + data[i].cdNm + '</a>';
+					html += '	<ul aria-labelledby="dropdownMenu1" class="dropdown-menu border-0">';
 					html += '	</ul>';
 					html += '</li>';
 				} else if (lvl == 2) {
 					html += '<li class="dropdown-submenu">';
-					if (data[i].uri == '#') {
-						html += '	<a id="' + data[i].menuCd + '" href="' + contextPath + data[i].uri + '" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="lvl2 dropdown-item" data-bs-auto-close="true">' + data[i].menuNm + '</a>';
+					if (data[i].val == '#') {
+						html += '	<a id="' + data[i].comnCd + '" href="' + uri +'/'+ data[i].comnCd + '" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="lvl2 dropdown-item" data-bs-auto-close="true">' + data[i].cdNm + '</a>';
 					} else {
-						html += '<a class="lvl2 dropdown-item" id="' + data[i].menuCd + '" href="' + contextPath + data[i].uri + '">' + data[i].menuNm + '</a>';
+						html += '<a class="lvl2 dropdown-item" id="' + data[i].comnCd + '" href="' + contextPath + uri+'/'+ data[i].comnCd + '">' + data[i].cdNm + '</a>';
 					}
 
 					html += '	<ul aria-labelledby="dropdownMenu2" class="dropdown-menu border-0 shadow">';
@@ -82,7 +76,7 @@ function printNavbar(lvl, target, upCd) {
 					html += '</li>';
 				} else if (lvl == 3) {
 					html += '<li>';
-					html += '	<a tabindex="-1" href="#" class="dropdown-item show">' + data[i].menuNm + '</a>';
+					html += '	<a tabindex="-1" href="' + contextPath + data[i].val + '" class="dropdown-item show">' + data[i].cdNm + '</a>';
 					html += '</li>';
 				}
 			}
@@ -180,7 +174,7 @@ function removeReply(ord, boardNo, target) {
 		'ord': ord
 		, 'boardNo': boardNo
 		, 'delYn': 0
-		,'target' : target
+		, 'target': target
 	};
 
 	if (confirm('해당 댓글을 삭제하시겠습니까?')) {
