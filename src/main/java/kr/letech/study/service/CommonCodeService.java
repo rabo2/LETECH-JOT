@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.letech.study.dto.CommonCode;
-import kr.letech.study.dto.Navbar;
 import kr.letech.study.repository.CommonCodeRepository;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,6 +48,20 @@ public class CommonCodeService {
 	
 	public List<CommonCode> getNavbarList(CommonCode comn) throws Exception{
 		List<CommonCode> navList = cmnCdRepository.selectCommonCodeByLevel(comn);
+		
+		for (CommonCode commonCode : navList) {
+			commonCode.setUpCd(commonCode.getComnCd());
+			commonCode.setLvl(commonCode.getLvl()+1);
+			
+			List<CommonCode> subList = cmnCdRepository.selectCommonCodeByLevel(commonCode);
+
+			commonCode.setLvl(commonCode.getLvl()-1);
+			if(subList == null || subList.size() == 0) {
+				commonCode.setSubList(null);
+			}else {
+				commonCode.setSubList(subList);
+			}
+		}
 		return navList;
 	}
 	

@@ -88,7 +88,7 @@ div.dropleft div.dropdown-menu a.dropdown-item:active {
 			<hr>
 			<label for="fileDiv">첨부파일</label>
 			<div th:each="attach : ${board?.attachList}" id="fileDiv">
-				<a th:href="|location.href='@{/common/}'|">[[${attach?.fileNm}]]</a>
+				<a th:href="|@{/download}?uuid=${attach.uuid}|">[[${attach?.fileNm}]]</a>
 			</div>
 			<hr>
 			<div class="reply-div">

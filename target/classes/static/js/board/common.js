@@ -38,7 +38,7 @@ function modifyBoard(data) {
 	let boardDev = data.boardDev;
 	if (confirm('해당 수정내용을 등록하시겠습니까?')) {
 		$.ajax({
-			url: '/std/boards',
+			url: '',
 			data: JSON.stringify(data),
 			contentType: 'application/json; charset=utf-8',
 			method: 'put'

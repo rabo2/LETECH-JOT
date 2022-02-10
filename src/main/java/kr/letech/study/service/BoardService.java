@@ -3,6 +3,7 @@ package kr.letech.study.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,8 +42,11 @@ public class BoardService {
 	private CommonCodeRepository codeRepository;
 
 	public Map<String, Object> getBoardList(Map<String, Object> paraMap) throws Exception {
+		Criteria cri = (Criteria)paraMap.get("cri");
+		RowBounds rowBounds = new RowBounds(cri.getPageStart(), cri.getPerPageNum());
 
-		List<Map<String, String>> boardList = boardRepository.selectBoardList(paraMap);
+		List<Map<String, String>> boardList = boardRepository.selectBoardList(paraMap, rowBounds);
+		
 		CommonCode comn = codeRepository.selectCommonCode((String) paraMap.get("boardDev"));
 
 		Page page = new Page();

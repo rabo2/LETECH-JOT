@@ -26,7 +26,6 @@
 			 	 AND BOARD_DEV = #{boardDev} 
 		 </if>
 		ORDER BY boardNo DESC
-		LIMIT #{cri.pageStart}, #{cri.perPageNum}
 	</select>
 		
 	<select id="selectBoardByBoardNo" resultType="java.util.HashMap">

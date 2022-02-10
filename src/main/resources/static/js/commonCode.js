@@ -10,7 +10,7 @@ window.addEventListener('load', function() {
 
 function commonCodeList(target, comnCd) {
 	$.ajax({
-		url: 'list/' + comnCd,
+		url: 'commonCode/list/' + comnCd,
 		method: 'GET'
 	}).done(function(fragment) {
 		$(target).replaceWith(fragment);
@@ -37,7 +37,7 @@ function modifyCode() {
 	// 	};
 	form = $('#registForm').serialize();
 	$.ajax({
-		url: 'modify',
+		url: 'commonCode/modify',
 		//		contentType: "application/json; UTF-8;",
 		method: 'PUT',
 		data: form

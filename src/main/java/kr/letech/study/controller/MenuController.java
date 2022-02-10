@@ -42,6 +42,7 @@ public class MenuController {
 		cd.setUpCd(comnCd);
 		
 		List<CommonCode> commonCodeList = cmnCdService.getNavbarList(cd);
+		
 		return commonCodeList;
 	}
 }

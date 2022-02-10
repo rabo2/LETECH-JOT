@@ -5,20 +5,22 @@ window.onload = function() {
 	let navbar = $('#navbarContent');
 
 	navbar.on('click', '.lvl1', function(e) {
-		$(this).siblings("ul.dropdown-menu").toggleClass("show");
-		
-		let show = $(this).parents('#oneDepth').find('.dropdown-menu');
-		for(let i = 0; i < show.length; i++){
-			if($(show[i]).hasClass){
-				$(show[i]).removeClass('show');
-			}
-		}
-		
 		let id = $(this).attr("id");
 		let uri = $(this).attr('href');
 
-		printNavbar(2, '#' + id + '+ ul.dropdown-menu', id, uri);
-		
+		if (!uri.includes(contextPath)) {
+			$(this).siblings("ul.dropdown-menu").toggleClass("show");
+
+			let show = $(this).parents('#oneDepth').find('.dropdown-menu');
+			for (let i = 0; i < show.length; i++) {
+				if ($(show[i]).hasClass) {
+					$(show[i]).removeClass('show');
+				}
+			}
+			printNavbar(2, '#' + id + '+ ul.dropdown-menu', id, uri);
+		} else {
+			location.href = uri;
+		}
 	});
 
 	navbar.on('click', '.lvl2', function(event) {
@@ -31,21 +33,24 @@ window.onload = function() {
 	});
 
 	$('#navbarContent').on("click", "ul.dropdown-menu [data-toggle='dropdown']", function(event) {
-		event.preventDefault();
-		event.stopPropagation();
+		let link = $(this).attr('href');
+		if (!link.includes(contextPath)) {
+			event.preventDefault();
+			event.stopPropagation();
 
-		$(this).parents().siblings('.dropdown-submenu').find('a.dropdown-item').siblings('ul.dropdown-menu').removeClass("show");
+			$(this).parents().siblings('.dropdown-submenu').find('a.dropdown-item').siblings('ul.dropdown-menu').removeClass("show");
 
-		if (!$(this).next().hasClass('show')) {
-			$(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+			if (!$(this).next().hasClass('show')) {
+				$(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+			}
+			$(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
+				$('.dropdown-submenu .show').removeClass("show");
+			});
 		}
-		$(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
-			$('.dropdown-submenu .show').removeClass("show");
-		});
 	});
 }
 
-function printNavbar(lvl, target, upCd,uri) {
+function printNavbar(lvl, target, upCd, uri) {
 	$.ajax({
 		url: contextPath + '/navbars/' + lvl + '/' + upCd,
 		contentType: "application/json; UTF-8;",
@@ -59,18 +64,22 @@ function printNavbar(lvl, target, upCd,uri) {
 				if (lvl == 1) {
 					html += '<!-- Level one dropdown -->';
 					html += '<li class="nav-item dropdown">';
-					html += '	<a id="' + data[i].comnCd + '" href="' + data[i].val + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link lvl1" data-bs-auto-close="true">' + data[i].cdNm + '</a>';
-					html += '	<ul aria-labelledby="dropdownMenu1" class="dropdown-menu border-0">';
-					html += '	</ul>';
+					if (data[i].subList == null) {
+						html += '	<a id="' + data[i].comnCd + '" href="' + contextPath + data[i].val + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link lvl1" data-bs-auto-close="true">' + data[i].cdNm + '</a>';
+					} else {
+						html += '	<a id="' + data[i].comnCd + '" href="' + data[i].val + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link lvl1" data-bs-auto-close="true">' + data[i].cdNm + '</a>';
+						html += '	<ul aria-labelledby="dropdownMenu1" class="dropdown-menu border-0">';
+						html += '	</ul>';
+					}
+
 					html += '</li>';
 				} else if (lvl == 2) {
 					html += '<li class="dropdown-submenu">';
-					if (data[i].val == '#') {
-						html += '	<a id="' + data[i].comnCd + '" href="' + uri +'/'+ data[i].comnCd + '" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="lvl2 dropdown-item" data-bs-auto-close="true">' + data[i].cdNm + '</a>';
+					if (data[i].subList != null) {
+						html += '	<a id="' + data[i].comnCd + '" href="' + uri + '/' + data[i].comnCd + '" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="lvl2 dropdown-item" data-bs-auto-close="true">' + data[i].cdNm + '</a>';
 					} else {
-						html += '<a class="lvl2 dropdown-item" id="' + data[i].comnCd + '" href="' + contextPath + uri+'/'+ data[i].comnCd + '">' + data[i].cdNm + '</a>';
+						html += '<a class="lvl2 dropdown-item" id="' + data[i].comnCd + '" href="' + contextPath + uri + '/' + data[i].comnCd + '">' + data[i].cdNm + '</a>';
 					}
-
 					html += '	<ul aria-labelledby="dropdownMenu2" class="dropdown-menu border-0 shadow">';
 					html += '	</ul>';
 					html += '</li>';

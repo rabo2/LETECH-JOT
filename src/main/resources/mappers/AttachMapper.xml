@@ -14,10 +14,19 @@
 		       ON A.UUID = B.UUID
 		 WHERE 1=1
 		   AND B.BOARD_NO = #{boardNo}
-		 ORDER BY ORD
+		 ORDER BY B.ORD
 	</select>
 	
-	<select id="selectAttach" resultType="Map">
+	<select id="selectAttach" resultType="AttachDTO">
+		SELECT A.UUID		 AS uuid
+			  ,A.UPLOAD_PATH AS uploadPath
+			  ,A.FILE_NM     AS fileNm
+			  ,A.FILE_TYPE   AS fileType
+			  ,A.USE_YN      AS useYn
+			  ,A.FILE_SIZE   AS fileSize
+		  FROM ATTACH A
+		 WHERE 1=1
+		   AND A.UUID = #{uuid}
 	</select>
 	
 	<insert id="insertAttach">

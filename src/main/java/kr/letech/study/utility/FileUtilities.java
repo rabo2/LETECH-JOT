@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.letech.study.dto.AttachDTO;
 
 public class FileUtilities {
-	private final static String ROOT_PATH = Paths.get("C:", "Users", "Desktop","testFile").toString();
+	private final static String ROOT_PATH = Paths.get("D:", "STS4-workspace", "msKim-study1","src","main", "resources").toString();
 
 	public static List<AttachDTO> parseFileInfo(List<MultipartFile> files) throws Exception {
 		if (CollectionUtils.isEmpty(files)) {

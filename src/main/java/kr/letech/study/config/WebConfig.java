@@ -9,10 +9,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
 
+import kr.letech.study.interceoptor.SecurityInterceptor;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-public class WebConfig  {
+public class WebConfig implements WebMvcConfigurer  {
 
 	/*
 	 * xssFilter
@@ -25,5 +26,12 @@ public class WebConfig  {
 		registrationBean.addUrlPatterns("/*");
 		return registrationBean;
 	}
-
+	
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(new SecurityInterceptor())
+		.excludePathPatterns("/css/**", "/fonts/**", "/plugin/**", "/scripts/**");
+	}
+	
+	
 }

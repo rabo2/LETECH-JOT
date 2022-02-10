@@ -12,7 +12,6 @@ import kr.letech.study.dto.Navbar;
 public interface CommonCodeRepository {
 	
 	// 공통 코드 관리
-	List<CommonCode> selectCommonCodeList();
 	
 	void insertCommonCode(CommonCode cmn);
 	
@@ -26,6 +25,8 @@ public interface CommonCodeRepository {
 	
 	//상단 메뉴 관리
 	List<CommonCode> selectCommonCodeByLevel(CommonCode cmn);
+
+	List<CommonCode> selectCommonCodeList();
 
 
 }

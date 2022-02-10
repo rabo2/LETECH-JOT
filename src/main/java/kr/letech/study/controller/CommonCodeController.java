@@ -28,7 +28,7 @@ public class CommonCodeController {
 	@Autowired
 	private CommonCodeService cmnCdService;
 
-	@RequestMapping("{comnCd}")
+	@RequestMapping("")
 	public String commonCodePage() {
 		return "commonCode/main";
 	}
