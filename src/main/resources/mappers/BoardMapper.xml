@@ -6,6 +6,7 @@
 		SELECT A.BOARD_NO    AS boardNo
 			 , C.CD_NM       AS boardClass
 			 , A.BOARD_DEV   AS boardDev
+			 , D.CD_NM		 AS boardNm
 			  ,A.TITLE       AS title
 			  ,A.CONTENT     AS content
  			  ,B.ID	   		 AS writer

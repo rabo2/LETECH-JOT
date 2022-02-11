@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
 
-import kr.letech.study.interceoptor.SecurityInterceptor;
+import kr.letech.study.interceptor.SecurityInterceptor;
 import lombok.RequiredArgsConstructor;
 
 @Configuration

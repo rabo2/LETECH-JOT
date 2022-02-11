@@ -94,22 +94,6 @@ function printNavbar(lvl, target, upCd, uri) {
 	})
 }
 
-
-function removeBoard(data) {
-	if (confirm('해당 게시글을 정말 삭제하시겠습니끼?')) {
-		$.ajax({
-			url: '/std/boards',
-			data: JSON.stringify(data),
-			method: 'DELETE',
-			contentType: 'application/json; charset=utf-8'
-		}).done(function() {
-			location.href = "/std/boards";
-		});
-	}
-}
-
-
-
 //댓굴 등록, 출력
 function printReply(boardNo, pageNum, target) {
 	$.ajax({

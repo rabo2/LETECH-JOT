@@ -1,12 +1,15 @@
 package kr.letech.study.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.letech.study.dto.Account;
@@ -43,30 +46,30 @@ public class BoardService {
 
 	@Autowired
 	private FileUtilities fileUtilities;
-	
-	public Map<String, Object> getBoardList(Map<String, Object> paraMap) throws Exception {
-		Criteria cri = (Criteria)paraMap.get("cri");
-		RowBounds rowBounds = new RowBounds(cri.getPageStart(), cri.getPerPageNum());
 
-		List<Map<String, String>> boardList = boardRepository.selectBoardList(paraMap, rowBounds);
-		
+	public List<Map<String, String>> getBoardList(Map<String, Object> paraMap) throws Exception {
+//		Criteria cri = (Criteria) paraMap.get("cri");
+//		RowBounds rowBounds = new RowBounds(cri.getPageStart(), cri.getPerPageNum());
+
+		List<Map<String, String>> boardList = boardRepository.selectBoardList(paraMap);
+
 		CommonCode comn = codeRepository.selectCommonCode((String) paraMap.get("boardDev"));
 
-		Page page = new Page();
+//		Page page = new Page();
 
-		page.setCri((Criteria) paraMap.get("cri"));
-
-		if (boardList.size() > 0 && boardList.get(0) != null) {
-			page.setTotalCnt(Integer.parseInt(String.valueOf(boardList.get(0).get("cnt"))));
-		} else {
-			page.setTotalCnt(0);
-		}
+//		page.setCri((Criteria) paraMap.get("cri"));
+//
+//		if (boardList.size() > 0 && boardList.get(0) != null) {
+//			page.setTotalCnt(Integer.parseInt(String.valueOf(boardList.get(0).get("cnt"))));
+//		} else {
+//			page.setTotalCnt(0);
+//		}
 
 		paraMap.put("boardList", boardList);
-		paraMap.put("pageInfo", page);
-		paraMap.put("boardCode", comn);
+//		paraMap.put("pageInfo", page);
+//		paraMap.put("boardCode", comn);
 
-		return paraMap;
+		return boardList;
 	}
 
 	@Transactional
@@ -77,17 +80,21 @@ public class BoardService {
 
 		boardRepository.insertBoard(paraMap);
 
-		List<AttachDTO> AttachmentsList = fileUtilities.parseFileInfo(files);
+		List<AttachDTO> AttachmentsList = null;
+		if (!CollectionUtils.isEmpty(files)) {
+			AttachmentsList = fileUtilities.parseFileInfo(files);
 
-		if (!AttachmentsList.isEmpty()) {
-			for (int i = 0; i < AttachmentsList.size(); i++) {
-				AttachDTO attachDTO = AttachmentsList.get(i);
-				attachRepository.insertAttach(attachDTO);
+			if (!AttachmentsList.isEmpty()) {
+				for (int i = 0; i < AttachmentsList.size(); i++) {
+					AttachDTO attachDTO = AttachmentsList.get(i);
+					attachRepository.insertAttach(attachDTO);
 
-				paraMap.put("uuid", attachDTO.getUuid());
-				paraMap.put("ord", String.valueOf(i) + 1);
+					paraMap.put("uuid", attachDTO.getUuid());
+					paraMap.put("ord", String.valueOf(i) + 1);
 
-				boardRepository.insertBoardAttach(paraMap);
+					boardRepository.insertBoardAttach(paraMap);
+				}
+
 			}
 		}
 	}

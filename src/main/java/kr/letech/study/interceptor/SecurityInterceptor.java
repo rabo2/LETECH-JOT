@@ -1,4 +1,4 @@
-package kr.letech.study.interceoptor;
+package kr.letech.study.interceptor;
 
 import java.util.Collection;
 
