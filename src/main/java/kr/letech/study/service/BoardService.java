@@ -41,6 +41,9 @@ public class BoardService {
 	@Autowired
 	private CommonCodeRepository codeRepository;
 
+	@Autowired
+	private FileUtilities fileUtilities;
+	
 	public Map<String, Object> getBoardList(Map<String, Object> paraMap) throws Exception {
 		Criteria cri = (Criteria)paraMap.get("cri");
 		RowBounds rowBounds = new RowBounds(cri.getPageStart(), cri.getPerPageNum());
@@ -74,7 +77,7 @@ public class BoardService {
 
 		boardRepository.insertBoard(paraMap);
 
-		List<AttachDTO> AttachmentsList = FileUtilities.parseFileInfo(files);
+		List<AttachDTO> AttachmentsList = fileUtilities.parseFileInfo(files);
 
 		if (!AttachmentsList.isEmpty()) {
 			for (int i = 0; i < AttachmentsList.size(); i++) {

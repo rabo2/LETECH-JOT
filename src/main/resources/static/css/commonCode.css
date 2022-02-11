@@ -1,4 +1,3 @@
-
 .btn-div {
 	text-align: right;
 }
@@ -24,21 +23,22 @@
 	text-align: center;
 }
 
-.table-div .table tr:hover {
-	background: #e3f2fd;
-	cursor: pointer;
-	text-decoration: underline;
-}
-
-.table-div .table tr td {
-	text-align: center;
-}
-
-.table-div #codeList tr td:nth-child(3), .table-div #codeList tr td:nth-child(6)
-	{
-	text-align: right;
-}
-
 #registForm .row .form-group, #registForm .row .form-group input {
 	text-align: center;
+}
+
+#codeDiv {
+	height: 50vh;
+}
+
+#codeDiv div {
+	height: 100%;
+}
+
+#codeDiv div.row div.card:first-child div.card-header{
+	height: 20%;
+}
+
+.card-header {
+	border-bottom: 3px solid #39c0ed;
 }

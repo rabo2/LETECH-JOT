@@ -5,10 +5,13 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,22 +35,31 @@ public class CommonCodeController {
 	public String commonCodePage() {
 		return "commonCode/main";
 	}
-
+	
+	@GetMapping("/{comnCd}")
+	@ResponseBody
+	public ResponseEntity<Object> commonCode(@PathVariable String comnCd) throws Exception{
+		ResponseEntity<Object> entity = null;
+		
+		CommonCode commonCode = cmnCdService.getCommonCode(comnCd);
+		entity = new ResponseEntity<Object>(commonCode, HttpStatus.OK);
+		
+		return entity;
+	}
+	
 	@GetMapping("list/{comnCd}")
-	public String commonCodeList(Model model, @PathVariable(required = false) String comnCd) throws Exception {
-		String target = "";
+	@ResponseBody
+	public ResponseEntity<Object> commonCodeList(@PathVariable(required = false) String comnCd) throws Exception {
+		ResponseEntity<Object> entity = null;
 		
 		if(comnCd.equals("undefined")) {
 			List<CommonCode> cmdList = cmnCdService.getCommonCodeList();
-			model.addAttribute("cmdList", cmdList);
-			target = "commonCode/main :: #codeList";
-			
+			entity = new ResponseEntity<Object>(cmdList, HttpStatus.OK);
 		}else {
 			CommonCode code = cmnCdService.getCommonCode(comnCd);
-			model.addAttribute("code", code);
-			target = "commonCode/main :: #detailCode";
+			entity = new ResponseEntity<Object>(code, HttpStatus.OK);
 		}
-		return target;
+		return entity;
 	}
 	
 	@GetMapping("/upCode")

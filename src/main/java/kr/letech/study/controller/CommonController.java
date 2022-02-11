@@ -65,14 +65,17 @@ public class CommonController {
 	public ResponseEntity<Map<String, String>> signUp(@RequestBody UserInfoVo userInfo) {
 
 		ResponseEntity<Map<String, String>> entity = null;
+		
 		Map<String, String> dataMap = new HashMap<String, String>();
 
 		try {
+			
 			accountService.save(userInfo);
 			dataMap.put("Message", "OK");
 			entity = new ResponseEntity<Map<String, String>>(dataMap, HttpStatus.OK);
 
 		} catch (Exception e) {
+			
 			dataMap.put("Message", "FAIL");
 			entity = new ResponseEntity<Map<String, String>>(dataMap, HttpStatus.BAD_REQUEST);
 
@@ -116,8 +119,7 @@ public class CommonController {
 			File file = new File(attach.getUploadPath());
 
 			HttpHeaders httpHeaders = new HttpHeaders();
-			httpHeaders.setContentDisposition(
-					ContentDisposition.builder("attachment").filename(attach.getFileNm()).build());
+			httpHeaders.setContentDisposition(ContentDisposition.builder("attachment").filename(attach.getFileNm()).build());
 
 			entity = new ResponseEntity<Object>(resource, httpHeaders, HttpStatus.OK);
 		} catch (Exception e) {
