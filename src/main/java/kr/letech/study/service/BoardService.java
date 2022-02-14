@@ -1,5 +1,6 @@
 package kr.letech.study.service;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -42,32 +43,29 @@ public class BoardService {
 	private AttachRepository attachRepository;
 
 	@Autowired
-	private CommonCodeRepository codeRepository;
-
-	@Autowired
 	private FileUtilities fileUtilities;
 
-	public List<Map<String, String>> getBoardList(Map<String, Object> paraMap) throws Exception {
-//		Criteria cri = (Criteria) paraMap.get("cri");
-//		RowBounds rowBounds = new RowBounds(cri.getPageStart(), cri.getPerPageNum());
+	private static String[] FILE_TYPE = { "JPG", "JPEG", "GIF", "PNG"};
 
+	public List<Map<String, String>> getBoardList(Map<String, Object> paraMap) throws Exception {
 		List<Map<String, String>> boardList = boardRepository.selectBoardList(paraMap);
 
-		CommonCode comn = codeRepository.selectCommonCode((String) paraMap.get("boardDev"));
-
-//		Page page = new Page();
-
-//		page.setCri((Criteria) paraMap.get("cri"));
-//
-//		if (boardList.size() > 0 && boardList.get(0) != null) {
-//			page.setTotalCnt(Integer.parseInt(String.valueOf(boardList.get(0).get("cnt"))));
-//		} else {
-//			page.setTotalCnt(0);
-//		}
-
-		paraMap.put("boardList", boardList);
-//		paraMap.put("pageInfo", page);
-//		paraMap.put("boardCode", comn);
+		if (boardList != null && boardList.size() > 0) {
+			if (boardList.get(0).get("boardDev").equals("CD019")) {
+				log.info("boardNm : 이미지");
+				for (Map<String, String> board : boardList) {
+					List<AttachDTO> attachList = attachRepository.selectAttachList(board);
+					if (attachList != null && attachList.size() > 0) {
+						String fileType = attachList.get(0).getFileType();
+						if (Arrays.asList(FILE_TYPE).contains(fileType)) {
+							board.put("uploadPath", attachList.get(0).getUploadPath());
+						}else {
+							board.put("uploadPath", null);
+						}
+					}
+				}
+			}
+		}
 
 		return boardList;
 	}
@@ -81,6 +79,7 @@ public class BoardService {
 		boardRepository.insertBoard(paraMap);
 
 		List<AttachDTO> AttachmentsList = null;
+		
 		if (!CollectionUtils.isEmpty(files)) {
 			AttachmentsList = fileUtilities.parseFileInfo(files);
 

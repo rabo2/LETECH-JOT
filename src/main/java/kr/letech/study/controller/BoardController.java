@@ -56,6 +56,17 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 
+	/**
+	* @Method 			: main
+	* @date 			: 2022.02.14
+	* @author 			: mskim
+	* @return			: String
+	* @description		:
+	* =========================================================== 
+	* DATE 				AUTHOR 			NOTE 
+	* ----------------------------------------------------------- 
+	* 2022.02.14		mskim			최초 생성
+	*/
 	@GetMapping("/CD{boardDev}")
 	public String main(@PathVariable String boardDev, Model model) {
 		log.info("\nboardDev : {}", boardDev);
@@ -63,6 +74,17 @@ public class BoardController {
 		return "board/main";
 	}
 	
+	/**
+	* @Method 			: printboardList
+	* @date 			: 2022.02.14
+	* @author 			: mskim
+	* @return			: ResponseEntity<Object>
+	* @description		:
+	* =========================================================== 
+	* DATE 				AUTHOR 			NOTE 
+	* ----------------------------------------------------------- 
+	* 2022.02.14		mskim			최초 생성
+	*/
 	@GetMapping("/boardDev{boardDev}")
 	@ResponseBody
 	public ResponseEntity<Object> printboardList(@PathVariable(value = "boardDev") String boardDev) throws Exception {
@@ -70,7 +92,6 @@ public class BoardController {
 		
 		Map<String, Object> paraMap = new HashMap<>();
 
-//		paraMap.put("cri", criteria);
 		paraMap.put("boardDev", boardDev);
 
 		try {
@@ -112,7 +133,7 @@ public class BoardController {
 	@PostMapping("")
 	public RedirectView regist(MultipartHttpServletRequest multiRequest) throws Exception {
 		List<MultipartFile> files = multiRequest.getFiles("files");
-
+		
 		Map<String, String> paraMap = new HashMap<>();
 		Principal principal = multiRequest.getUserPrincipal();
 
@@ -127,6 +148,17 @@ public class BoardController {
 		return new RedirectView("boards/"+multiRequest.getParameter("boardDev"));
 	}
 
+	/**
+	* @Method 			: modifyForm
+	* @date 			: 2022.02.14
+	* @author 			: mskim
+	* @return			: String
+	* @description		:
+	* =========================================================== 
+	* DATE 				AUTHOR 			NOTE 
+	* ----------------------------------------------------------- 
+	* 2022.02.14		mskim			최초 생성
+	*/
 	@GetMapping("/modify")
 	public String modifyForm(@RequestParam Map<String, String> paraMap, Model model) throws Exception {
 		Map<String, ?> board = boardService.getBoard(paraMap);
@@ -136,6 +168,17 @@ public class BoardController {
 		return "board/modify";
 	}
 
+	/**
+	* @Method 			: modify
+	* @date 			: 2022.02.14
+	* @author 			: mskim
+	* @return			: String
+	* @description		:
+	* =========================================================== 
+	* DATE 				AUTHOR 			NOTE 
+	* ----------------------------------------------------------- 
+	* 2022.02.14		mskim			최초 생성
+	*/
 	@PutMapping("")
 	public String modify(@RequestBody Map<String, String> paraMap) throws Exception {
 		boardService.modifyBoard(paraMap);
@@ -143,6 +186,17 @@ public class BoardController {
 		return "board/modify";
 	}
 
+	/**
+	* @Method 			: remove
+	* @date 			: 2022.02.14
+	* @author 			: mskim
+	* @return			: String
+	* @description		:
+	* =========================================================== 
+	* DATE 				AUTHOR 			NOTE 
+	* ----------------------------------------------------------- 
+	* 2022.02.14		mskim			최초 생성
+	*/
 	@DeleteMapping("")
 	public String remove(@RequestBody Map<String, String> paraMap) throws Exception {
 		boardService.remove(paraMap);

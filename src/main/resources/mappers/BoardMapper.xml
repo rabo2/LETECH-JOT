@@ -3,17 +3,17 @@
 
 <mapper namespace="kr.letech.study.repository.BoardRepository">
 	<select id="selectBoardList" resultType="java.util.LinkedHashMap">
-		SELECT A.BOARD_NO    AS boardNo
-			 , C.CD_NM       AS boardClass
-			 , A.BOARD_DEV   AS boardDev
-			 , D.CD_NM		 AS boardNm
-			  ,A.TITLE       AS title
-			  ,A.CONTENT     AS content
- 			  ,B.ID	   		 AS writer
- 			  ,DATE_FORMAT(A.REGIST_DATE, '%Y-%m-%d') AS registDate
-			  ,DATE_FORMAT(A.UPDATE_DATE, '%Y-%m-%d') AS updateDate
-			  ,A.VIEW_CNT	   AS viewCnt
-			  ,COUNT(*) OVER() AS cnt
+		SELECT A.BOARD_NO    							AS boardNo
+			 , C.CD_NM       							AS boardClass
+			 , A.BOARD_DEV   							AS boardDev
+			 , D.CD_NM		 							AS boardNm
+			 , A.TITLE       							AS title
+			 , A.CONTENT     							AS content
+ 			 , B.ID	   		 							AS writer
+ 			 , DATE_FORMAT(A.REGIST_DATE, '%Y-%m-%d') 	AS registDate
+			 , DATE_FORMAT(A.UPDATE_DATE, '%Y-%m-%d') 	AS updateDate
+			 , A.VIEW_CNT	   							AS viewCnt
+			 , COUNT(*) OVER() 							AS cnt
 		 FROM BOARD A
 		      JOIN USERS B
 		      ON A.WRITER = B.USER_NO

@@ -10,12 +10,12 @@ window.addEventListener('load', function() {
 	printBoardList(boardDev);
 
 	$('#grid').on('click', 'table.tui-grid-table tbody tr', function(e) {
+		let child = $(e.currentTarget).children();
+
 		let boardNo = this.getAttribute('data-boardNo');
 		let boardDev = this.getAttribute('data-boardDev');
-		location.href = boardDev + '/' + boardNo;
+		//		location.href = boardDev + '/' + boardNo;
 	})
-	
-	
 });
 
 function printBoardList(boardDev) {
@@ -25,14 +25,53 @@ function printBoardList(boardDev) {
 		success: function(data) {
 			document.getElementById('gridLabel').innerHTML = data[0].boardNm
 			document.getElementById('totalCnt').innerText = '총 ' + data.length;
-			pringToastGrid(data);
+
+			col = [
+				{
+					header: '분류',
+					name: 'boardClass',
+					keyColumnName: '100',
+					width : 'auto',
+					align: 'center'
+				}, {
+					header: '제목',
+					name: 'title'
+				}, {
+					header: '작성자',
+					name: 'writer',
+					width : 'auto'
+				}, {
+					header: '작성일자',
+					name: 'registDate',
+					width : 'auto',
+					minWidth: 150
+				}, {
+					header: '조회수',
+					name: 'viewCnt',
+					width : 'auto',
+					align: 'right'
+				}]
+
+			if (data[0].uploadPath) {
+				col.unshift({
+					header: ' ',
+					name: 'uploadPath',
+					width: 80
+				});
+				
+				for(let i = 0; i < data.length; i++){
+					data[i].uploadPath = '<div style="width:100px; height:80px; background-image: url(\''+contextPath+'/thumbnail?uploadPath='+encodeURI(data[i].uploadPath)+'\');"></div>';
+				}
+			}
+
+			pringToastGrid(col, data);
 		}
 	});
 }
-function pringToastGrid(gridData) {
+function pringToastGrid(column, gridData) {
 	const grid = new tui.Grid({
 		el: document.getElementById('grid'),
-		contextMenu : null,
+		contextMenu: null,
 		data: gridData,
 		pageOptions: {
 			useClient: true,
@@ -42,40 +81,18 @@ function pringToastGrid(gridData) {
 		selectionUnit: 'row',
 		scrollX: false,
 		scrollY: false,
-		rowHeaders: ['rowNum'],
-		columns: [{
-			header: '분류',
-			name: 'boardClass',
-			width : 100
-		}, {
-			header: '제목',
-			name: 'title',
-			width : 650
-		}, {
-			header: '작성자',
-			name: 'writer',
-			width : 120
-		}, {
-			header: '작성일자',
-			name: 'registDate',
-			width : 150
-		}, {
-			header: '조회수',
-			name: 'viewCnt',
-			width : 50
-		}],
+		columns: column,
 	});
-	onGridMounted 
-	
+
 	grid.on('onGridMounted', (e) => {
-		document.getElementById('pageCnt').innerText = '      1 /' ;
+		document.getElementById('pageCnt').innerText = '      1 /';
 	});
 
 	grid.on('afterPageMove', (e) => {
 		const pagination = grid.getPagination();
 		const currentPage = pagination.getCurrentPage();
-			
-		document.getElementById('pageCnt').innerText = currentPage+'/' ;
+
+		document.getElementById('pageCnt').innerText = currentPage + '/';
 	});
 }
 

@@ -4,6 +4,7 @@ var codList = "";
 var flag = true;
 var data = "";
 var html = "";
+
 window.addEventListener('load', function() {
 	commonCodeList('#codeList');
 });
@@ -23,7 +24,8 @@ function commonCodeList(target, comnCd) {
 			});
 			$('#tree').jstree({
 				'core': {
-					'data': jstree
+					'data': jstree,
+					 "check_callback" : true
 				},
 				'plugins': [
 					'search'
@@ -36,6 +38,10 @@ function commonCodeList(target, comnCd) {
 			$('#tree').on("select_node.jstree", function(e) {
 				let comnCd = $(e.target).attr('aria-activedescendant');
 				getCommonCode(comnCd);
+				let btn = document.querySelectorAll('div.btn-div input.btn');
+				for (let i = 0; i < btn.length; i++) {
+					btn[i].removeAttribute('disabled');
+				}
 			});
 
 			var to = false;
@@ -55,7 +61,7 @@ function commonCodeList(target, comnCd) {
 
 function getCommonCode(comnCd) {
 	$.ajax({
-		url: 'commonCode/'+comnCd,
+		url: 'commonCode/' + comnCd,
 		success: function(data) {
 			$('input[name="comnCd"]').val(data.comnCd);
 			$('input[name="upCd"]').val(data.upCd);
@@ -72,40 +78,36 @@ function registCode() {
 	form = $('#registForm').serialize();
 
 	$.ajax({
-		url: 'regist',
-		//		contentType: "application/json; UTF-8;",
+		url: 'commonCode/regist',
 		method: 'POST',
-		data: form
-	}).done(function(fragment) {
-		$("#codeList").replaceWith(fragment);
-		$('#registForm input').reset();
-	});
+		data: form,
+		success: function(data) {
+			$('#tree').jstree().create_node (data.upCd, data.cdNm);
+		}
+	})
 }
 
 function modifyCode() {
-	// 	if(!formCheck()){
-	// 		return false;
-	// 	};
 	form = $('#registForm').serialize();
 	$.ajax({
 		url: 'commonCode/modify',
-		//		contentType: "application/json; UTF-8;",
 		method: 'PUT',
-		data: form
-	}).done(function(fragment) {
-		$("#codeList").replaceWith(fragment);
+		data: form,
+		success : function(data){
+			$('#tree').jstree().rename_node(data.comnCd, data.cdNm)
+		}
 	});
 }
 
 function removeCode() {
-	let codeVal = document.querySelector('#detailCode input[name="comnCd"]').value;
+	let codeVal = document.querySelector('input[name="comnCd"]').value;
 
 	if (confirm('정말 삭제하시겠습니까?')) {
 		$.ajax({
-			url: 'remove/' + codeVal,
+			url: 'commonCode/remove/' + codeVal,
 			method: 'DELETE'
-		}).done(function(fragment) {
-			$("#codeList").replaceWith(fragment);
+		}).done(function() {
+			$('#tree').jstree().delete_node($('#' + codeVal));
 		});
 	}
 }

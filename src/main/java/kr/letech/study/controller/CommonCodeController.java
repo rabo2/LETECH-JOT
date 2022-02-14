@@ -1,5 +1,6 @@
 package kr.letech.study.controller;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -35,60 +36,66 @@ public class CommonCodeController {
 	public String commonCodePage() {
 		return "commonCode/main";
 	}
-	
+
 	@GetMapping("/{comnCd}")
 	@ResponseBody
-	public ResponseEntity<Object> commonCode(@PathVariable String comnCd) throws Exception{
+	public ResponseEntity<Object> commonCode(@PathVariable String comnCd) throws Exception {
 		ResponseEntity<Object> entity = null;
-		
+
 		CommonCode commonCode = cmnCdService.getCommonCode(comnCd);
 		entity = new ResponseEntity<Object>(commonCode, HttpStatus.OK);
-		
+
 		return entity;
 	}
-	
+
 	@GetMapping("list/{comnCd}")
 	@ResponseBody
 	public ResponseEntity<Object> commonCodeList(@PathVariable(required = false) String comnCd) throws Exception {
 		ResponseEntity<Object> entity = null;
-		
-		if(comnCd.equals("undefined")) {
+
+		if (comnCd.equals("undefined")) {
 			List<CommonCode> cmdList = cmnCdService.getCommonCodeList();
 			entity = new ResponseEntity<Object>(cmdList, HttpStatus.OK);
-		}else {
+		} else {
 			CommonCode code = cmnCdService.getCommonCode(comnCd);
 			entity = new ResponseEntity<Object>(code, HttpStatus.OK);
 		}
 		return entity;
 	}
-	
+
 	@GetMapping("/upCode")
-	public String commonCodeListByUpCd(Model model, @RequestParam Map<String, String> paraMap) throws Exception{
-		model.addAttribute("codeList",cmnCdService.getCommonCodeListByUpCode(paraMap));
-		
+	public String commonCodeListByUpCd(Model model, @RequestParam Map<String, String> paraMap) throws Exception {
+		model.addAttribute("codeList", cmnCdService.getCommonCodeListByUpCode(paraMap));
+
 		return paraMap.get("target");
 	}
-	
-	
 
 	@PostMapping("/regist")
-	public String registCommonCode(Model model, CommonCode cmd) throws Exception {
-		cmnCdService.registCommonCode(cmd);
-		List<CommonCode> cmdList = cmnCdService.getCommonCodeList();
-
-		model.addAttribute("cmdList", cmdList);
-
-		return "commonCode/main :: #codeList";
+	@ResponseBody
+	public ResponseEntity<Object> registCommonCode(CommonCode cmd) throws Exception {
+		ResponseEntity<Object> entity = null;
+		try {
+			cmnCdService.registCommonCode(cmd);
+			entity = new ResponseEntity<Object>(cmd, HttpStatus.OK);
+		} catch (SQLException e) {
+			entity = new ResponseEntity<Object>(cmd, HttpStatus.OK);
+		}
+		return entity;
 	}
 
 	@PutMapping("/modify")
-	public String modifyCommonCode(Model model, CommonCode cmd) throws Exception {
-		cmnCdService.modifyCommandCode(cmd);
-		List<CommonCode> cmdList = cmnCdService.getCommonCodeList();
+	@ResponseBody
+	public ResponseEntity<Object> modifyCommonCode(CommonCode cmd) throws Exception {
+		ResponseEntity<Object> entity = null;
 
-		model.addAttribute("cmdList", cmdList);
+		try {
+			cmnCdService.modifyCommandCode(cmd);
+			entity = new ResponseEntity<Object>(cmd, HttpStatus.OK);
+		} catch (SQLException e) {
+			entity = new ResponseEntity<Object>(cmd, HttpStatus.OK);
+		}
 
-		return "commonCode/main :: #codeList";
+		return entity;
 	}
 
 	@DeleteMapping("/remove/{comnCd}")

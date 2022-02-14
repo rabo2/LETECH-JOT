@@ -1,6 +1,10 @@
 package kr.letech.study.controller;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -8,6 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.io.IOUtils;
+import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -15,6 +23,7 @@ import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,15 +34,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.letech.study.dto.AttachDTO;
-import kr.letech.study.dto.CommonCode;
-import kr.letech.study.dto.Navbar;
 import kr.letech.study.dto.UserInfoVo;
 import kr.letech.study.service.AccountService;
 import kr.letech.study.service.AttachService;
-import kr.letech.study.service.CommonCodeService;
 import kr.letech.study.service.MenuService;
+import kr.letech.study.utility.ThumbnailUtility;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
+@Slf4j
 public class CommonController {
 
 	@Autowired
@@ -45,6 +54,9 @@ public class CommonController {
 	@Autowired
 	private AttachService attachService;
 
+	@Autowired
+	private ThumbnailUtility thumbnailUtility;
+	
 	@RequestMapping(value = { "/index", "" })
 	public String indexPage() {
 		return "common/index";
@@ -65,17 +77,17 @@ public class CommonController {
 	public ResponseEntity<Map<String, String>> signUp(@RequestBody UserInfoVo userInfo) {
 
 		ResponseEntity<Map<String, String>> entity = null;
-		
+
 		Map<String, String> dataMap = new HashMap<String, String>();
 
 		try {
-			
+
 			accountService.save(userInfo);
 			dataMap.put("Message", "OK");
 			entity = new ResponseEntity<Map<String, String>>(dataMap, HttpStatus.OK);
 
 		} catch (Exception e) {
-			
+
 			dataMap.put("Message", "FAIL");
 			entity = new ResponseEntity<Map<String, String>>(dataMap, HttpStatus.BAD_REQUEST);
 
@@ -119,7 +131,8 @@ public class CommonController {
 			File file = new File(attach.getUploadPath());
 
 			HttpHeaders httpHeaders = new HttpHeaders();
-			httpHeaders.setContentDisposition(ContentDisposition.builder("attachment").filename(attach.getFileNm()).build());
+			httpHeaders.setContentDisposition(
+					ContentDisposition.builder("attachment").filename(attach.getFileNm()).build());
 
 			entity = new ResponseEntity<Object>(resource, httpHeaders, HttpStatus.OK);
 		} catch (Exception e) {
@@ -127,4 +140,22 @@ public class CommonController {
 		}
 		return entity;
 	}
+
+	@GetMapping("/thumbnail")
+	@ResponseBody
+
+	public ResponseEntity<byte[]> thumbnail(@RequestParam @Nullable Map<String, String> paraMap) throws Exception{
+
+		ResponseEntity<byte[]> entity = null;
+
+		try{
+			byte[] thumbnail = thumbnailUtility.makeThumbnail(paraMap);
+			entity = new ResponseEntity<byte[]>(thumbnail, HttpStatus.OK);
+		}catch (IOException e) {
+			entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
+		}
+		
+		return entity;
+	}
+
 }
