@@ -7,40 +7,46 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.letech.study.dto.AttachDTO;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * @packageName : kr.letech.study.utility
- * @fileName : FileUtilities.java
- * @author : LE_TECH
- * @date : 2022.02.11
- * @description : ===========================================================
- *              DATE AUTHOR NOTE
- *              -----------------------------------------------------------
- *              2022.02.11 LE_TECH 최초 생성
- */
+* @packageName 		: kr.letech.study.utility 
+* @fileName 		: FileUtilities.java 
+* @author 			: mskim 
+* @date 			: 2022.02.15
+* @description      :
+* =========================================================== 
+* DATE 				AUTHOR 			NOTE 
+* ----------------------------------------------------------- 
+* 2022.02.15 		mskim			최초 생성
+*/
 @Component
-public class FileUtilities {
+@Slf4j
+public class FileUtility {
 
-	private final static String ROOT_PATH = Paths
-			.get("D:", "STS4-workspace", "msKim-study1", "src", "main", "resources").toString();
+	@Value("${custom.file.path}")
+	private String filePath;
 
 	/**
-	 * @Method : parseFileInfo
-	 * @date : 2022.02.11
-	 * @author : LE_TECH
-	 * @return : List<AttachDTO>
-	 * @description : ===========================================================
-	 *              DATE AUTHOR NOTE
-	 *              -----------------------------------------------------------
-	 *              2022.02.11 LE_TECH 최초 생성
-	 */
+	* @Method 			: parseFileInfo
+	* @date 			: 2022.02.15
+	* @author 			: mskim
+	* @return			: List<AttachDTO>
+	* @description		:
+	* =========================================================== 
+	* DATE 				AUTHOR 			NOTE 
+	* ----------------------------------------------------------- 
+	* 2022.02.15		mskim			최초 생성
+	*/
 	public List<AttachDTO> parseFileInfo(List<MultipartFile> files) throws IOException {
-
-		String savePath = Paths.get(ROOT_PATH, "files").toString();
+		
+		filePath = filePath.replace("/", File.separator);
+		String savePath = Paths.get(filePath, "files").toString();
 
 		if (!new File(savePath).exists()) {
 			new File(savePath).mkdir();
@@ -61,10 +67,6 @@ public class FileUtilities {
 
 			File newFile = new File(filePath);
 
-			/*
-			 * 파일은 확장자를 제거후에 저장 => web shell공격 jsp파일을 업로드후 cmd창을 실행시킴
-			 * 
-			 */
 			file.transferTo(newFile);
 
 			String fileType = oriFileName.substring(oriFileName.lastIndexOf(".") + 1).toUpperCase();

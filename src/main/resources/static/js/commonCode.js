@@ -4,6 +4,7 @@ var codList = "";
 var flag = true;
 var data = "";
 var html = "";
+var maxComnCd = -1;
 
 window.addEventListener('load', function() {
 	commonCodeList('#codeList');
@@ -21,11 +22,16 @@ function commonCodeList(target, comnCd) {
 				}
 				jstree[idx] = { "id": item.comnCd, "parent": item.upCd, "text": item.cdNm };
 
+				let comnCdNumber = Number(item.comnCd.substring(2));
+				if (comnCdNumber > maxComnCd) {
+					maxComnCd = comnCdNumber
+				}
 			});
+
 			$('#tree').jstree({
 				'core': {
 					'data': jstree,
-					 "check_callback" : true
+					"check_callback": true
 				},
 				'plugins': [
 					'search'
@@ -39,7 +45,7 @@ function commonCodeList(target, comnCd) {
 				let comnCd = $(e.target).attr('aria-activedescendant');
 				getCommonCode(comnCd);
 				let btn = document.querySelectorAll('div.btn-div input.btn');
-				for (let i = 0; i < btn.length; i++) {
+				for (let i = 0; i < btn.length - 1; i++) {
 					btn[i].removeAttribute('disabled');
 				}
 			});
@@ -69,31 +75,65 @@ function getCommonCode(comnCd) {
 			$('input[name="val"]').val(data.val);
 			$('input[name="cdNm"]').val(data.cdNm);
 			$('input[name="ord"]').val(data.ord);
-			$('input[name="desc"]').val(data.desc);
+			$('input[name="description"]').val(data.desc);
 		}
 	});
 }
 
-function registCode() {
-	form = $('#registForm').serialize();
+function abledRegist() {
+	let comnCd = $('input[name="comnCd"]');
+	let upCd = $('input[name="upCd"]');
+	let lvl = $('input[name="lvl"]');
 
+	upCd.val(comnCd.val());
+	upCd = upCd.val();
+	lvl.val(Number(lvl.val()) + 1);
+	comnCd.val('CD' + leadingZeros(maxComnCd + 1, 3));
+	comnCd = comnCd.val()
+
+	$('input[name="val"]').val('').attr('placeholder', '값을 입력하세요').focus();
+	$('input[name="cdNm"]').val('').attr('placeholder', '코드명을 입력하세요');
+	$('input[name="ord"]').val('').attr('placeholder', '정렬순번을 입력하세요');
+	$('input[name="description"]').val('').attr('placeholder', '설명을 입력하세요');
+
+	let btn = document.querySelectorAll('div.btn-div input.btn');
+	for (let i = 0; i < btn.length; i++) {
+		btn[i].removeAttribute('disabled');
+	}
+}
+
+function registCode() {
+	let formInputs = {};
+
+	$('input[type=text]').each(function() {
+		formInputs[this.name] = this.value;
+	});
 	$.ajax({
 		url: 'commonCode/regist',
 		method: 'POST',
-		data: form,
+		contentType: 'application/json; charset=utf-8',
+		data: JSON.stringify(formInputs),
 		success: function(data) {
-			$('#tree').jstree().create_node (data.upCd, data.cdNm);
+			let node = {id :data.comnCd, text : data.cdNm};
+			
+			$('#tree').jstree('create_node',data.upCd, node,'last');
 		}
 	})
 }
 
 function modifyCode() {
-	form = $('#registForm').serialize();
+	let formInputs = {};
+
+	$('input[type=text]').each(function() {
+		formInputs[this.name] = this.value;
+	});
+
 	$.ajax({
 		url: 'commonCode/modify',
 		method: 'PUT',
-		data: form,
-		success : function(data){
+		contentType: 'application/json; charset=utf-8',
+		data: JSON.stringify(formInputs),
+		success: function(data) {
 			$('#tree').jstree().rename_node(data.comnCd, data.cdNm)
 		}
 	});
@@ -110,4 +150,15 @@ function removeCode() {
 			$('#tree').jstree().delete_node($('#' + codeVal));
 		});
 	}
+}
+
+function leadingZeros(n, digits) {
+	var zero = '';
+	n = n.toString();
+
+	if (n.length < digits) {
+		for (var i = 0; i < digits - n.length; i++)
+			zero += '0';
+	}
+	return zero + n;
 }

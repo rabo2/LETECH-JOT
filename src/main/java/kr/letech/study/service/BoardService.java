@@ -1,5 +1,7 @@
 package kr.letech.study.service;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +25,7 @@ import kr.letech.study.repository.AttachRepository;
 import kr.letech.study.repository.BoardRepository;
 import kr.letech.study.repository.CommonCodeRepository;
 import kr.letech.study.repository.ReplyRepository;
-import kr.letech.study.utility.FileUtilities;
+import kr.letech.study.utility.FileUtility;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -43,16 +45,26 @@ public class BoardService {
 	private AttachRepository attachRepository;
 
 	@Autowired
-	private FileUtilities fileUtilities;
+	private FileUtility fileUtilities;
 
 	private static String[] FILE_TYPE = { "JPG", "JPEG", "GIF", "PNG"};
 
+	/**
+	* @Method 			: getBoardList
+	* @date 			: 2022.02.15
+	* @author 			: mskim
+	* @return			: List<Map<String,String>>
+	* @description		:
+	* =========================================================== 
+	* DATE 				AUTHOR 			NOTE 
+	* ----------------------------------------------------------- 
+	* 2022.02.15		mskim			최초 생성
+	*/
 	public List<Map<String, String>> getBoardList(Map<String, Object> paraMap) throws Exception {
 		List<Map<String, String>> boardList = boardRepository.selectBoardList(paraMap);
 
 		if (boardList != null && boardList.size() > 0) {
 			if (boardList.get(0).get("boardDev").equals("CD019")) {
-				log.info("boardNm : 이미지");
 				for (Map<String, String> board : boardList) {
 					List<AttachDTO> attachList = attachRepository.selectAttachList(board);
 					if (attachList != null && attachList.size() > 0) {
@@ -70,7 +82,18 @@ public class BoardService {
 		return boardList;
 	}
 
-	@Transactional
+	/**
+	* @Method 			: regist
+	* @date 			: 2022.02.15
+	* @author 			: mskim
+	* @return			: void
+	* @description		:
+	* =========================================================== 
+	* DATE 				AUTHOR 			NOTE 
+	* ----------------------------------------------------------- 
+	* 2022.02.15		mskim			최초 생성
+	*/
+	@Transactional(rollbackFor = {SQLException.class, IOException.class})
 	public void regist(List<MultipartFile> files, Map<String, String> paraMap) throws Exception {
 		Account account = accountRepository.selectAccount(paraMap.get("user"));
 
@@ -98,6 +121,17 @@ public class BoardService {
 		}
 	}
 
+	/**
+	* @Method 			: getBoard
+	* @date 			: 2022.02.15
+	* @author 			: mskim
+	* @return			: Map<String,?>
+	* @description		:
+	* =========================================================== 
+	* DATE 				AUTHOR 			NOTE 
+	* ----------------------------------------------------------- 
+	* 2022.02.15		mskim			최초 생성
+	*/
 	public Map<String, ?> getBoard(Map<String, String> paraMap) throws Exception {
 		if (paraMap.get("from") == null) {
 			boardRepository.updateViewCount(paraMap);
@@ -118,10 +152,32 @@ public class BoardService {
 		return board;
 	}
 
+	/**
+	* @Method 			: modifyBoard
+	* @date 			: 2022.02.15
+	* @author 			: mskim
+	* @return			: void
+	* @description		:
+	* =========================================================== 
+	* DATE 				AUTHOR 			NOTE 
+	* ----------------------------------------------------------- 
+	* 2022.02.15		mskim			최초 생성
+	*/
 	public void modifyBoard(Map<String, String> paraMap) throws Exception {
 		boardRepository.updateBoard(paraMap);
 	}
 
+	/**
+	* @Method 			: remove
+	* @date 			: 2022.02.15
+	* @author 			: mskim
+	* @return			: void
+	* @description		:
+	* =========================================================== 
+	* DATE 				AUTHOR 			NOTE 
+	* ----------------------------------------------------------- 
+	* 2022.02.15		mskim			최초 생성
+	*/
 	@Transactional
 	public void remove(Map<String, String> paraMap) throws Exception {
 		replyRepository.deleteAllReply(paraMap);

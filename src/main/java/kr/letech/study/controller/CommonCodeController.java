@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -72,27 +73,27 @@ public class CommonCodeController {
 
 	@PostMapping("/regist")
 	@ResponseBody
-	public ResponseEntity<Object> registCommonCode(CommonCode cmd) throws Exception {
+	public ResponseEntity<Object> registCommonCode(@RequestBody CommonCode cmd) throws Exception {
 		ResponseEntity<Object> entity = null;
 		try {
 			cmnCdService.registCommonCode(cmd);
 			entity = new ResponseEntity<Object>(cmd, HttpStatus.OK);
 		} catch (SQLException e) {
-			entity = new ResponseEntity<Object>(cmd, HttpStatus.OK);
+			entity = new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
 		}
 		return entity;
 	}
 
 	@PutMapping("/modify")
 	@ResponseBody
-	public ResponseEntity<Object> modifyCommonCode(CommonCode cmd) throws Exception {
+	public ResponseEntity<Object> modifyCommonCode(@RequestBody CommonCode cmd) throws Exception {
 		ResponseEntity<Object> entity = null;
 
 		try {
 			cmnCdService.modifyCommandCode(cmd);
 			entity = new ResponseEntity<Object>(cmd, HttpStatus.OK);
 		} catch (SQLException e) {
-			entity = new ResponseEntity<Object>(cmd, HttpStatus.OK);
+			entity = new ResponseEntity<Object>(cmd, HttpStatus.BAD_REQUEST);
 		}
 
 		return entity;

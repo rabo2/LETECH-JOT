@@ -69,7 +69,6 @@ public class BoardController {
 	*/
 	@GetMapping("/CD{boardDev}")
 	public String main(@PathVariable String boardDev, Model model) {
-		log.info("\nboardDev : {}", boardDev);
 		model.addAttribute("boardDev", "CD"+boardDev);
 		return "board/main";
 	}
@@ -125,11 +124,33 @@ public class BoardController {
 		return "board/detail";
 	}
 
+	/**
+	* @Method 			: registForm
+	* @date 			: 2022.02.15
+	* @author 			: mskim
+	* @return			: String
+	* @description		:
+	* =========================================================== 
+	* DATE 				AUTHOR 			NOTE 
+	* ----------------------------------------------------------- 
+	* 2022.02.15		mskim			최초 생성
+	*/
 	@GetMapping("/regist")
 	public String registForm() {
 		return "board/regist";
 	}
 
+	/**
+	* @Method 			: regist
+	* @date 			: 2022.02.15
+	* @author 			: mskim
+	* @return			: RedirectView
+	* @description		:
+	* =========================================================== 
+	* DATE 				AUTHOR 			NOTE 
+	* ----------------------------------------------------------- 
+	* 2022.02.15		mskim			최초 생성
+	*/
 	@PostMapping("")
 	public RedirectView regist(MultipartHttpServletRequest multiRequest) throws Exception {
 		List<MultipartFile> files = multiRequest.getFiles("files");

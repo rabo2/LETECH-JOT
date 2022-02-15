@@ -11,7 +11,7 @@
 			  ,ORD
 			  ,DESCRIPTION
 		  FROM COMN_CD
-		  ORDER BY UP_CD, LVL, ORD
+		  ORDER BY COMN_CD, UP_CD, LVL, ORD
 	</select>
 	
 	<select id="selectCommonCode" resultType="CommonCode">

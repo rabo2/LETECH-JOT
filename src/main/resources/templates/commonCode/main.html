@@ -5,7 +5,7 @@
 <link rel="stylesheet" th:href="@{/css/commonCode.css}">
 </head>
 <div layout:fragment="content">
-	<div class="container">
+	<div class="container commonCodeContainer">
 		<div>
 			<h2>코드관리</h2>
 		</div>
@@ -23,15 +23,15 @@
 							<div class="row row-no-gutters detailCode">
 								<div class="form-group col">
 									<label for="inputsm">CD</label>
-									<input class="form-control input-sm" type="text" id="comnCd" name="comnCd" th:value="${code?.comnCd}">
+									<input disabled="disabled" class="form-control input-sm" type="text" id="comnCd" name="comnCd" th:value="${code?.comnCd}">
 								</div>
 								<div class="form-group col">
 									<label for="inputsm">UP_CD</label>
-									<input class="form-control input-sm" type="text" name="upCd" th:value="${code?.upCd}">
+									<input disabled="disabled" class="form-control input-sm" type="text" name="upCd" th:value="${code?.upCd}">
 								</div>
 								<div class="form-group col">
 									<label for="inputsm">LVL</label>
-									<input class="form-control input-sm" type="text" name="lvl" th:value="${code?.lvl}">
+									<input disabled="disabled" class="form-control input-sm" type="text" name="lvl" th:value="${code?.lvl}">
 								</div>
 							</div>
 							<div class="row row-no-gutters  detailCode">
@@ -56,9 +56,10 @@
 							</div>
 						</form>
 						<div style="margin-bottom: 30px;" class="btn-div">
-							<input type="button" onclick="registCode()" class="btn btn-secondary" disabled="disabled" value="하위코드등록" />
+							<input type="button" onclick="abledRegist()" class="btn btn-secondary" disabled="disabled" value="하위코드추가" />
 							<input type="button" onclick="modifyCode()" class="btn btn-secondary" disabled="disabled" value="수정" />
 							<input type="button" onclick="removeCode()" class="btn btn-secondary" disabled="disabled" value="삭제" />
+							<input type="button" onclick="registCode()" class="btn btn-secondary" disabled="disabled" value="등록" />
 						</div>
 					</div>
 				</div>

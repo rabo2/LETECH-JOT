@@ -8,14 +8,6 @@ var col = ['글번호', '분류', '제목', '작성자', '작성일자', '조화
 window.addEventListener('load', function() {
 	let boardDev = document.querySelector('input[name="boardDev"]').value
 	printBoardList(boardDev);
-
-	$('#grid').on('click', 'table.tui-grid-table tbody tr', function(e) {
-		let child = $(e.currentTarget).children();
-
-		let boardNo = this.getAttribute('data-boardNo');
-		let boardDev = this.getAttribute('data-boardDev');
-		//		location.href = boardDev + '/' + boardNo;
-	})
 });
 
 function printBoardList(boardDev) {
@@ -24,14 +16,14 @@ function printBoardList(boardDev) {
 		method: 'GET',
 		success: function(data) {
 			document.getElementById('gridLabel').innerHTML = data[0].boardNm
-			document.getElementById('totalCnt').innerText = '총 ' + data.length;
-
+			document.getElementById('totalCnt').innerText = '총 ' + data.length + '  건';
+			let size;
 			col = [
 				{
 					header: '분류',
 					name: 'boardClass',
 					keyColumnName: '100',
-					width : 'auto',
+					width: 'auto',
 					align: 'center'
 				}, {
 					header: '제목',
@@ -39,61 +31,77 @@ function printBoardList(boardDev) {
 				}, {
 					header: '작성자',
 					name: 'writer',
-					width : 'auto'
+					width: 'auto'
 				}, {
 					header: '작성일자',
 					name: 'registDate',
-					width : 'auto',
+					width: 'auto',
 					minWidth: 150
 				}, {
 					header: '조회수',
 					name: 'viewCnt',
-					width : 'auto',
+					width: 'auto',
 					align: 'right'
 				}]
 
 			if (data[0].uploadPath) {
+				size = 900
 				col.unshift({
 					header: ' ',
 					name: 'uploadPath',
-					width: 80
+					width: 85
 				});
-				
-				for(let i = 0; i < data.length; i++){
-					data[i].uploadPath = '<div style="width:100px; height:80px; background-image: url(\''+contextPath+'/thumbnail?uploadPath='+encodeURI(data[i].uploadPath)+'\');"></div>';
+
+				for (let i = 0; i < data.length; i++) {
+					data[i].uploadPath = '<div style="width:100px; height:80px; background-image: url(\'' + contextPath + '/thumbnail?uploadPath=' + encodeURI(data[i].uploadPath) + '\');"></div>';
 				}
+			}else{
+				size = 'auto'
+			}
+			for (let i = 0; i < data.length; i++) {
+				data[i].title += '<input type="hidden" id="' + data[i].boardDev + '/' + data[i].boardNo + '"/>'
 			}
 
-			pringToastGrid(col, data);
+
+			pringToastGrid(col, data, size);
 		}
 	});
 }
-function pringToastGrid(column, gridData) {
+function pringToastGrid(column, gridData, size) {
 	const grid = new tui.Grid({
 		el: document.getElementById('grid'),
 		contextMenu: null,
 		data: gridData,
+		bodyHeight: size,
 		pageOptions: {
 			useClient: true,
-			perPage: 15
+			perPage: 10
 		},
-		minBodyHeight: 60,
 		selectionUnit: 'row',
 		scrollX: false,
 		scrollY: false,
-		columns: column,
+		columns: column
 	});
 
-	grid.on('onGridMounted', (e) => {
-		document.getElementById('pageCnt').innerText = '      1 /';
+	grid.on('mouseover', (e) => {
+		if (e.targetType == 'cell') {
+			$(e.nativeEvent.target).parents('tr').find('td').css({ 'background': '#cee6ff', 'cursor': 'pointer' });
+		}
+	})
+
+	grid.on('mouseout', (e) => {
+		if (e.targetType == 'cell') {
+			$(e.nativeEvent.target).parents('tr').find('td').css('background', '');
+		}
 	});
 
-	grid.on('afterPageMove', (e) => {
-		const pagination = grid.getPagination();
-		const currentPage = pagination.getCurrentPage();
-
-		document.getElementById('pageCnt').innerText = currentPage + '/';
+	grid.on('click', (e) => {
+		if (e.targetType == 'cell') {
+			location.href = $(e.nativeEvent.target).parents('tr').find('input[type="hidden"]').attr('id')
+		}
 	});
+
+	tui.Grid.applyTheme('clean');
 }
 
 
@@ -123,9 +131,7 @@ function registBoard() {
 			data: JSON.stringify(data),
 			contentType: 'application/json; charset=utf-8',
 			method: 'POST'
-		}).done(function() {
-			console.log(boardDev);
-		});
+		})
 	}
 }
 

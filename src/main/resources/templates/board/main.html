@@ -8,23 +8,29 @@ div.container div div#btnDiv {
 	text-align: right;
 }
 
-table.tui-grid-table colgroup:first-child{
+table.tui-grid-table colgroup:first-child {
 	width: 10%;
 }
-table.tui-grid-table tbody tr:not(first-child):hover{
-	background : skyblue;
+
+table.tui-grid-table tbody tr:not(first-child):hover {
 	text-decoration: underline;
 }
 
-table.tui-grid-table tbody tr td:nth-child(1){
+table.tui-grid-table tbody tr td:nth-child(1) {
 	width: 10%;
 }
-table.tui-grid-table tbody tr td:nth-child(1) div,
-table.tui-grid-table tbody tr td:nth-child(4) div{
+
+table.tui-grid-table tbody tr td:nth-child(1) div, table.tui-grid-table tbody tr td:nth-child(4) div
+	{
 	text-align: center;
 }
-table.tui-grid-table tbody tr td:nth-child(5) div{
+
+table.tui-grid-table tbody tr td:nth-child(5) div {
 	text-align: right;
+}
+
+td:focus{
+	outline: none !important;
 }
 </style>
 </head>
@@ -40,7 +46,7 @@ table.tui-grid-table tbody tr td:nth-child(5) div{
 			<div id="grid"></div>
 			<div>
 				<div id="btnDiv">
-					<input type="button" value="글쓰기" class="btn btn-secondary btn-sm" onclick="location.href = 'regist'"/>
+					<input type="button" value="글쓰기" class="btn btn-secondary btn-sm" onclick="location.href = 'regist'" />
 				</div>
 			</div>
 		</div>

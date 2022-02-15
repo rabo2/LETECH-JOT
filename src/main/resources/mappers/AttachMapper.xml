@@ -8,7 +8,7 @@
 			  ,A.FILE_NM     AS fileNm
 			  ,A.FILE_TYPE   AS fileType
 			  ,A.USE_YN      AS useYn
-			  ,A.FILE_SIZE   AS fileSize
+			  ,CEIL(A.FILE_SIZE/1024)   AS fileSize
 		  FROM ATTACH A
 		       JOIN BOARD_ATTACH B
 		       ON A.UUID = B.UUID
@@ -23,7 +23,7 @@
 			  ,A.FILE_NM     AS fileNm
 			  ,A.FILE_TYPE   AS fileType
 			  ,A.USE_YN      AS useYn
-			  ,A.FILE_SIZE   AS fileSize
+			  ,CEIL(A.FILE_SIZE/1024)   AS fileSize
 		  FROM ATTACH A
 		 WHERE 1=1
 		   AND A.UUID = #{uuid}

@@ -35,7 +35,7 @@ mybatis:
   
 logging:
   level:
-    jdbc: error
+    jdbc: warn
     sqlonly: debug
     com:
       prototype:
@@ -46,10 +46,14 @@ logging:
         web : info
       hibernate:
         SQL: off
-    sql: error
+    sql: debug
   pattern:
     console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
     file: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
-    
+
+custom:
+  file:
+    path: "D:/STS4-workspace/msKim-study1/src/main/resources"
+
     
     

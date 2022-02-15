@@ -75,7 +75,6 @@
 					url : 'imageBoards/' + boardDev + '?page=' + pageNum+ '&perPageNum=' + pageSize,
 					method : 'GET'
 				}).done(function(fragment) {
-				console.log(fragment)
 				$('#boardList').replaceWith(fragment);
 			});
 		}

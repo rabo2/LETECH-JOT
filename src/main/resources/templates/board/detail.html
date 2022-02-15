@@ -71,9 +71,12 @@ div.dropleft div.dropdown-menu a.dropdown-item:active {
 			<div class="col-10">
 				<h2 th:utext="|[${board?.boardClass}]${board?.title}|"></h2>
 			</div>
-			<div th:if="${board?.hasRole != null}" class="btn-div col-2">
-				<button id="modifyBtn" class="btn btn-secondary btn-sm" th:onclick="|javascript:location.href='@{/boards/modify}?boardNo=${board?.boardNo}&from=modify'|">수정</button>
-				<button id="removeBtn" class="btn btn-secondary btn-sm">삭제</button>
+			<div class="btn-div col-2">
+				<span th:if="${board?.hasRole != null and board?.hasRole == 'OK'}">
+					<button id="modifyBtn" class="btn btn-secondary btn-sm" th:onclick="|javascript:location.href='@{/boards/modify}?boardNo=${board?.boardNo}&from=modify'|">수정</button>
+					<button id="removeBtn" class="btn btn-secondary btn-sm">삭제</button>
+				</span>
+				<button onclick="history.go(-1);" class="btn btn-secondary btn-sm">이전</button>
 			</div>
 		</div>
 		<div class="form-div" id="board">
@@ -88,7 +91,7 @@ div.dropleft div.dropdown-menu a.dropdown-item:active {
 			<hr>
 			<label for="fileDiv">첨부파일</label>
 			<div th:each="attach : ${board?.attachList}" id="fileDiv">
-				<a th:href="|@{/download}?uuid=${attach.uuid}|">[[${attach?.fileNm}]]</a>
+				<a th:href="|@{/download}?uuid=${attach.uuid}|">[[${attach?.fileNm}]] &nbsp;([[${attach?.fileSize}]]MB)</a>
 			</div>
 			<hr>
 			<div class="reply-div">
@@ -177,11 +180,6 @@ window.addEventListener('load',function(){
 	댓글 삭제
 	*/
 	let replyRemove = document.getElementsByClassName('replyRemove');
-	console.log(replyRemove);
-	for(let i=0; i<replyRemove.length; i++){
-	    console.log(replyRemove[i]);
-	 }
-	
 });
 </script>
 </div>
