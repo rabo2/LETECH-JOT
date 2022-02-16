@@ -67,7 +67,6 @@ public class CommonCodeController {
 	@GetMapping("/upCode")
 	public String commonCodeListByUpCd(Model model, @RequestParam Map<String, String> paraMap) throws Exception {
 		model.addAttribute("codeList", cmnCdService.getCommonCodeListByUpCode(paraMap));
-
 		return paraMap.get("target");
 	}
 

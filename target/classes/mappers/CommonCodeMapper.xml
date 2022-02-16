@@ -60,6 +60,7 @@
 			  ,CD_NM
 			  ,ORD
 			  ,DESCRIPTION
+			  ,COLLAPSE_YN
 		  FROM COMN_CD
 		 WHERE 1=1
 		   AND UP_CD = #{upCd}
@@ -68,7 +69,7 @@
 	
 	
 	<insert id="insertCommonCode">
-		INSERT INTO COMN_CD
+		INSERT INTO COMN_CD(COMN_CD, UP_CD, LVL, VAL, CD_NM, ORD,DESCRIPTION)
 		VALUES (
 			#{comnCd}
 			,#{upCd}
@@ -101,6 +102,9 @@
 			<if test="description != null and description != ''">
 				DESCRIPTION = #{description},
 			</if>
+			<if test="collapseYn != null and collapseYn != ''">
+				COLLAPSE_YN = #{collapseYn},
+			</if>
 		</trim>	
 		WHERE COMN_CD = #{comnCd}
 	</update>
@@ -109,5 +113,4 @@
 		DELETE FROM COMN_CD
 		WHERE COMN_CD = #{comnCd}
 	</delete>
-	
 </mapper>

@@ -115,7 +115,7 @@ function registCode() {
 		data: JSON.stringify(formInputs),
 		success: function(data) {
 			let node = {id :data.comnCd, text : data.cdNm};
-			
+			maxComnCd = Number(data.comnCd.substring(2));
 			$('#tree').jstree('create_node',data.upCd, node,'last');
 		}
 	})
@@ -147,6 +147,7 @@ function removeCode() {
 			url: 'commonCode/remove/' + codeVal,
 			method: 'DELETE'
 		}).done(function() {
+			$('#registForm input[type="text"]').val('');
 			$('#tree').jstree().delete_node($('#' + codeVal));
 		});
 	}

@@ -1,23 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="utf-8">
+<meta charset="utf-8">
 </head>
-<div th:fragment="headerFragment">
-	<!-- Topbar -->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<div class="container">
-			<a href="#" class="navbar-brand font-weight-bold">OJT</a>
-			<button type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div id="navbarContent" class="collapse navbar-collapse">
-				<ul class="navbar-nav mr-auto" id="oneDepth">
-				</ul>
-				<span class="badge badge-secondary" onclick="javascript:location.href='/std/logout';">logout</span>
-			</div>
-		</div>
+<!-- 	<!-- Topbar -->
+<!-- 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark"> -->
+<!-- 		<div class="container"> -->
+<!-- 			<a href="#" class="navbar-brand font-weight-bold">OJT</a> -->
+<!-- 			<button type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"> -->
+<!-- 				<span class="navbar-toggler-icon"></span> -->
+<!-- 			</button> -->
+<!-- 			<div id="navbarContent" class="collapse navbar-collapse"> -->
+<!-- 				<ul class="navbar-nav mr-auto" id="oneDepth"> -->
+<!-- 				</ul> -->
+<!-- 				<span class="badge badge-secondary" onclick="javascript:location.href='/std/logout';">logout</span> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</nav> -->
+
+<!-- ======= Header ======= -->
+<header th:fragment="headerFragment" id="header" class="header fixed-top d-flex align-items-center">
+
+	<div class="d-flex align-items-center justify-content-between">
+		<a href="index.html" class="logo d-flex align-items-center">
+			<img src="assets/img/logo.png" alt="">
+			<span class="d-none d-lg-block">OJT</span>
+		</a>
+		<i class="bi bi-list toggle-sidebar-btn"></i>
+	</div>
+	<!-- End Logo -->
+
+	<div class="search-bar">
+	</div>
+	<!-- End Search Bar -->
+
+	<nav class="header-nav ms-auto">
+		<input type="button" class="btn" th:onclick="|javascript:location.href = '@{/logout}'|" value="logout">	
 	</nav>
-	<!-- End of Topbar -->
-</div>
+	<!-- End Icons Navigation -->
+</header>
+<!-- End Header -->
 </html>

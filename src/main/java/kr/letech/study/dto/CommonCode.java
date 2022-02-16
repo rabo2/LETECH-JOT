@@ -18,6 +18,8 @@ public class CommonCode {
 	private String cdNm;
 	private int ord;
 	private String description;
+	private int collapseYn;
+	
 	
 	private List<CommonCode> subList;
 

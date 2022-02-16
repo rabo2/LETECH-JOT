@@ -27,12 +27,17 @@ public class SecurityInterceptor implements HandlerInterceptor {
 			String requestURI = request.getRequestURI();
 
 			if (authorities != null && requestURI.contains("admin")) {
-				if (!authorities.contains("ADMIN")) {
-					response.setContentType("text/html;charset=utf-8");
-					response.getWriter().print("<script>alert('권한이 존재하지 않습니다');\n history.go(-1);</script>");
-					;
-					return false;
+				String o = "ROLE_ADMIN";
+				for (GrantedAuthority grantedAuthority : authorities) {
+					String authority = grantedAuthority.getAuthority();
+					if (!authority.equals(o)) {
+						response.setContentType("text/html;charset=utf-8");
+						response.getWriter().print("<script>alert('권한이 존재하지 않습니다');\n history.go(-1);</script>");
+						;
+						return false;
+					}
 				}
+				
 			}
 		}
 

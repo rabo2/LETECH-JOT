@@ -25,6 +25,12 @@ public class CommonCodeService {
 	
 	public void registCommonCode(CommonCode cmd) throws Exception{
 		cmnCdRepository.insertCommonCode(cmd);
+		
+		CommonCode commonCode = new CommonCode();
+		commonCode.setComnCd(cmd.getUpCd());
+		commonCode.setCollapseYn(1);
+		
+		cmnCdRepository.updateCommonCode(commonCode);
 	}
 	
 	public void modifyCommandCode(CommonCode cmd) throws Exception{

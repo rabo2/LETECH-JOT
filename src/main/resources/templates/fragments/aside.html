@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- ======= Sidebar ======= -->
+<aside th:fragment="asideFragment" id="sidebar" class="sidebar">
+	<ul class="sidebar-nav" id="sidebar-nav">
+		<!-- End Components Nav -->
+	</ul>
+	<script>
+	window.addEventListener('load', function(){
+		printAside();
+		
+		$('.sidebar-nav').on('click', 'a.nav-link', function(e){
+			let href = $(this).attr('href')
+			if(href != '#'){
+				location.href = contextPath + href;
+			}
+		})
+		
+		
+		$('.sidebar-nav').on('show.bs.collapse', function(e){
+			let param = $(e.target).siblings("a.nav-link").attr('comnCd');
+			param = param.split(' ');
+			printAside(param[0], param[1]);
+		})
+		
+		$('.sidebar-nav').on('hide.bs.collapse', function(e){
+			if($(e.target).find('.nav-link').attr('aria-expanded')){
+				return false;
+			}
+		})
+	})
+	function printAside(upCd,upCdUrl){
+		if(upCd == null){
+			upCd = 'CD025';
+		}
+		$.ajax({
+			url : contextPath + '/navbars/'+upCd
+			,contentTpye:'application/json; charset=utf-8;'
+			,success : function(data){
+				let html = '';
+				data.forEach(function(e){
+					html += '<li class="nav-item">';
+					if(e.collapseYn == 1){
+						if(upCdUrl){
+						html += '	<a class="nav-link collapsed ml-'+(Number(e.lvl)-1)+'" data-bs-target="#'+e.comnCd+'" data-bs-toggle="collapse" href="#" comnCd="'+e.comnCd+' '+upCdUrl+e.val+'">'
+						}else{
+						html += '	<a class="nav-link collapsed ml-'+(Number(e.lvl)-1)+'" data-bs-target="#'+e.comnCd+'" data-bs-toggle="collapse" href="#" comnCd="'+e.comnCd+' '+contextPath+e.val+'">'
+						}
+						html +=	'		<span>'+e.cdNm+'</span>'	
+						html += '		<i class="bi bi-chevron-down ms-auto"></i>'
+						html += '	</a>'
+						html += '	<ul id="'+e.comnCd+'" class="nav-content collapse " data-bs-parent="#sidebar-nav">'	
+						html += '	</ul>'
+					}else{
+						if(upCdUrl){
+							html += '	<a class="nav-link collapsed ml-'+(Number(e.lvl)-1)+'" href="'+upCdUrl+e.val+'">'				
+						}else{
+							html += '	<a class="nav-link collapsed ml-'+(Number(e.lvl)-1)+'" href="'+contextPath+e.val+'">'				
+						}
+						html +=	'		<span>'+e.cdNm+'</span>'	
+						html += '	</a>'
+					}
+					html += '</li>'
+				});
+				
+				if(data[0].upCd == 'CD025'){
+					document.getElementById('sidebar-nav').innerHTML = html;
+				}else{
+					document.getElementById(data[0].upCd).innerHTML = html;
+				}
+				
+			}
+		});
+	}
+	
+	</script>
+</aside>
+<!-- End Sidebar-->
+</html>

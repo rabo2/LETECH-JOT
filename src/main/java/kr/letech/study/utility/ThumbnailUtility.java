@@ -12,12 +12,34 @@ import javax.imageio.ImageIO;
 import org.imgscalr.Scalr;
 import org.springframework.stereotype.Component;
 
+/**
+* @packageName 		: kr.letech.study.utility 
+* @fileName 		: ThumbnailUtility.java 
+* @author 			: mskim 
+* @date 			: 2022.02.16
+* @description      :
+* =========================================================== 
+* DATE 				AUTHOR 			NOTE 
+* ----------------------------------------------------------- 
+* 2022.02.16 		mskim			최초 생성
+*/
 @Component
 public class ThumbnailUtility {
 	
 	private int defaultWidth = 80;
 	private int defaultHeight = 80;
 
+	/**
+	* @Method 			: makeThumbnail
+	* @date 			: 2022.02.16
+	* @author 			: mskim
+	* @return			: byte[]
+	* @description		:
+	* =========================================================== 
+	* DATE 				AUTHOR 			NOTE 
+	* ----------------------------------------------------------- 
+	* 2022.02.16		mskim			최초 생성
+	*/
 	public byte[] makeThumbnail(Map<String, String> paraMap) throws Exception{
 		byte[] byteArray = null;
 		FileInputStream inputFile = null;
@@ -37,7 +59,7 @@ public class ThumbnailUtility {
 					
 				    byteArray =byteArrayOutputStream.toByteArray();
 				}
-				
+					
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {

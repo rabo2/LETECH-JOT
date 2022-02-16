@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <!-- [head] 영역 시작 -->
 <head>
 <meta charset="utf-8">
@@ -9,15 +8,27 @@
 <!-- [head] 영역 끝 -->
 <!-- [body] 영역 시작 -->
 <body>
-	<!-- [header] 영역 시작 -->
-	<header th:replace="fragments/header :: headerFragment"></header>
-	<!-- [header] 영역 끝 -->
-	<!-- [content] 영역 시작 -->
-	<div layout:fragment="content"></div>
-	<!-- [content] 영역 끝 -->
-	<!-- [footer] 영역 시작 -->
-	<footer th:replace="fragments/footer :: footerFragment"></footer>
-	<!-- [footer] 영역 끝 -->
+	<div id="wrapper">
+		<aside th:replace="fragments/aside :: asideFragment"></aside>
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<!-- [header] 영역 시작 -->
+				<header th:replace="fragments/header :: headerFragment"></header>
+				<!-- [header] 영역 끝 -->
+				<!-- [content] 영역 시작 -->
+				<main id="main" class="main">
+					<div layout:fragment="content"></div>
+				</main>
+				<!-- [content] 영역 끝 -->
+				<!-- [footer] 영역 시작 -->
+				<footer th:replace="fragments/footer :: footerFragment"></footer>
+				<!-- [footer] 영역 끝 -->
+				<a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+					<i class="bi bi-arrow-up-short"></i>
+				</a>
+			</div>
+		</div>
+	</div>
 </body>
 <!-- [body] 영역 끝 -->
 <th:block th:replace="fragments/script :: scriptFragment"></th:block>
