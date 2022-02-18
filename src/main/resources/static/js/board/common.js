@@ -44,16 +44,16 @@ function printBoardList(boardDev) {
 					align: 'right'
 				}]
 
-			if (data[0].uploadPath) {
+			if (data[0].thumbnail) {
 				size = 900
 				col.unshift({
 					header: ' ',
-					name: 'uploadPath',
+					name: 'thumbnail',
 					width: 85
 				});
 
 				for (let i = 0; i < data.length; i++) {
-					data[i].uploadPath = '<div style="width:100px; height:80px; background-image: url(\'' + contextPath + '/thumbnail?uploadPath=' + encodeURI(data[i].uploadPath) + '\');"></div>';
+					data[i].thumbnail = '<div style="width:100px; height:80px; background-image: url(\'' + data[i].thumbnail+'\'); background-size: cover;  background-repeat: no-repeat; background-position: center center;"></div>';
 				}
 			}else{
 				size = 'auto'
@@ -121,17 +121,19 @@ function registBoard() {
 	if (confirm('게시글을 등록하시겠습니까?')) {
 		let data = {
 			'title': $('input[name="title"]').val(),
-			'content': $("textarea[name='content']").val().replace(/\n/g, "<br>"),
+			'content': $("textarea[name='content']").val(),
 			'boardDev': boardDev,
 			'boardClass': $('select[name="boardClass"] option:selected').val()
 		};
 
-		$.ajax({
-			url: '/std/boards',
-			data: JSON.stringify(data),
-			contentType: 'application/json; charset=utf-8',
-			method: 'POST'
-		})
+		console.log(data)
+		return false;
+//		$.ajax({
+//			url: '/std/boards',
+//			data: JSON.stringify(data),
+//			contentType: 'application/json; charset=utf-8',
+//			method: 'POST'
+//		})
 	}
 }
 
@@ -158,7 +160,7 @@ function removeBoard(data) {
 			method: 'DELETE',
 			contentType: 'application/json; charset=utf-8'
 		}).done(function() {
-			location.href = "/std/boards";
+			history.go(-1)
 		});
 	}
 }

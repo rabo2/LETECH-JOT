@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.letech.study.dto.CommonCode;
 import kr.letech.study.service.CommonCodeService;
+import kr.letech.study.utility.Constant;
 
 @Controller
 @RequestMapping("/navbars")
@@ -28,6 +29,7 @@ public class MenuController {
 	public ResponseEntity<Object> navList(@PathVariable Map<String, String> paraMap) throws Exception{
 		ResponseEntity<Object> entity = null;
 		
+		String mncd = Constant.MENU_CD;
 		try {
 			List<CommonCode> navbarList = cmnCdService.getCommonCodeListByUpCode(paraMap);
 			entity = new ResponseEntity<Object>(navbarList, HttpStatus.OK);

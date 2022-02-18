@@ -32,7 +32,7 @@
 	})
 	function printAside(upCd,upCdUrl){
 		if(upCd == null){
-			upCd = 'CD025';
+			upCd = 'CD0025';
 		}
 		$.ajax({
 			url : contextPath + '/navbars/'+upCd
@@ -64,7 +64,7 @@
 					html += '</li>'
 				});
 				
-				if(data[0].upCd == 'CD025'){
+				if(data[0].upCd == 'CD0025'){
 					document.getElementById('sidebar-nav').innerHTML = html;
 				}else{
 					document.getElementById(data[0].upCd).innerHTML = html;

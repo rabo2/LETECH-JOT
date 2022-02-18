@@ -87,7 +87,8 @@ div.dropleft div.dropdown-menu a.dropdown-item:active {
 			</div>
 			<div class="subTitle row" th:if="${board == null}"></div>
 			<hr>
-			<div class="form-group content-div" th:utext="${board?.content}"></div>
+			<div class="form-group content-div" th:utext="${board.content}">
+			</div>
 			<hr>
 			<label for="fileDiv">첨부파일</label>
 			<div th:each="attach : ${board?.attachList}" id="fileDiv">
@@ -151,6 +152,7 @@ div.dropleft div.dropdown-menu a.dropdown-item:active {
 			</div>
 		</div>
 	</div>
+	<script th:src="@{/js/board/common.js}"></script>
 	<script th:inline="javascript" type="text/javascript">
 window.addEventListener('load',function(){
 	printReply(/*<![CDATA[*//*[[${board?.boardNo}]]*//*]]*/, 1, 'board/detail :: #replyList'); 
@@ -158,19 +160,19 @@ window.addEventListener('load',function(){
 	/*
 	게시글 삭제
 	*/
-	let removeBtn = document.querySelector('#removeBtn');
-	let data = {
-				'boardNo' : /*<![CDATA[*//*[[${board?.boardNo}]]*//*]]*/
-				};
-	removeBtn.addEventListener('click', function(){
-		removeBoard(data);
-	});
+	if(document.querySelector('#removeBtn')){
+		let removeBtn = document.querySelector('#removeBtn');
+		let data = {'boardNo' : /*<![CDATA[*//*[[${board?.boardNo}]]*//*]]*/};
+		
+		removeBtn.addEventListener('click', function(){
+			removeBoard(data);
+		});
+	}
 	
 	/*
 	댓글 등록
 	*/
 	let registReplyBtn = document.querySelector('.replyRegistBtn');
-	
 	registReplyBtn.addEventListener('click', function(e){
 		let content = e.target.parentElement.parentElement.previousElementSibling.value;
  		registReply(/*<![CDATA[*//*[[${board?.boardNo}]]*//*]]*/, content ,'board/detail :: #replyList');

@@ -29,9 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FileUtility {
 
-	@Value("${custom.file.path}")
-	private String filePath;
-
 	/**
 	* @Method 			: parseFileInfo
 	* @date 			: 2022.02.15
@@ -43,13 +40,13 @@ public class FileUtility {
 	* ----------------------------------------------------------- 
 	* 2022.02.15		mskim			최초 생성
 	*/
-	public List<AttachDTO> parseFileInfo(List<MultipartFile> files) throws IOException {
+	public List<AttachDTO> parseFileInfo(List<MultipartFile> files, String paramFilePath) throws IOException {
 		
-		filePath = filePath.replace("/", File.separator);
-		String savePath = Paths.get(filePath, "files").toString();
+		paramFilePath = paramFilePath.replace("/", File.separator);
+		String savePath = Paths.get(paramFilePath).toString();
 
 		if (!new File(savePath).exists()) {
-			new File(savePath).mkdir();
+			new File(savePath).mkdirs();
 		}
 
 		List<AttachDTO> attachList = new ArrayList<>();

@@ -142,9 +142,7 @@ public class CommonController {
 	}
 
 	@GetMapping("/thumbnail")
-	@ResponseBody
-
-	public ResponseEntity<byte[]> thumbnail(@RequestParam @Nullable Map<String, String> paraMap) throws Exception{
+	public @ResponseBody ResponseEntity<byte[]> thumbnail(@RequestParam @Nullable Map<String, String> paraMap) throws Exception{
 
 		ResponseEntity<byte[]> entity = null;
 

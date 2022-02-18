@@ -2,14 +2,13 @@ package kr.letech.study.service;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -17,13 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.letech.study.dto.Account;
 import kr.letech.study.dto.AttachDTO;
-import kr.letech.study.dto.CommonCode;
-import kr.letech.study.dto.Criteria;
-import kr.letech.study.dto.Page;
 import kr.letech.study.repository.AccountRepository;
 import kr.letech.study.repository.AttachRepository;
 import kr.letech.study.repository.BoardRepository;
-import kr.letech.study.repository.CommonCodeRepository;
 import kr.letech.study.repository.ReplyRepository;
 import kr.letech.study.utility.FileUtility;
 import lombok.extern.slf4j.Slf4j;
@@ -47,53 +42,55 @@ public class BoardService {
 	@Autowired
 	private FileUtility fileUtilities;
 
-	private static String[] FILE_TYPE = { "JPG", "JPEG", "GIF", "PNG"};
+	@Value("${custom.path.file}")
+	private String filePath;
+
+	@Value("${custom.path.summernote}")
+	private String summernotePath;
+
+	@Value("${custom.path.thumbnail}")
+	private String thumbnailPath;
+
+	private static String[] FILE_TYPE = { "JPG", "JPEG", "GIF", "PNG" };
 
 	/**
-	* @Method 			: getBoardList
-	* @date 			: 2022.02.15
-	* @author 			: mskim
-	* @return			: List<Map<String,String>>
-	* @description		:
-	* =========================================================== 
-	* DATE 				AUTHOR 			NOTE 
-	* ----------------------------------------------------------- 
-	* 2022.02.15		mskim			최초 생성
-	*/
+	 * @Method : getBoardList
+	 * @date : 2022.02.15
+	 * @author : mskim
+	 * @return : List<Map<String,String>>
+	 * @description : ===========================================================
+	 *              DATE AUTHOR NOTE
+	 *              -----------------------------------------------------------
+	 *              2022.02.15 mskim 최초 생성
+	 */
 	public List<Map<String, String>> getBoardList(Map<String, Object> paraMap) throws Exception {
 		List<Map<String, String>> boardList = boardRepository.selectBoardList(paraMap);
+		Pattern nonValidPattern = Pattern.compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>");
 
-		if (boardList != null && boardList.size() > 0) {
-			if (boardList.get(0).get("boardDev").equals("CD019")) {
-				for (Map<String, String> board : boardList) {
-					List<AttachDTO> attachList = attachRepository.selectAttachList(board);
-					if (attachList != null && attachList.size() > 0) {
-						String fileType = attachList.get(0).getFileType();
-						if (Arrays.asList(FILE_TYPE).contains(fileType)) {
-							board.put("uploadPath", attachList.get(0).getUploadPath());
-						}else {
-							board.put("uploadPath", null);
-						}
-					}
+		if (boardList.size() > 0 && boardList.get(0).get("boardDev").equals("CD0019")) {
+			for (Map<String, String> board : boardList) {
+
+				Matcher matcher = nonValidPattern.matcher(board.get("content"));
+				while (matcher.find()) {
+					String imgTag = matcher.group(1);
+					board.put("thumbnail", imgTag);
 				}
 			}
 		}
-
 		return boardList;
 	}
 
 	/**
-	* @Method 			: regist
-	* @date 			: 2022.02.15
-	* @author 			: mskim
-	* @return			: void
-	* @description		:
-	* =========================================================== 
-	* DATE 				AUTHOR 			NOTE 
-	* ----------------------------------------------------------- 
-	* 2022.02.15		mskim			최초 생성
-	*/
-	@Transactional(rollbackFor = {SQLException.class, IOException.class})
+	 * @Method : regist
+	 * @date : 2022.02.15
+	 * @author : mskim
+	 * @return : void
+	 * @description : ===========================================================
+	 *              DATE AUTHOR NOTE
+	 *              -----------------------------------------------------------
+	 *              2022.02.15 mskim 최초 생성
+	 */
+	@Transactional(rollbackFor = { SQLException.class, IOException.class })
 	public void regist(List<MultipartFile> files, Map<String, String> paraMap) throws Exception {
 		Account account = accountRepository.selectAccount(paraMap.get("user"));
 
@@ -102,9 +99,9 @@ public class BoardService {
 		boardRepository.insertBoard(paraMap);
 
 		List<AttachDTO> AttachmentsList = null;
-		
+
 		if (!CollectionUtils.isEmpty(files)) {
-			AttachmentsList = fileUtilities.parseFileInfo(files);
+			AttachmentsList = fileUtilities.parseFileInfo(files, filePath);
 
 			if (!AttachmentsList.isEmpty()) {
 				for (int i = 0; i < AttachmentsList.size(); i++) {
@@ -122,16 +119,15 @@ public class BoardService {
 	}
 
 	/**
-	* @Method 			: getBoard
-	* @date 			: 2022.02.15
-	* @author 			: mskim
-	* @return			: Map<String,?>
-	* @description		:
-	* =========================================================== 
-	* DATE 				AUTHOR 			NOTE 
-	* ----------------------------------------------------------- 
-	* 2022.02.15		mskim			최초 생성
-	*/
+	 * @Method : getBoard
+	 * @date : 2022.02.15
+	 * @author : mskim
+	 * @return : Map<String,?>
+	 * @description : ===========================================================
+	 *              DATE AUTHOR NOTE
+	 *              -----------------------------------------------------------
+	 *              2022.02.15 mskim 최초 생성
+	 */
 	public Map<String, ?> getBoard(Map<String, String> paraMap) throws Exception {
 		if (paraMap.get("from") == null) {
 			boardRepository.updateViewCount(paraMap);
@@ -153,35 +149,52 @@ public class BoardService {
 	}
 
 	/**
-	* @Method 			: modifyBoard
-	* @date 			: 2022.02.15
-	* @author 			: mskim
-	* @return			: void
-	* @description		:
-	* =========================================================== 
-	* DATE 				AUTHOR 			NOTE 
-	* ----------------------------------------------------------- 
-	* 2022.02.15		mskim			최초 생성
-	*/
+	 * @Method : modifyBoard
+	 * @date : 2022.02.15
+	 * @author : mskim
+	 * @return : void
+	 * @description : ===========================================================
+	 *              DATE AUTHOR NOTE
+	 *              -----------------------------------------------------------
+	 *              2022.02.15 mskim 최초 생성
+	 */
 	public void modifyBoard(Map<String, String> paraMap) throws Exception {
 		boardRepository.updateBoard(paraMap);
 	}
 
 	/**
-	* @Method 			: remove
-	* @date 			: 2022.02.15
-	* @author 			: mskim
-	* @return			: void
-	* @description		:
-	* =========================================================== 
-	* DATE 				AUTHOR 			NOTE 
-	* ----------------------------------------------------------- 
-	* 2022.02.15		mskim			최초 생성
-	*/
+	 * @Method : remove
+	 * @date : 2022.02.15
+	 * @author : mskim
+	 * @return : void
+	 * @description : ===========================================================
+	 *              DATE AUTHOR NOTE
+	 *              -----------------------------------------------------------
+	 *              2022.02.15 mskim 최초 생성
+	 */
 	@Transactional
 	public void remove(Map<String, String> paraMap) throws Exception {
 		replyRepository.deleteAllReply(paraMap);
 		boardRepository.deleteBoard(paraMap);
+	}
+
+	public AttachDTO insertBoardImage(List<MultipartFile> files) throws Exception {
+		List<AttachDTO> attachmentsList = null;
+
+		if (!CollectionUtils.isEmpty(files)) {
+			attachmentsList = fileUtilities.parseFileInfo(files, summernotePath);
+
+			if (!attachmentsList.isEmpty()) {
+				for (int i = 0; i < attachmentsList.size(); i++) {
+					AttachDTO attachDTO = attachmentsList.get(i);
+					attachRepository.insertAttach(attachDTO);
+
+					attachDTO.setUploadPath("/summernoteImage/" + attachDTO.getUuid());
+				}
+			}
+		}
+
+		return attachmentsList.get(0);
 	}
 
 }

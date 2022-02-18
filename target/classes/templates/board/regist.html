@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default}">
 <head>
 <meta charset="utf-8">
-<link rel="stylesheet" th:href="@{/css/summernote/summernote-lite.css}">
 <style type="text/css">
 .content-container>.head-div {
 	margin: 20px 0;
@@ -101,7 +100,7 @@ div.filebox div.col-sm-10 label.control-label {
 				</div>
 				<div class="form-group">
 					<label>내용</label>
-					<textarea name="content" class="form-control" rows="15" placeholder="내용을 입력하세요" maxlength="1000" style="resize: none;" wrap="hard"></textarea>
+					<textarea id="summernote" name="content" class="form-control" wrap="hard"></textarea>
 				</div>
 				<div data-name="fileDiv" class="form-group filebox bs3-primary">
 					<label for="file_0" class="col-sm-2 control-label">파일1</label>
@@ -128,17 +127,49 @@ div.filebox div.col-sm-10 label.control-label {
 	</div>
 	<script th:src="@{/js/board/common.js}"></script>
 	<script th:src="@{/js/board/file.js}"></script>
+	<!-- summernote -->
+	<script th:src="@{/summernote-0.8.18-dist/summernote-lite.js}"></script>
+	<script th:src="@{/summernote-0.8.18-dist/lang/summernote-ko-KR.min.js}"></script>
 	<script>
-		window.addEventListener('load', function() {
-			printBoardSelect('board/regist :: #boardDev', 'CD017');
-			printBoardSelect('board/regist :: #boardClass', 'CD020');
-			
-			document.querySelector('#registBtn').addEventListener('click', function(){
-				if(confirm('게시글을 등록하시겠습니까?')){
-					$('#registForm').submit();
-				}
-			})
+	window.addEventListener('load',function() {
+		printBoardSelect('board/regist :: #boardDev','CD0017');
+		printBoardSelect('board/regist :: #boardClass','CD0020');
+		document.querySelector('#registBtn').addEventListener('click',function() {
+			if (confirm('게시글을 등록하시겠습니까?')) {
+				$('#registForm').submit();
+			}
 		});
+	});
+
+		$('#summernote').summernote({
+			height : 300,
+			lang : "ko-KR",
+			disableResizeEditor : true,
+			callbacks : {
+				onImageUpload : function(files) {
+					uploadSummernoteImageFile(files[0], this)
+				}
+			}
+		})
+		function uploadSummernoteImageFile(file, editor) {
+			let data = new FormData();
+			data.append("files", file);
+
+			$.ajax({
+				url : contextPath + '/boards/uploadBoardImage',
+				data : data,
+				type : 'POST',
+				contentType : false,
+				enctype : 'multipart/form-data',
+				processData : false,
+				success : function(data) {
+					$(editor).summernote('insertImage', data.uploadPath)
+				}
+			}).done(function(e) {
+				$(".note-image-input").val("");
+
+			});
+		}
 	</script>
 </div>
 </html>

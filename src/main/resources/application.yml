@@ -52,8 +52,10 @@ logging:
     file: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
 
 custom:
-  file:
-    path: "D:/STS4-workspace/msKim-study1/src/main/resources"
+  path:
+    file: "D:/resources/files"
+    summernote: "D:/resources/summernoteImage"
+    thumbnail: "/summernoteImage"
 
     
     

@@ -1,5 +1,6 @@
 package kr.letech.study.controller;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -31,22 +32,22 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import kr.letech.study.dto.AttachDTO;
 import kr.letech.study.dto.Criteria;
 import kr.letech.study.dto.Page;
 import kr.letech.study.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
-* @packageName 		: kr.letech.study.controller 
-* @fileName 		: BoardController.java 
-* @author 			: LE_TECH 
-* @date 			: 2022.02.11
-* @description      :
-* =========================================================== 
-* DATE 				AUTHOR 			NOTE 
-* ----------------------------------------------------------- 
-* 2022.02.11 		LE_TECH			최초 생성
-*/
+ * @packageName : kr.letech.study.controller
+ * @fileName : BoardController.java
+ * @author : LE_TECH
+ * @date : 2022.02.11
+ * @description : ===========================================================
+ *              DATE AUTHOR NOTE
+ *              -----------------------------------------------------------
+ *              2022.02.11 LE_TECH 최초 생성
+ */
 @Slf4j
 @Controller
 @RequestMapping("/boards")
@@ -57,66 +58,63 @@ public class BoardController {
 	private BoardService boardService;
 
 	/**
-	* @Method 			: main
-	* @date 			: 2022.02.14
-	* @author 			: mskim
-	* @return			: String
-	* @description		:
-	* =========================================================== 
-	* DATE 				AUTHOR 			NOTE 
-	* ----------------------------------------------------------- 
-	* 2022.02.14		mskim			최초 생성
-	*/
+	 * @Method : main
+	 * @date : 2022.02.14
+	 * @author : mskim
+	 * @return : String
+	 * @description : ===========================================================
+	 *              DATE AUTHOR NOTE
+	 *              -----------------------------------------------------------
+	 *              2022.02.14 mskim 최초 생성
+	 */
 	@GetMapping("/CD{boardDev}")
 	public String main(@PathVariable String boardDev, Model model) {
-		model.addAttribute("boardDev", "CD"+boardDev);
+		model.addAttribute("boardDev", "CD" + boardDev);
 		return "board/main";
 	}
-	
+
 	/**
-	* @Method 			: printboardList
-	* @date 			: 2022.02.14
-	* @author 			: mskim
-	* @return			: ResponseEntity<Object>
-	* @description		:
-	* =========================================================== 
-	* DATE 				AUTHOR 			NOTE 
-	* ----------------------------------------------------------- 
-	* 2022.02.14		mskim			최초 생성
-	*/
+	 * @Method : printboardList
+	 * @date : 2022.02.14
+	 * @author : mskim
+	 * @return : ResponseEntity<Object>
+	 * @description : ===========================================================
+	 *              DATE AUTHOR NOTE
+	 *              -----------------------------------------------------------
+	 *              2022.02.14 mskim 최초 생성
+	 */
 	@GetMapping("/boardDev{boardDev}")
 	@ResponseBody
 	public ResponseEntity<Object> printboardList(@PathVariable(value = "boardDev") String boardDev) throws Exception {
 		ResponseEntity<Object> entity = null;
-		
+
 		Map<String, Object> paraMap = new HashMap<>();
 
 		paraMap.put("boardDev", boardDev);
 
 		try {
-			entity = new ResponseEntity<Object>( boardService.getBoardList(paraMap), HttpStatus.OK);
-		}catch (SQLException e) {
+			entity = new ResponseEntity<Object>(boardService.getBoardList(paraMap), HttpStatus.OK);
+		} catch (SQLException e) {
 			entity = new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
 		}
 		return entity;
 	}
 
 	/**
-	* @Method 			: detail
-	* @date 			: 2022.02.11
-	* @author 			: LE_TECH
-	* @return			: String
-	* @description		:
-	* =========================================================== 
-	* DATE 				AUTHOR 			NOTE 
-	* ----------------------------------------------------------- 
-	* 2022.02.11		LE_TECH			최초 생성
-	*/
+	 * @Method : detail
+	 * @date : 2022.02.11
+	 * @author : LE_TECH
+	 * @return : String
+	 * @description : ===========================================================
+	 *              DATE AUTHOR NOTE
+	 *              -----------------------------------------------------------
+	 *              2022.02.11 LE_TECH 최초 생성
+	 */
 	@GetMapping("/{boardDev}/{boardNo}")
 	public String detail(@PathVariable Map<String, String> paraMap, Model model, Principal principal) throws Exception {
 
 		paraMap.put("user", principal.getName());
-		
+
 		Map<String, ?> board = boardService.getBoard(paraMap);
 
 		model.addAttribute("board", board);
@@ -125,61 +123,61 @@ public class BoardController {
 	}
 
 	/**
-	* @Method 			: registForm
-	* @date 			: 2022.02.15
-	* @author 			: mskim
-	* @return			: String
-	* @description		:
-	* =========================================================== 
-	* DATE 				AUTHOR 			NOTE 
-	* ----------------------------------------------------------- 
-	* 2022.02.15		mskim			최초 생성
-	*/
+	 * @Method : registForm
+	 * @date : 2022.02.15
+	 * @author : mskim
+	 * @return : String
+	 * @description : ===========================================================
+	 *              DATE AUTHOR NOTE
+	 *              -----------------------------------------------------------
+	 *              2022.02.15 mskim 최초 생성
+	 */
 	@GetMapping("/regist")
 	public String registForm() {
 		return "board/regist";
 	}
 
 	/**
-	* @Method 			: regist
-	* @date 			: 2022.02.15
-	* @author 			: mskim
-	* @return			: RedirectView
-	* @description		:
-	* =========================================================== 
-	* DATE 				AUTHOR 			NOTE 
-	* ----------------------------------------------------------- 
-	* 2022.02.15		mskim			최초 생성
-	*/
+	 * @Method : regist
+	 * @date : 2022.02.15
+	 * @author : mskim
+	 * @return : RedirectView
+	 * @description : ===========================================================
+	 *              DATE AUTHOR NOTE
+	 *              -----------------------------------------------------------
+	 *              2022.02.15 mskim 최초 생성
+	 */
 	@PostMapping("")
 	public RedirectView regist(MultipartHttpServletRequest multiRequest) throws Exception {
 		List<MultipartFile> files = multiRequest.getFiles("files");
-		
+
 		Map<String, String> paraMap = new HashMap<>();
 		Principal principal = multiRequest.getUserPrincipal();
 
 		paraMap.put("title", multiRequest.getParameter("title"));
-		paraMap.put("content", multiRequest.getParameter("content"));
+		String content = multiRequest.getParameter("content").replace("&lt;", "<");
+		content = content.replace("&gt;", ">");
+		content = content.replace("&quot;", "\"");
+		paraMap.put("content", content);
 		paraMap.put("user", principal.getName());
 		paraMap.put("boardDev", multiRequest.getParameter("boardDev"));
 		paraMap.put("boardClass", multiRequest.getParameter("boardClass"));
 
 		boardService.regist(files, paraMap);
 
-		return new RedirectView("boards/"+multiRequest.getParameter("boardDev"));
+		return new RedirectView("boards/" + multiRequest.getParameter("boardDev"));
 	}
 
 	/**
-	* @Method 			: modifyForm
-	* @date 			: 2022.02.14
-	* @author 			: mskim
-	* @return			: String
-	* @description		:
-	* =========================================================== 
-	* DATE 				AUTHOR 			NOTE 
-	* ----------------------------------------------------------- 
-	* 2022.02.14		mskim			최초 생성
-	*/
+	 * @Method : modifyForm
+	 * @date : 2022.02.14
+	 * @author : mskim
+	 * @return : String
+	 * @description : ===========================================================
+	 *              DATE AUTHOR NOTE
+	 *              -----------------------------------------------------------
+	 *              2022.02.14 mskim 최초 생성
+	 */
 	@GetMapping("/modify")
 	public String modifyForm(@RequestParam Map<String, String> paraMap, Model model) throws Exception {
 		Map<String, ?> board = boardService.getBoard(paraMap);
@@ -190,16 +188,15 @@ public class BoardController {
 	}
 
 	/**
-	* @Method 			: modify
-	* @date 			: 2022.02.14
-	* @author 			: mskim
-	* @return			: String
-	* @description		:
-	* =========================================================== 
-	* DATE 				AUTHOR 			NOTE 
-	* ----------------------------------------------------------- 
-	* 2022.02.14		mskim			최초 생성
-	*/
+	 * @Method : modify
+	 * @date : 2022.02.14
+	 * @author : mskim
+	 * @return : String
+	 * @description : ===========================================================
+	 *              DATE AUTHOR NOTE
+	 *              -----------------------------------------------------------
+	 *              2022.02.14 mskim 최초 생성
+	 */
 	@PutMapping("")
 	public String modify(@RequestBody Map<String, String> paraMap) throws Exception {
 		boardService.modifyBoard(paraMap);
@@ -208,20 +205,39 @@ public class BoardController {
 	}
 
 	/**
-	* @Method 			: remove
-	* @date 			: 2022.02.14
-	* @author 			: mskim
-	* @return			: String
-	* @description		:
-	* =========================================================== 
-	* DATE 				AUTHOR 			NOTE 
-	* ----------------------------------------------------------- 
-	* 2022.02.14		mskim			최초 생성
-	*/
+	 * @Method : remove
+	 * @date : 2022.02.14
+	 * @author : mskim
+	 * @return : String
+	 * @description : ===========================================================
+	 *              DATE AUTHOR NOTE
+	 *              -----------------------------------------------------------
+	 *              2022.02.14 mskim 최초 생성
+	 */
 	@DeleteMapping("")
-	public String remove(@RequestBody Map<String, String> paraMap) throws Exception {
-		boardService.remove(paraMap);
-		return "board/detail";
+	public @ResponseBody ResponseEntity<Object> remove(@RequestBody Map<String, String> paraMap) throws Exception {
+		ResponseEntity<Object> entity = null;
+		try {
+			boardService.remove(paraMap);
+			entity = new ResponseEntity<Object>(HttpStatus.OK);
+		} catch (SQLException e) {
+			entity = new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+		}
+		return entity;
 	}
-	
+
+	@PostMapping("uploadBoardImage")
+	public @ResponseBody ResponseEntity<Object> uploadBoardImage(MultipartHttpServletRequest multiRequest)
+			throws Exception {
+		ResponseEntity<Object> entity = null;
+		List<MultipartFile> files = multiRequest.getFiles("files");
+		try {
+			AttachDTO attach = boardService.insertBoardImage(files);
+			attach.setUploadPath(multiRequest.getContextPath()+attach.getUploadPath());
+			entity = new ResponseEntity<Object>(attach, HttpStatus.OK);
+		} catch (IOException e) {
+			entity = new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+		}
+		return entity;
+	}
 }

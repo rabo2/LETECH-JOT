@@ -13,8 +13,8 @@
 }
 
 #modifyForm div.form-group:nth-child(2) div.form-control {
-	overflow:scroll; 
-	height:50vh;
+	overflow: scroll;
+	height: 50vh;
 }
 </style>
 </head>
@@ -25,7 +25,7 @@
 		</div>
 		<hr>
 		<div class="form-div">
-			<form id="modifyForm" action="modify" method="put">
+			<form id="modifyForm" action="modify" method="PUT">
 				<div class="row">
 					<div class="form-group col-6">
 						<label for="title">제목</label>
@@ -46,7 +46,7 @@
 				</div>
 				<div class="form-group">
 					<label>내용</label>
-						<div name="content" class="form-control editable" contenteditable="true" th:utext="${board?.content}"></div>
+					<textarea id="summernote" name="content" class="form-control editable" contenteditable="true" th:utext="${board?.content}"></textarea>
 				</div>
 			</form>
 			<div class="file-div">
@@ -58,25 +58,33 @@
 			<button class="btn btn-secondary" onclick="history.go(-1);">취소</button>
 		</div>
 	</div>
-<script th:src="@{/js/board/common.js}"></script>
-<script th:inline="javascript" type="text/javascript">
+	<script th:src="@{/js/board/common.js}"></script>
+	<script th:src="@{/summernote-0.8.18-dist/summernote-lite.js}"></script>
+	<script th:src="@{/summernote-0.8.18-dist/lang/summernote-ko-KR.min.js}"></script>
+	<script th:inline="javascript" type="text/javascript">
 window.addEventListener('load', function(){
-	printBoardSelect('board/regist :: #boardDev' , 'CD017');
-	printBoardSelect('board/regist :: #boardClass' , 'CD020');
+	printBoardSelect('board/regist :: #boardDev' , 'CD0017');
+	printBoardSelect('board/regist :: #boardClass' , 'CD0020');
 	
 	let btn = document.getElementById("modifyBtn");
 	
 	btn.addEventListener('click', function(){
 		let data = {
 				'title': document.querySelector('input[name="title"]').value
-				, 'content': document.querySelector('div[name="content"]').innerHTML
-				, 'boardNo': /*<![CDATA[*//*[[${board?.boardNo}]]*//*]]*/
-				, 'boardDev': $('select[name="boardDev"] option:selected').val()
-				, 'boardClass': $('select[name="boardClass"] option:selected').val()
+				,'content': document.querySelector('div[name="content"]').innerHTML
+				,'boardNo': /*<![CDATA[*//*[[${board?.boardNo}]]*//*]]*/
+				,'boardDev': $('select[name="boardDev"] option:selected').val()
+				,'boardClass': $('select[name="boardClass"] option:selected').val()
 		};
 		modifyBoard(data);
 	});
 });
+$('#summernote').summernote({
+	height : 300,
+	lang : "ko-KR",
+	disableResizeEditor : true
+})
+
 </script>
 </div>
 </html>
